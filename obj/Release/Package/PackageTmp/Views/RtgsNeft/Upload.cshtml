@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<script type="text/javascript">
+
+    var imgArr = [];
+
+    function ImportFunction() {
+        //alert("This is Import function");
+        var base64 = document.getElementById("base64PathVal").value;
+        var userId = document.getElementById("tellerDetails").value;
+
+        var x = document.getElementById("urlVal").value;
+        //var y = "getRtgsList";
+        var y = "rtgsImageUpload";
+        //alert("url: " + x + y);
+        debugger;
+
+        var form_type = document.getElementById("UploadType").value;
+
+        if (confirm("Do you want to Submit the selected recods!")) {
+            //alert("within confirm box!");
+            $.ajax({
+                type: 'POST',
+                url: x + y,
+                //data: { ImgList: imgArr, ImgType: 'RTGS', tellerId: 'aniket' },
+                data: { ImgList: imgArr, ImgType: form_type, tellerId: userId },
+                success: SuccessImg,
+                error: FailedImg
+            });
+        }
+
+    }
+
+    function encodeImageFileAsURL() {
+        //debugger;
+        var filesSelected = document.getElementById("inputFileToLoad").files;
+        //debugger;
+        if (filesSelected.length > 0) {
+
+            for (var i = 0; i < filesSelected.length; i++) {
+                //debugger;
+                var fileToLoad = filesSelected[i];
+
+                var fileReader = new FileReader();
+
+                fileReader.onload = function (fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    //debugger;
+                    var newImage = document.createElement('img');
+                    newImage.src = srcData;
+                    var dataVal = srcData.replace("data:image/jpeg;base64,", "");
+                    //debugger;
+
+                    imgArr.push(dataVal);
+                    //debugger;
+
+
+                    //document.getElementById("base64PathVal").value = document.getElementById("base64PathVal").value + dataVal + '|';
+                }
+                //debugger;
+                fileReader.readAsDataURL(fileToLoad);
+
+
+                //imgArr.push
+
+            }
+
+        }
+    }
+
+    function SuccessImg(result) {
+        debugger;
+        //document.getElementById("inputFileToLoad").files = null;
+        var rooturl = '@Url.Content("~/")';
+        window.open(rooturl + "RtgsNeft/Index", "_self");
+        alert(result);
+    }
+
+    function FailedImg(result) {
+        debugger;
+        //document.getElementById("inputFileToLoad").files = null;
+
+        var rooturl = '@Url.Content("~/")';
+        window.open(rooturl + "RtgsNeft/Index", "_self");
+
+        alert(result);
+    }
+
+</script>
+
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Manual Form Upload
+            </h1>
+        </div>
+
+        <div class="page-content">
+            <div class="row">
+                <label class="col-sm-1"></label>
+                <label class="col-sm-2">Upload Type</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("UploadType", new List<SelectListItem>
+                    {
+                        new SelectListItem{ Text = "RTGS/NEFT", Value = "01" },
+                        new SelectListItem{ Text = "Cheque", Value = "02" },
+                        new SelectListItem{ Text = "Slip", Value = "03" },
+                        new SelectListItem{ Text = "KYC", Value = "04" }
+                    })
+                </div>
+            </div>
+            <br />
+            
+            <div class="row">
+                <label class="col-sm-3"></label>
+
+                <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" multiple />
+                <input id="base64PathVal" value="" hidden />
+            </div>
+            <br />
+
+            <div class="row">
+                <label class="col-sm-3"></label>
+                <button class="btn btn-info" value="Import" onclick="ImportFunction()">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Import
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</div>

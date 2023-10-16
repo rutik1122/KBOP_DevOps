@@ -1,0 +1,813 @@
+﻿
+<script src="~/Scripts/TransferChecker.js"></script>
+<script src="~/Scripts/CommonValidation.js"></script>
+<script src="~/Scripts/SignPopUp.js"></script>
+
+@{
+    ViewBag.Title = "TrfVerificationForm";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+
+<input id="cid" name="cid" value="@ViewBag.cid" hidden />
+<input id="username" name="username" value="@Session["Login_Page_Id"].ToString()" hidden />
+<input id="scanning_type" name="scanning_type" value="@ViewBag.ScanningType" hidden />
+
+<input id="verfLevel" name="verfLevel" value="@ViewBag.VerfLevel" hidden />
+
+<input id="icr_id" name="icr_id" value="" hidden />
+
+<div class="main-content-inner">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-5">
+                <h1>
+                    @ViewBag.TitleName
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        @ViewBag.SubTitleName
+                    </small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div id="dialog_img" style="display: none; font-size: large; height: 450px; width: 900px; " align="center" class="form-popup">
+        <img style="height:450px; width:900px; cursor: zoom-out" id="FullImg" onclick="zoomOut();" />
+    </div>
+    <div class="page-content">
+        <div class="row" style="background-color: lightblue;padding-bottom:5px;padding-top:10px;border-radius: 10px;font-size:small;">
+            <input type="text" value="" id="TransMode" name="TransMode" hidden />
+            <input type="text" value="" id="Slip_Credit_AccNo" name="Slip_Credit_AccNo" hidden />
+            <input type="text" value="" id="Chq_Dedit_AccNo" name="Chq_Dedit_AccNo" hidden />
+            <div class="col-sm-12">
+
+                <div class="col-sm-3">
+                    @{
+                        Html.RenderPartial("TrfCheckerSideView");
+                    }
+                </div>
+                <div class="col-sm-5">
+                    @*<div class="row text-center">
+                    <label style="color:red;font:100" id="status"></label>
+                </div>*@
+                    <div class="row text-center">
+                        <label id="getresult"></label>
+                    </div>
+                    <div class="row text-center" style="padding-bottom:20px;padding-left:15px">
+                        <table>
+                            <tr>
+                                <td id="imageid">
+                                    @*<img style="display: none; cursor: zoom-in" height='250' width='500' id="FG" onclick="fullImage();" />*@
+                                    <img style="display: none; cursor: zoom-in" height='285' width='570' id="FG" onclick="ChqSlipPopUp();" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <div class="row" id="MICRImg">
+                        <div class="col-sm-4" id="micrtxt" hidden>
+                            MICR: <input type="text" id="micr" style="width: 100px;" readonly="readonly" />
+                        </div>
+                        <div class="col-sm-12">
+                            <input id="ItemId" style="display:none" />
+                            <input type="button" id="frontGimg" value="Front" style="background-color: black; color: white; font-size: 13px; padding: 4px;" class="btn col-sm-2" onclick="switchimage('frontGimg', 'FG', 'BOT_RGB')" />
+                            <span class="col-sm-1"></span>
+                            <input type="button" id="backGimg" value="Back" style="background-color: black; color: white; font-size: 13px; padding: 4px;" class="btn col-sm-2" onclick="switchimage('backGimg', 'FG', 'TOP_RGB')" />
+                            <span class="col-sm-1"></span>
+                            <input type="button" id="frontIRimg" value="IR" style="background-color: black; color: white; font-size: 13px; padding: 4px;" class="btn col-sm-2" onclick="switchimage('frontIRimg', 'FG', 'BOT_IRR')" />
+                            <span class="col-sm-1"></span>
+                            <input type="button" id="waterMark" value="WM" style="background-color: black; color: white; font-size: 13px; padding: 4px;" class="btn col-sm-2" onclick="switchimage('waterMark', 'FG', 'TOP_QIR')" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" id="cheque_Data">
+                        <table class="col-sm-12">
+                            <tr>
+                                <th class="col-sm-3" style="text-align:center">Cheque No</th>
+                                <th class="col-sm-3" style="text-align:center">Sort Code</th>
+                                <th class="col-sm-3" style="text-align:center">SAN</th>
+                                <th class="col-sm-3" style="text-align:center">TR Code</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="number" class="col-sm-12" id="chqnoDataEntry" min="0" max="999999" placeholder="Cheque No" onfocusout="txt_to_grid()" />
+                                </td>
+                                <td>
+                                    <input type="number" class="col-sm-12" id="sortcodeDataEntry" min="0" max="999999" placeholder="Sort Code" onfocusout="txt_to_grid()" />
+                                </td>
+                                <td>
+                                    <input type="number" class="col-sm-12" id="sanDataEntry" min="0" max="999999" placeholder="SAN" onfocusout="txt_to_grid()" />
+                                </td>
+                                <td>
+                                    <input type="number" class="col-sm-12" id="trDataEntry" min="0" max="999999" placeholder="Tr Code" onfocusout="txt_to_grid()" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    @*<div class="row">
+                    <label id="alertVal"></label>
+                </div>*@
+                </div>
+                <div class="col-sm-4">
+                    <div class="row" style="padding-top:10px;font-size:12px;">
+                        @*<div id="TranAmnt" class="col-sm-7"> <label>Transaction Amount: </label></div>*@
+                        <div id="SlipAmnt" class="col-sm-7"> <label>Slip Amount: </label></div>
+                        <div id="SlipCheque" class="col-sm-5">
+                            <input id="HalfSlipAmount" style="" class="col-sm-5" onfocusout="txt_to_grid()" />
+                            <label id="DivSlipAmount" class="col-sm-2"> / </label>
+                            <label id="SlipAmountForCheque" class="col-sm-5"></label>
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="padding-top:2px;font-size:12px;">
+                        @*<div id="DenomAmnt" class="col-sm-7"><label>Denomination Amount:</label> </div>*@
+                        <div id="ChequeAmnt" class="col-sm-7"><label>Cheque Amount:</label> </div>
+                        <div id="ChequeSlip" class="col-sm-5">
+                            <input id="HalfChequeAmount" class="col-sm-5" onfocusout="txt_to_grid()" />
+                            <label id="DivChqAmount" class="col-sm-2"> / </label>
+                            <label id="DenomAmountForCheque" class="col-sm-5"></label>
+                        </div>
+                    </div>
+
+                    <div id="ChequeDate" class="row" style="padding-top:2px;font-size:12px;">
+                        <div class="col-sm-7"><label>Cheque Date: (dd-MM-yyyy) </label> </div>
+                        <div class="col-sm-5">
+                            <input id="ChequeDateTxt" style="width: 135px;" onfocusout="txt_to_grid()" placeholder="dd-mm-yyyy" />
+                        </div>
+                    </div>
+                    <div id="ShowToAcc" class="col-sm-12" style="padding-top:20px;">
+                        <div class="col-sm-12" style="background-color: rgb(242, 242, 242);padding-top:10px;">
+                            <div class="row">
+                                <div class="col-sm-5"><label>Credit Account:</label> </div>
+                                <div class="col-sm-7">
+                                    <input id="ToAccount" style="width: 135px;" maxlength="16" onfocusout="toAccNo_focusOut()" />
+                                    <button class="btn-sm" style="background-color:black;color:white;font-size: x-small;margin-left: -5px;padding: 4px 10px 2px 11px;" onclick="GetPayeeeDtls(ToAccount.value,'S');">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="SlipFinPay" class="col-sm-12" style="padding-top: 10px">
+                                <select id="SlipFinPayeeName" style="width: 230px;"></select>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Name:</b><label id="SlipFinName">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Scheme Code:</b><label id="SlipFinScheme">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Freeze Code:</b><label id="SlipFinFreeze">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Mode Of Operation:</b><label id="SlipFinMOP"></label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Account Status:</b><label id="SlipFinAccountStatus"></label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>NRE Flag:</b><label id="SlipFinNRE">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Scheme Type:</b><label id="SlipFinSchemeType">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Account Ownership:</b><label id="SlipFinAccOwner">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Amount:</b><label id="SlipFinAmount">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Mobile Number:</b><label id="SlipFinMobNo">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>PAN No:</b><label id="SlipFinPANNo">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Date:</b><label id="SlipFinDate">
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            @*<input id="PayeeNameCheque_val" name="PayeeNameCheque_val" value="0" hidden>
+        <input id="PayeeNameSlip_val" name="PayeeNameSlip_val" value="0" hidden>*@
+
+            <div id="ChequeData" class="row" style="overflow-x: auto;padding: 5px 0px 35px 0px;overflow-y:auto;">
+                <div class="col-sm-12">
+                    <table id="tblChequeData" style="cursor:pointer;overflow-x:auto;width:100%;border:1px solid black;text-align: center;">
+                        <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                            <tr style="background-color: #438EB9">
+
+                                <th style="text-align:center">Credit Account No</th>
+                                <th style="text-align:center">Debit Account No</th>
+                                <th style="text-align:center">Slip Amount </th>
+                                <th style="text-align:center">Cheque Amount</th>
+                                <th style="text-align:center">Cheque Date</th>
+                                <th style="text-align:center">Cheque No</th>
+                                <th style="text-align:center">Sort Code</th>
+                                <th style="text-align:center">SAN</th>
+                                <th style="text-align:center">Trans Code</th>
+                                <th style="text-align:center">Mark as Cheque or Slip</th>
+                                <th style="text-align:center">Instrument Type</th>
+                                <th style="text-align:center;display:none">ImageFront</th>
+                                <th style="text-align:center;display:none">SlipNo</th>
+                                <th style="display:none">Front Gray</th>    @*13*@
+                                <th style="display:none">Rear Gray</th>
+                                <th style="display:none">Doc No</th>
+                                <th style="display:none">Cheque No</th>
+                                <th style="display:none">Document Type</th>
+                                <th style="display:none">Sort Code</th>
+                                <th style="display:none">Trans Code</th>
+                                <th style="display:none">SAN</th>
+                                <th style="display:none">Ignore IQA</th>
+                                <th style="display:none">IQA_Flag</th>
+                                <th style="display:none">IQA_String</th>
+                                <th style="text-align:center">Count</th>
+                                <th style="text-align:center">Delete</th>
+                                <th style="text-align:center;display:none;">MICR</th>    @*26*@
+                                <th style="text-align:center;display:none;">OCR</th>
+                                <th style="text-align:center;">ValidAcc</th>
+                                <th style="text-align:center;">PayeeName</th>
+                                <th style="text-align: center; display: none;">PayeeNameChange</th>
+                                <th style="text-align:center;" id="creditAccValid">Credit Acc Valid</th>
+                                <th style="text-align:center;" id="creditChange_1">C Change</th>
+                                <th style="text-align:center;" id="debitAccValid">Debit Acc Valid</th>
+                                <th style="text-align:center;" id="debitChange_1">D Change</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <div id="smoke" style="display:none;position:absolute;top:-30px;left:-30px;opacity:0.3;background-color:black;z-index:9998">...</div>
+            <div id="popup" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move "><b>Signature</b><span id="btn_close" onclick="closeButton()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="signTable">
+                    <thead style="border: 1px solid black; background-color: cadetblue; color: white;">
+                        <tr style="background-color: #438EB9">
+                            <th style="text-align:center">Name</th>
+                            <th style="text-align:center">Sign Img</th>
+                            <th style="text-align:center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="popup2" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar2" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move; font-size: 20px;"><b>Item Return Reason</b><span id="btn_close" onclick="closeButton()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="itemReasonTable">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                        <tr style="background-color: #438EB9">
+                            <th style="text-align: center; width: 50px; font-size: 20px;">Code</th>
+                            <th style="text-align: center; width: 240px; font-size: 20px;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="popup1" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar1" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move "><b>Chq/Slip</b><span id="btn_close" onclick="closeButton1()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="chqSlipTable" style="width:800px;">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="dialog" style="display: none;font-size:large;background-color:aliceblue;" align="center">
+
+                <table style="padding-top: 20px;width: 700px;">
+                    <tr>
+                        <td class="bb" style="font-size:large;text-align:center;background-color:black;color:white" colspan="2">
+                            <b>DEPOSIT/PAY IN SLIP </b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:large;text-align:center"><b>Axis Bank Ltd.</b></td>
+
+                    </tr>
+
+                </table>
+                <table style="padding-top:20px;width: 700px;">
+                    <tr>
+                        <td>
+                            <label class="control-label"> Branch Name :</label>
+                        </td>
+                        <td><label id="Branch" class="control-label"></label></td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <label class="control-label"> Date :</label>
+                        </td>
+                        <td><label id="pdate" class="control-label">--</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label">------------------------------------</label>
+                        </td>
+                        <td><label class="control-label">----------------------------------------------------------------------------</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Receipt No :</label>
+                        </td>
+                        <td><label id="Receipt" class="control-label">--</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Name :</label>
+                        </td>
+                        <td>
+                            <label id="Name" class="control-label">--</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Account :</label>
+                        </td>
+                        <td><label id="Account" class="control-label">--</label></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label class="control-label"> Amount :</label>
+                        </td>
+                        <td>
+                            <label id="Amount" class="control-label">--</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label">------------------------------------</label>
+                        </td>
+                        <td><label class="control-label">----------------------------------------------------------------------------</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Office/Cashier/SWO :</label>
+                        </td>
+                        <td>
+                            <label id="Cashier" class="control-label">--</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="partial_table" hidden>
+                @Html.Partial("_ItemReturnReason")
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    debugger;
+    //$("#cheque_Data").hide();
+
+    //alert("this the test alert!");
+
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+
+    var popup = "";
+    var recipt = "no";
+
+
+    var chqDate = "";
+    var chq_no_final = "";
+    var sort_code_final = "";
+    var san_final = "";
+    var trcode_final = "";
+
+    var check_ToAccNo = 2;
+    var check_FromAccNo = 2;
+
+    var slipTotalCount = 0;
+
+    var PerviousType = "";
+
+    var popup = document.getElementById("popup");
+    var popup_bar = document.getElementById("popup_bar");
+    var btn_close = document.getElementById("btn_close");
+    var smoke = document.getElementById("smoke");
+
+    //alert("this the test alert! 2");
+
+    ////$("#tblDenomination").hide();
+    //$("#MICRImg").hide();
+    //$("#ShowToAcc").hide();
+    ////$("#SignData").hide();
+    //$("#ChequeData").hide();
+    //$("#CashData").hide();
+    //$("#TranAmnt").hide();
+    //$("#SlipAmnt").hide();
+    //$("#DenomAmnt").hide();
+    //$("#ChequeAmnt").hide();
+    //$("#ChequeDate").hide();
+    ////$("#HalfChequeAmount").hide();
+    //$("#DivChequeAmount").hide();
+    ////$("#HalfSlipAmount").hide();
+    //$("#DivSlipAmount").hide();
+    //$("#DivChqAmount").hide();
+    //$("#ChequeSlip").hide();
+    //$("#SlipCheque").hide();
+    ////$("#btnPost").hide();// anandi
+    //// $("#btnValid").hide();
+    //$("#btngetvault").hide();
+
+    var root = '@Url.Content("~/")';
+
+    var instruType = "";
+    var dArray = [];
+    var dCount = [];
+    var ImageArray = [];
+    var SlipToAccount = 0;
+    var SlipCount = 0;
+    var batchNo = 0;
+    var intSlipNo = 0;
+    var batchCntAfterDelete = 0;
+    var batchCnt = 0;
+    var GlobalRowNo = " ";
+    var DenomDataToadd = 0;
+    var totalAmtToAdd = 0;
+    var transRefNo = null;
+    var d = new Date();
+    strDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + "  " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+    var ValidationPassed = false;
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var ddd = new Date();
+    var RegNo = ddd.getDate() + "" + (ddd.getMonth() + 1) + "" + ddd.getFullYear() + "" + ddd.getHours() + "" + ddd.getMinutes() + "" + ddd.getSeconds();
+    var typeOfTran = "TRF";
+
+    var CustId = "";
+
+    //$("TransMode").val = "TRF";
+    //$("#SlipAmount").hide();
+    //$("#DenomAmount").hide();
+    //$("#TsCT").show();
+    //$("#returncash").hide();
+    //$("#returncash1").hide();
+    ////$("#micr").hide();
+
+    ////07032022
+    //$("#denomcount").hide();
+    //$("#abc").hide();
+
+    localStorage.setItem("typeOfTran", typeOfTran)
+    var tableChequeData = document.getElementById('tblChequeData');
+    //var tableDenom = document.getElementById("tblDenomination");
+
+    $(document).ready(function () {
+
+        /*alert("Begin of checker module!");*/
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+        var count_id = document.getElementById("cid").value;
+        var username = document.getElementById("username").value;
+
+        var verfLevel = document.getElementById("verfLevel").value;
+
+        var y = "getTrfCheckerDetails";
+
+        $.ajax({
+            // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+            url: x + y,
+            // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+            headers: authHeaders,
+            type: 'POST',
+            data: { cid: count_id, user_id: username, VerificationLevel: verfLevel },
+            success: getSuccessVoucher,
+            error: getError
+        });
+
+
+        //$.ajax({
+        //    url: x + "ItemReturnList",
+        //    headers: authHeaders,
+        //    type: 'POST',
+        //    success: itemReturnList,
+        //    error: getError
+        //});
+
+
+    });
+
+    //alert("this the test alert! END");
+
+    //$('#tblChequeData').on('click', 'td', function () {
+    //    debugger;
+    //    alert("This is alert for table row selection!");
+    //});
+
+    //alert("this the test alert! END 2");
+
+    var table = document.getElementById("tblChequeData");
+    //alert(table);
+
+
+    $("#tblChequeData").on('click', 'td', function () {
+        debugger;
+        
+        var rowNumber = this.parentNode.rowIndex;
+        var SeqNo = 0;
+        var x = this.cellIndex;
+        GlobalRowNo = rowNumber;
+
+        var myTab = document.getElementById("tblChequeData");
+        //debugger;
+
+        var scanType = document.getElementById("scanning_type").value;
+
+        if (x == 9) {
+            //debugger;
+            for (i = 1; i < myTab.rows.length; i++) {
+                //debugger;
+                if (rowNumber == i) {
+                    //debugger;
+                    var objCells = myTab.rows.item(i).cells;
+                    if (document.getElementById("chkboxCheque_" + (i - 1)).checked == true) {
+                        chequeBox = true;
+                        //objCells[8].innerText = "C";
+                        objCells[10].innerText = "C";
+                    }
+                    else if (document.getElementById("chkboxSlip_" + (i - 1)).checked == true) {
+                        slipBox = true;
+                        //objCells[8].innerText = "S";
+                        objCells[10].innerText = "S";
+                    }
+                }
+            }
+        }
+        else if (x == 24) {
+            //debugger;
+            var result = confirm("Are you sure you want to delete this item..?");
+
+            if (result) {
+                if (document.getElementById("tblChequeData").getElementsByTagName('tr')[rowNumber].cells[9].innerHTML == 1) {
+                    intSlipNo = intSlipNo - 1;
+                }
+                batchCnt = tableChequeData.rows.length;
+                batchCntAfterDelete = batchCnt - 1;
+                if (batchCntAfterDelete > 0) {
+                    batchCnt = batchCntAfterDelete;
+                }
+                document.getElementById("tblChequeData").deleteRow(rowNumber);
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            //var myTab = document.getElementById("tblChequeData");
+            //debugger;
+            for (i = 1; i < myTab.rows.length; i++) {
+                //debugger;
+                if (rowNumber == i) {
+                    var objCells = myTab.rows.item(i).cells;
+                    document.getElementById('micr').value = objCells[6].innerText;
+                    document.getElementById('chqnoDataEntry').value = objCells[5].innerText;
+                    document.getElementById('sortcodeDataEntry').value = objCells[6].innerText;
+                    document.getElementById('sanDataEntry').value = objCells[7].innerText;
+                    document.getElementById('trDataEntry').value = objCells[8].innerText;
+                    debugger;
+
+                    //$("#HalfSlipAmount").show();
+                    //$("#HalfChequeAmount").show();
+                    //$("#ChequeDateTxt").show();
+
+                    var instrumentType = objCells[10].innerHTML;
+                    //debugger;
+                    if (instrumentType == "C") {
+                        //$("#SlipAmnt").hide();
+                        //$("#SlipCheque").hide();
+                        //$("#ChequeAmnt").show();
+
+                        $("#HalfSlipAmount").hide();
+                        $("#DivSlipAmount").hide();
+                        $("#SlipAmountForCheque").show();
+
+                        $("#HalfChequeAmount").show();
+                        $("#DivChqAmount").show();
+                        $("#DenomAmountForCheque").show();
+                        //$("#ChequeSlip").show();
+
+                        $("#ChequeDate").show();
+                        $("#ChequeDateTxt").show();
+                    }
+                    else if (instrumentType == "S") {
+                        //$("#SlipAmnt").show();
+                        //$("#SlipCheque").show();
+                        //$("#ChequeAmnt").hide();
+
+                        $("#HalfSlipAmount").show();
+                        $("#DivSlipAmount").show();
+                        $("#SlipAmountForCheque").show();
+
+                        $("#HalfChequeAmount").hide();
+                        $("#DivChqAmount").hide();
+                        $("#DenomAmountForCheque").show();
+                        //$("#ChequeSlip").hide();
+
+                        $("#ChequeDate").hide();
+                        $("#ChequeDateTxt").hide();
+                    }
+
+                    //debugger;
+
+                    
+
+                    //if (scanType == "1") {
+                    //if (objCells[8].innerHTML == "S") {
+                    if (objCells[10].innerHTML == "S") {
+                        //debugger;
+
+                        $("#cheque_Data").hide();
+                        //$("#HalfSlipAmount").show();
+                        //$("#HalfChequeAmount").hide();
+                        //$("#ChequeDateTxt").hide();
+
+                        SlipToAccount = objCells[0].innerHTML;
+                        SlipCount = objCells[12].innerHTML;
+                        document.getElementById('ToAccount').value = SlipToAccount;
+                        document.getElementById('ChequeDateTxt').value = objCells[4].innerHTML;
+                        document.getElementById('FG').src = objCells[11].innerHTML;
+                        // Aniket 2022-06-04
+                        SlipRowNo = rowNumber;
+                        //SlipRowNo = rowNumber + 1;
+                        //debugger;
+                        if (myTab.rows.item(SlipRowNo) != null) {
+                            var RowobjCells = myTab.rows.item(SlipRowNo).cells;
+
+                            //document.getElementById('AccountNo').value = RowobjCells[0].innerHTML;
+                            
+                            //debugger;
+                            if (RowobjCells[0].innerHTML == "") {
+                                //alert("Account Number is blank for Cheque..!");
+                                alert("Account Number is blank for Slip..!");
+                            }
+                            else {
+                                //debugger;
+                                // aniket 2022-06-04
+                                //GetPayeeeDtls(RowobjCells[0].innerHTML, "C");
+                                GetPayeeeDtls(RowobjCells[0].innerHTML, RowobjCells[10].innerHTML);
+                            }
+                        }
+                        else {
+                            document.getElementById('AccountNo').value = "";
+                        }
+
+                        //if (objCells[0].innerHTML == "") {
+                        //    if (objCells[10].innerHTML == "C") {
+                        //        alert("Account Number is blank for Cheque..!");
+                        //    }
+                        //    else {
+                        //        alert("Account Number is blank for Slip..!");
+                        //    }
+                        //}
+                        //else {
+                        //    var delayInMilliseconds = 10000; //10 second
+                        //    setTimeout(function () {
+                        //        //debugger;
+                        //        GetPayeeeDtls(objCells[0].innerHTML, objCells[10].innerHTML);
+                        //    }, delayInMilliseconds);
+                        //}
+
+                        document.getElementById('HalfSlipAmount').value = objCells[2].innerHTML;
+                        document.getElementById('HalfChequeAmount').value = objCells[3].innerHTML;
+                    }
+                    else {
+                        $("#cheque_Data").show();
+                        //$("#HalfSlipAmount").hide();
+                        //$("#HalfChequeAmount").show();
+                        /*$("#ChequeDateTxt").show();*/
+
+                        if (scanType == "1") {
+                            SlipCntToChk = objCells[12].innerHTML;
+                            if (SlipCntToChk != 0) {
+                                for (k = 1; k < myTab.rows.length; k++) {
+                                    var kobjCells = myTab.rows.item(k).cells;
+                                    for (var l = 0; l < kobjCells.length; l++) {
+                                        if (SlipCntToChk == kobjCells[12].innerHTML) {
+                                            SlipToAccount = kobjCells[0].innerHTML;
+                                            
+                                            if (scanType == "1")
+                                                document.getElementById('ToAccount').value = SlipToAccount;
+                                            else
+                                                document.getElementById('ToAccount').value = objCells[0].innerHTML;
+
+                                            document.getElementById('ChequeDateTxt').value = objCells[4].innerHTML;
+                                            document.getElementById('FG').src = objCells[11].innerHTML;
+                                            document.getElementById('AccountNo').value = objCells[1].innerHTML;
+                                            document.getElementById('HalfChequeAmount').value = objCells[3].innerHTML;
+                                            document.getElementById('HalfSlipAmount').value = objCells[2].innerHTML;
+                                            debugger;
+
+                                            if (objCells[1].innerHTML == "") {
+                                                if (objCells[10].innerHTML == "C") {
+                                                    alert("Account Number is blank for Cheque..!");
+                                                }
+                                                else {
+                                                    alert("Account Number is blank for Slip..!");
+                                                }
+                                            }
+                                            else {
+                                                //debugger;
+                                                GetPayeeeDtls(objCells[1].innerHTML, objCells[10].innerHTML);
+                                            }
+                                            if (SlipToAccount == "") {
+                                                alert("Account Number is blank for Slip..!");
+                                            }
+                                            else {
+                                                var delayInMilliseconds = 10000; //1 second
+                                                setTimeout(function () {
+                                                    //debugger;
+                                                    // Aniket
+                                                    GetPayeeeDtls(objCells[1].innerHTML, objCells[10].innerHTML);
+                                                    //GetPayeeeDtls(SlipToAccount, "S");
+                                                }, delayInMilliseconds);
+                                            }
+                                            return true;
+
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                document.getElementById('ToAccount').value = " ";
+                                document.getElementById('ChequeDateTxt').value = objCells[4].innerHTML;
+                                document.getElementById('FG').src = objCells[11].innerHTML;
+                                document.getElementById('AccountNo').value = objCells[1].innerHTML;
+                                document.getElementById('HalfChequeAmount').value = objCells[3].innerHTML;
+                                document.getElementById('HalfSlipAmount').value = objCells[2].innerHTML;
+                            }
+                        }
+                        else if (scanType == "2" && GlobalRowNo != " ") {
+                            debugger;
+                            var creditAccNo = objCells[0].innerHTML;
+                            var debitAccNo = objCells[1].innerHTML;
+
+                            document.getElementById('HalfChequeAmount').value = objCells[3].innerHTML;
+                            document.getElementById('ChequeDateTxt').value = objCells[4].innerHTML;
+
+                            if (debitAccNo == "" || debitAccNo == null || debitAccNo == "0") {
+                                document.getElementById("AccountNo").value = "";
+                                alert("Alert! Debit Account Number is Blank!");
+                            }
+                            else {
+                                document.getElementById("AccountNo").value = debitAccNo;
+                                GetPayeeeDtls(debitAccNo, "C");
+                            }
+
+                            if (creditAccNo == "" || creditAccNo == null || creditAccNo == "0") {
+                                document.getElementById("ToAccount").value = "";
+                                alert("Alert! Credit Account Number is Blank!");
+                            }
+                            else {
+                                document.getElementById("ToAccount").value = creditAccNo;
+                                GetPayeeeDtls(creditAccNo, "S");
+                            }
+                        }
+                    }
+                }
+                //debugger;
+            }
+        }
+    });
+
+</script>

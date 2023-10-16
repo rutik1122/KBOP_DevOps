@@ -1,0 +1,123 @@
+﻿
+<script src="~/Scripts/BankList.js"></script>
+
+@{
+    ViewBag.Title = "BankList";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" hidden />
+
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+<input id="usertype" value="@Session["UserType"].ToString()" hidden />
+<input id="BankCode" name="BankCode" value="@Session["BankCode"]" hidden />
+
+<input type="hidden" id="startlimit" value="@Session["CheckerStartLimit"].ToString()" />
+<input type="hidden" id="stoplimit" value="@Session["CheckerStopLimit"].ToString()" />
+
+<input type="hidden" id="startlimit_l3" value="@Session["CheckerStartLimit_l3"].ToString()" />
+<input type="hidden" id="stoplimit_l3" value="@Session["CheckerStopLimit_l3"].ToString()" />
+
+<input id="CheckerModule" name="CheckerModule" value="@Session["CheckerModule"]" hidden />
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+
+<input id="CheckerModule_L3" name="CheckerModule_L3" value="@Session["CheckerModule_L3"]" hidden />
+<input id="l3startlimit" value="@Session["l3startlimit"]" hidden />
+
+
+<div class="row col-12 mb-3 my-0">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <h3 class="mb-0 text-primary position-relative">
+                <span id="spam_header" class="bg-200 dark__bg-1100 pe-3">
+
+                </span>
+            </h3>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 d-md-block">
+                <button class="btn btn-sm btn-primary ml-2" type="button" onclick="ReloadStatus()"> Reload Status </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="div_form_list" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 id="h5_name" class="mb-0 text-center"></h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_form_list" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="text-align: center;">Data Id</th>
+                            <th scope="col" style="text-align: center;">Insert Time Stamp</th>
+                            <th scope="col" style="text-align: center;">Data Entry</th>
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var rooturl = '@Url.Content("~/")';
+
+    var FormType = '@ViewBag.FormType';
+    var BankCode = "";
+    var userId = "";
+
+    $(document).ready(function () {
+
+        debugger;
+        $("#ProcessingBar").show();
+
+        if (FormType == "THIRD_PARTY") {
+            document.getElementById("spam_header").innerHTML = "Third Party Form";
+        }
+        else if (FormType == "NRO") {
+            document.getElementById("spam_header").innerHTML = "NRO Form";
+        }
+
+        document.getElementById("h5_name").innerHTML = "Status List";
+
+        BankCode = document.getElementById("BankCode").value;
+        userId = document.getElementById("loginid").value;
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+
+        var y = "getBankFormsList";
+
+        $.ajax({
+            type: "POST",
+            url: x + y,
+            data: { BankCode: BankCode, FormType: FormType, LoginId: userId },
+            success: getListData,
+            error: getError
+        });
+
+
+    });
+
+</script>

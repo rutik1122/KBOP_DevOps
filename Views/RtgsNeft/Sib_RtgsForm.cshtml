@@ -1,0 +1,570 @@
+﻿
+@{
+    ViewBag.Title = "Sib_RtgsForm";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+<input id="L3StartLimit" value="@Session["l3startlimit"]" hidden />
+<input id="CheckerModule" value="@Session["CheckerModule"]" hidden />
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<input id="RecordId" value="@ViewBag.RecordId" hidden />
+<input id="sni_id" value="" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        debugger;
+        var x = document.getElementById("urlVal").value;
+        var y = "getRtgsFormData";
+        var userId = document.getElementById("tellerDetails").value;
+
+        var count_id = document.getElementById("RecordId").value;
+
+        debugger;
+
+        var access_token = window.localStorage.getItem('AccessToken');
+        var bearer = window.localStorage.getItem('TokenType');
+        var gusername = window.localStorage.getItem('username');
+        //var gusername = "MERAJ";
+        var authHeaders = {};
+        var ProcessType = "";
+        authHeaders.Authorization = bearer + " " + access_token;
+
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            //data: { 'pType': 'RTGS', 'INtellerid': userId },
+            data: { 'count_id': count_id },
+            success: function (result) {
+                RtgsFormData(result);
+            },
+            error: getError
+        });
+
+    });
+
+
+    function getError(result) {
+
+        var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+
+    function RtgsFormData(result) {
+        debugger;
+
+        document.getElementById("sni_id").value = result.sni_id;
+        var img = result.frontgreyimagepath;
+        //document.getElementById("FrontImg").src = result.frontgreyimagepath;
+        document.getElementById("form_date").value = result.Date;
+        document.getElementById("branch").value = result.Branch;
+        document.getElementById("pan").value = result.PAN;
+        document.getElementById("amt").value = result.Amount;
+        document.getElementById("amtinwords").value = result.AmountInWords;
+        document.getElementById("RemittanceType").value = result.RemittanceType;
+        document.getElementById("debitAccNo").value = result.DebitAccNo;
+        document.getElementById("Chqno").value = result.ChqNo;
+        document.getElementById("chqDate").value = result.ChequeDate;
+
+        document.getElementById("remitterName").value = result.DebitName;
+
+        document.getElementById("address").value = result.Address;
+        document.getElementById("mobileno").value = result.MobileNo;
+
+        document.getElementById("BeneficiaryName").value = result.BeneficiaryName;
+
+        document.getElementById("BeneficiaryAccNo").value = result.BeneficiaryAccNo;
+        document.getElementById("cBeneficiaryAccNo").value = result.cBeneficiaryAccNo;
+
+        document.getElementById("BeneficiaryBank").value = result.BeneficiaryBank;
+        document.getElementById("IFSCCode").value = result.BeneficiaryIFSCCode;
+
+        document.getElementById("branchAddress").value = result.BranchAddress;
+
+    }
+
+    function DateValidation(result, datefield) {
+        var date = result;
+        debugger;
+        if (date == null || date == "") {
+            alert(datefield + " field is blank!");
+
+            if (datefield == "Form")
+                document.getElementById("form_date").focus;
+            else if (datefield == "Cheque")
+                document.getElementById("chqDate").focus;
+
+            return false;
+        }
+
+        var dd = date.substring(0, 2);
+        var mm = date.substring(3, 5);
+        var yyyy = date.substring(6, 10);
+
+
+
+        if (!dd.match(/^\d+/) || !mm.match(/^\d+/) || !yyyy.match(/^\d+/)) {
+            alert("Alert! Enter " + datefield + " Date in dd-mm-yyyy format!");
+            if (datefield == "Form")
+                document.getElementById("form_date").focus;
+            else if (datefield == "Cheque")
+                document.getElementById("chqDate").focus;
+            //ValidationPassed = false;
+            return false;
+        }
+
+        var j1 = date.substring(2, 3);
+        var j2 = date.substring(5, 6);
+
+
+        if (j1 != "-" || j2 != "-") {
+            alert("Alert! Enter " + datefield + " Date in dd-mm-yyyy format!");
+            if (datefield == "Form")
+                document.getElementById("form_date").focus;
+            else if (datefield == "Cheque")
+                document.getElementById("chqDate").focus;
+            //ValidationPassed = false;
+            return false;
+        }
+
+        var fDate = dd + '-' + mm + '-' + yyyy;
+        var dateResult = validatedate(fDate);
+
+        if (dateResult == false) {
+            alert("Alert! Enter proper " + datefield + " Date!");
+            if (datefield == "Form")
+                document.getElementById("form_date").focus;
+            else if (datefield == "Cheque")
+                document.getElementById("chqDate").focus;
+            //ValidationPassed = false;
+            return false;
+        }
+    }
+
+    function validatedate(inputText) {
+
+
+        var dateformat = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        // Match the date format through regular expression
+        if (inputText.match(dateformat)) {
+            //document.form1.text1.focus();
+            //Test which seperator is used '/' or '-'
+            var opera1 = inputText.split('/');
+            var opera2 = inputText.split('-');
+            lopera1 = opera1.length;
+            lopera2 = opera2.length;
+            // Extract the string into month, date and year
+            if (lopera1 > 1) {
+                var pdate = inputText.split('/');
+            }
+            else if (lopera2 > 1) {
+                var pdate = inputText.split('-');
+            }
+            var dd = parseInt(pdate[0]);
+            var mm = parseInt(pdate[1]);
+            var yy = parseInt(pdate[2]);
+            // Create list of days of a month [assume there is no leap year by default]
+            var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            if (mm == 1 || mm > 2) {
+                if (dd > ListofDays[mm - 1]) {
+                    alert('Invalid date!');
+                    return false;
+                }
+            }
+            if (mm == 2) {
+                var lyear = false;
+                if ((!(yy % 4) && yy % 100) || !(yy % 400)) {
+                    lyear = true;
+                }
+                if ((lyear == false) && (dd >= 29)) {
+                    alert('Invalid date!');
+                    return false;
+                }
+                if ((lyear == true) && (dd > 29)) {
+                    alert('Invalid date!');
+                    return false;
+                }
+            }
+            return true;
+        }
+        else {
+            alert("Invalid date !");
+            //  document.form1.text1.focus();
+            return false;
+        }
+        //  return true;
+    }
+
+    function SubmitData() {
+        debugger;
+
+        let text = "Do you want to Submit the record!";
+        if (confirm(text) != true) {
+            return false;
+        }
+
+        // form date
+        var formdate = document.getElementById("form_date").value;
+        var formdateValidation = DateValidation(formdate, "Form");
+        if (formdateValidation == false)
+            return false;
+
+        // branch
+        var branch = document.getElementById("branch").value;
+        if (branch == null || branch == "") {
+            alert("Enter Branch name!");
+            document.getElementById("branch").focus();
+            return false;
+        }
+
+        // Pan
+        var pan = document.getElementById("pan").value;
+        if (pan == null || pan == "") {
+            alert("Enter PAN number!");
+            document.getElementById("pan").focus();
+            return false;
+        }
+
+        // Amount amt
+        var amt = document.getElementById("amt").value;
+        if (amt == null || amt == "" || amt == "0") {
+            alert("Enter Amount!");
+            document.getElementById("amt").focus();
+            return false;
+        }
+
+        // Amount In Words
+        var amtinwords = document.getElementById("amtinwords").value;
+        if (amtinwords == null || amtinwords == "") {
+            alert("Enter Amount in words!");
+            document.getElementById("amtinwords").focus();
+            return false;
+        }
+
+        // RemittanceType
+        var RemittanceType = document.getElementById("RemittanceType").value;
+        if (RemittanceType == null || RemittanceType == "") {
+            alert("Enter Remittance Type!");
+            document.getElementById("RemittanceType").focus();
+            return false;
+        }
+
+        // Debit Acc No
+        var debitAccNo = document.getElementById("debitAccNo").value;
+        if (debitAccNo == null || debitAccNo == "") {
+            alert("Enter Debit Account No!");
+            document.getElementById("debitAccNo").focus();
+            return false;
+        }
+
+        // Cheque No
+        var Chqno = document.getElementById("Chqno").value;
+        if (Chqno == null || Chqno == "") {
+            alert("Enter Cheque No!");
+            document.getElementById("Chqno").focus();
+            return false;
+        }
+        else if (Chqno.length != 6) {
+            alert("6 digit Cheque no is required!");
+            document.getElementById("Chqno").focus();
+            return false;
+        }
+
+        // Chq Date
+        var chqDate = document.getElementById("chqDate").value;
+        var chqdateValidation = DateValidation(chqDate, "Cheque");
+        if (chqdateValidation == false)
+            return false;
+
+
+        // Remitter's name
+        var remitterName = document.getElementById("remitterName").value;
+        if (remitterName == null || remitterName == "") {
+            alert("Enter Remitter's name!");
+            document.getElementById("remitterName").focus();
+            return false;
+        }
+
+
+        // address
+        var address = document.getElementById("address").value;
+        if (address == null || address == "") {
+            alert("Enter Address!");
+            document.getElementById("address").focus();
+            return false;
+        }
+
+        // mobileno
+        var mobileno = document.getElementById("mobileno").value;
+        if (mobileno == null || mobileno == "") {
+            alert("Enter Mobile Number!");
+            document.getElementById("mobileno").focus();
+            return false;
+        }
+        else if (mobileno.length != 10) {
+            alert("Enter valid mobile number!");
+            document.getElementById("mobileno").focus();
+            return false;
+        }
+
+        // BeneficiaryName
+        var BeneficiaryName = document.getElementById("BeneficiaryName").value;
+        if (BeneficiaryName == null || BeneficiaryName == "") {
+            alert("Enter Beneficiary Name!");
+            document.getElementById("BeneficiaryName").focus();
+            return false;
+        }
+
+        // BeneficiaryAccNo
+        var BeneficiaryAccNo = document.getElementById("BeneficiaryAccNo").value;
+        if (BeneficiaryAccNo == null || BeneficiaryAccNo == "") {
+            alert("Enter Beneficiary Acc number!");
+            document.getElementById("BeneficiaryAccNo").focus();
+            return false;
+        }
+
+        // cBeneficiaryAccNo
+        var cBeneficiaryAccNo = document.getElementById("cBeneficiaryAccNo").value;
+        if (cBeneficiaryAccNo == null || cBeneficiaryAccNo == "") {
+            alert("Enter confirm Beneficiary Acc number!");
+            document.getElementById("cBeneficiaryAccNo").focus();
+            return false;
+        }
+
+        // BeneficiaryBank
+        var BeneficiaryBank = document.getElementById("BeneficiaryBank").value;
+        if (BeneficiaryBank == null || BeneficiaryBank == "") {
+            alert("Enter confirm Beneficiary Bank name!");
+            document.getElementById("BeneficiaryBank").focus();
+            return false;
+        }
+
+        // IFSCCode
+        var IFSCCode = document.getElementById("IFSCCode").value;
+        if (IFSCCode == null || IFSCCode == "") {
+            alert("Enter Beneficiary IFSC Code!");
+            document.getElementById("IFSCCode").focus();
+            return false;
+        }
+
+        // branchAddress
+        var branchAddress = document.getElementById("branchAddress").value;
+        if (branchAddress == null || branchAddress == "") {
+            alert("Enter Beneficiary Branch Address!");
+            document.getElementById("branchAddress").focus();
+            return false;
+        }
+
+
+        var x = document.getElementById("urlVal").value;
+        var y = "postRtgsData";
+
+        var count_id = document.getElementById("RecordId").value;
+        var sni_id = document.getElementById("sni_id").value;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        var hh = String(today.getHours()).padStart(2, '0');
+        var min = String(today.getMinutes()).padStart(2, '0');
+        var ss = String(today.getSeconds()).padStart(2, '0');
+        //var RefNo = "RTGS" + yyyy + mm + dd + hh + min + ss;
+        var RefNo = "RTGS" + yyyy + mm + dd + hh + min + ss;
+
+        var bankcode = document.getElementById("bankcode").value;
+        var remittance_type = "RTGS";
+
+        var L2StartLimit = document.getElementById("L2StartLimit").value;
+        var CheckerModule = document.getElementById("CheckerModule").value;
+
+        var data_amt = parseFloat(amt);
+        var VerfRequired = "";
+
+        if (CheckerModule == "Y") {
+            if (data_amt >= parseFloat(L2StartLimit))
+                VerfRequired = "Y";
+            else
+                VerfRequired = "N";
+        }
+        else {
+            VerfRequired = "N";
+        }
+
+        debugger;
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: {
+                'Status': 'SUBMIT',
+                'CheckerModule': CheckerModule, 'VerfRequired': VerfRequired,
+                'count_id': count_id, 'sni_id': sni_id, 'RefNo': RefNo, 'bankcode': bankcode, 'RemittanceType': remittance_type, 'Date': formdate, 'PAN': pan,
+                'Branch': branch, 'Amount': amt, 'AmountInWords': amtinwords, 'ModeOfTransaction': RemittanceType, 'DebitAccNo': debitAccNo, 'ChqNo': Chqno, 'ChequeDate': chqDate,
+                'Address': address, 'MobileNo': mobileno, 'BeneficiaryName': BeneficiaryName, 'BeneficiaryAccNo': BeneficiaryAccNo, 'cBeneficiaryAccNo': cBeneficiaryAccNo,
+                'BeneficiaryBank': BeneficiaryBank, 'BeneficiaryIFSCCode': IFSCCode, 'BranchAddress': branchAddress, 'DebitName': remitterName
+            },
+            success: function (result) {
+                PostRtgsSuccess(result);
+            },
+            error: getError
+        });
+    }
+
+
+    function PostRtgsSuccess(result) {
+        alert(result);
+
+        var rooturl = '@Url.Content("~/")';
+
+        window.open(rooturl + "RtgsNeft/RtgsList", "_self");
+    }
+
+
+</script>
+
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Rtgs Form
+            </h1>
+        </div>
+        <div class="page-content">
+            <div class="col-sm-12">
+                <div class="col-sm-4" style="border-color:black">
+                    <div class="row">
+                        <label class="col-sm-5"><b>Form Date:</b></label>
+                        <input id="form_date" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch:</b></label>
+                        <input id="branch" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Pan:</b></label>
+                        <input id="pan" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Amount:</b></label>
+                        <input id="amt" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Amount In Words:</b></label>
+                    </div>
+                    <div class="row">
+                        <textarea id="amtinwords" style="width:100%"></textarea>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Mode of Transaction:</b></label>
+                        <input id="RemittanceType" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Debit Acc No:</b></label>
+                        <input id="debitAccNo" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Cheque No:</b></label>
+                        <input id="Chqno" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Cheque Date:</b></label>
+                        <input id="chqDate" />
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Remitter's Name:</b></label>
+                        <input id="remitterName" />
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Address:</b></label>
+                    </div>
+                    <div class="row">
+                        <textarea id="address" style="width:100%"></textarea>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Mobile Number:</b></label>
+                        <input id="mobileno" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Name:</b></label>
+                        <input id="BeneficiaryName" style="width:100%" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Acc No:</b></label>
+                        <input id="BeneficiaryAccNo" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Confirm Beneficiary Acc No:</b></label>
+                        <input id="cBeneficiaryAccNo" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Bank:</b></label>
+                        <input id="BeneficiaryBank" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>IFSC:</b></label>
+                        <input id="IFSCCode" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch Address:</b></label>
+                    </div>
+                    <div class="row">
+                        <textarea id="branchAddress" style="width:100%"></textarea>
+                    </div>
+
+
+                    <br />
+                    <div class="row">
+                        <input type="button" id="btnReset" value="Back" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="BackBtn();" />
+                        <input type="button" id="btnReset" value="Reset" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="ResetData();" />
+                        <input type="button" id="btnSubmit" value="Submit" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="SubmitData();" />
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <img id="FrontImg" src="" style="width:100%" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

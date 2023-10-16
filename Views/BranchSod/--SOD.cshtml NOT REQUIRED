@@ -1,0 +1,768 @@
+﻿<script src="~/Scripts/SOD.js"></script>
+@{
+    ViewBag.Title = "Branch SOD";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Branch SOD
+                @*<small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        Manual Upload
+                    </small>*@
+            </h1>
+        </div>
+        <div>
+            <div class="container-fluid">
+                @{
+                    Html.RenderPartial("TopView");
+                }
+            </div>
+            <div class="row text-center" style="">
+                <h4 id="CashT" style="text-align:center ;display:none;"><u>CASH DEPOSIT </u></h4>
+                <h4 id="WithT" style="text-align:center; display:none"><u>CASH WITHDRWAL </u></h4>
+                <h4 id="SOD" style="text-align:center; display:none"><u>SOD </u></h4>
+                <h4 id="EOD" style="text-align:center; display:none"><u>EOD </u></h4>
+                <h4 id="TsCT" style="text-align:center; display:none"><u>TRANSFER CHEQUE </u></h4>
+            </div>
+            @*cadetblue*@
+            <div class="row" style="background-color: lightblue;padding-bottom:5px;padding-top:10px;border-radius: 10px;font-size:small;">
+                <input type="text" value="" id="TransMode" name="TransMode" hidden />
+                <img style="display:none" height='310' width='500' id="FG" hidden />
+                <div class="col-sm-12">
+                    @*<div class="col-sm-3">
+                    @{
+                        Html.RenderPartial("SideView");
+                    }
+                </div>*@
+
+                    <div class="col-sm-4">
+
+                        <div class="row" style="padding-top:2px;font-size:12px;">
+
+                            <div id="ChequeAmnt" class="col-sm-7"><label>Cheque Amount:</label> </div>
+                            <div class="col-sm-7">
+
+
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div id="ChequeSlip" class="row">
+                                    <div class="col-sm-4">
+                                        <input id="HalfChequeAmount" style="width: 55px;" />
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input id="DivChequeAmount" value="/" style="width: 20px;text-align: center;" />
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input id="DenomAmountForCheque" readonly="readonly" style="width: 55px;margin-left:-11px;" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="DenomAmnt">
+                                <label>MobileNo/AccountNo:</label>
+                                <input id="MobileNo" autofocus="autofocus" />
+                                <div>
+                                    <label>Denmination Amount:</label>
+                                    <input id="DenomAmount" readonly="readonly" />
+                                </div>
+
+                                <div>
+                                    <label>Denomination Count   :</label>
+                                    <input id="denomcount" readonly="readonly" />
+                                </div>
+                                <input type="button" id="btnGetVoucher" value="Get Vault Cash Details" style="background-color:black;color:white;font-size: x-small;" class="btn" onclick="getSubmit('WithVoucher');" />
+                                @*<input type="button" id="btnBack" value="Back" class="btn" style="background-color:black;color:white;font-size: x-small;" onclick="goBack();" />*@
+                                <input type="button" id="btnReset" value="Reset" class="btn" style="background-color:black;color:white;font-size: x-small;" onclick="getReset();" />
+                                <input type="button" id="btnSubmit" value="Submit" class="btn" style="background-color:black;color:white;font-size: x-small;" onclick="SubmitData();" />
+
+                                @*<input type="text" id="denomcount" class="btn" style="background-color:black;color:white;font-size: x-small;" readonly />*@
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div id="CashData" class="col-sm-12" style="padding-top:20px;">
+                            <div class="row" style="background-color: rgb(242, 242, 242);width: 365px;">
+                                @*<div class="row" style="background-color: lightblue;width: 365px;">*@
+                                <table id="tblDenomination" style="cursor:pointer;overflow-x:auto;border:1px solid black; font-size:smaller">
+                                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                                        <tr>
+                                            @*<th>                 </th>
+                                        <th>                    </th>
+                                        <th style="text-align:center">        DENOMINATIONS            </th>
+                                        <th></th>
+                                        <th></th>*@
+                                            <th colspan="6" style="text-align:center">DENOMINATIONS</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-align:center;width:100px">DENOMINATION</th>
+                                            <th></th>
+                                            <th style="text-align:center;width:80px">Cash In</th>
+
+                                            <th style="text-align:center;width:80px">Cash Out</th>
+                                            <th style="text-align:center;width:80px">Amount</th>
+                                            <th style="text-align:center;width:80px">DENOM VALUE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div align="right">
+
+                                    <input type="button" id="btnPost" value="InsertCash" style="background-color:black;font-size:15px; color:white;" onclick="Data_ManualDataEntry()" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    document.getElementById("TransMode").value = "SOD";
+
+    var rooturl = '@Url.Content("~/")';
+
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var popup = "";
+    var recipt = "no";
+    var flag = "";
+    $("#tblDenomination").hide();
+    $("#MICRImg").hide();
+    $("#ShowToAcc").hide();
+    $("#ChequeData").hide();
+    $("#CashData").hide();
+    $("#TranAmnt").hide();
+    $("#SlipAmnt").hide();
+    $("#DenomAmnt").hide();
+    $("#ChequeAmnt").hide();
+    $("#ChequeDate").hide();
+    $("#HalfChequeAmount").hide();
+    $("#DivChequeAmount").hide();
+    $("#HalfSlipAmount").hide();
+    $("#DivSlipAmount").hide();
+    $("#ChequeSlip").hide();
+    $("#SlipCheque").hide();
+    // $("#btnValid").hide();
+    var instruType = "";
+    var dArray = [];
+    var dCount = [];
+    var ImageArray = [];
+    var SlipToAccount = 0;
+    var SlipCount = 0;
+    var batchNo = 0;
+    var intSlipNo = 0;
+    var batchCntAfterDelete = 0;
+    var batchCnt = 0;
+    var GlobalRowNo = " ";
+    var DenomDataToadd = 0;
+    var totalAmtToAdd = 0;
+    var transRefNo = null;
+    var TotalManualDenomDataToadd = 0;
+    var manualTotal = 0;
+
+    var d = new Date();
+    strDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + "  " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+    var ValidationPassed = false;
+
+    var urlParams = new URLSearchParams(window.location.search);
+
+    //var typeOfTran = urlParams.get('Name');
+    var typeOfTran = "SOD";
+    var cashinout = "";
+    if (typeOfTran == "SOD") {
+        //$("TransMode").val = "SOD";
+       // $("#TranAmnt").show();
+        $("#DenomAmnt").show();
+        $("#SOD").show();
+        cashinout = "v";
+        flag = "vaultcash";
+    }
+
+    //if (typeOfTran == "EOD") {
+    //    $("TransMode").val = "EOD";
+    //    // $("#TranAmnt").show();
+    //    $("#DenomAmnt").show();
+    //    $("#EOD").show();
+    //    $('#btnPost').show();
+    //    cashinout = "c";
+    //    flag = "Currencychestcash";
+    //}
+
+
+
+        localStorage.setItem("typeOfTran", "vaultcash")
+    var tableChequeData = document.getElementById('tblChequeData');
+    var tableDenom = document.getElementById("tblDenomination");
+
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    //var gusername = window.localStorage.getItem('username');
+    var gusername = document.getElementById('tellerDetails').value;
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+    function getSubmit(typeOfTran) {
+      //  alert(cashinout);
+
+        debugger;
+
+        var jb = document.getElementById('tellerDetails').value;
+
+        $.ajax({
+            type: 'POST',
+            url: x + "getcashdetails",
+            headers: authHeaders,
+            crossDomain: true,
+            data: { 'Intellerid': gusername, 'cashinout': cashinout },
+            success: getSuccess,
+            error: getError
+
+        });
+    }
+
+    function Data_ManualDataEntry() {
+        debugger;
+        var dArray_Manual = [];
+        var dCount_Manual = [];
+        for (var i = 2, row; row = tableDenom.rows[i]; i++) {
+            //debugger;
+            //if (row.cells[0].innerHTML.includes("COINS") == false) {
+            var dValue = row.cells[2].innerHTML;
+            var rowdata = [];
+            rowdata = dValue.split(" ");
+            var idVal = [];
+            //idVal = rowdata[3].split("=\"");
+            //var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+            //------------ Added on 2022-03-21 ----------- By Aniketadit Jamuar ----------- Begin
+            var j = i - 2;
+            var newId = j.toString();
+            var inId = 'denomId_' + newId;
+            var DenomDataToaddss = inId;
+            if (j < 10) {
+                //debugger;
+                var dnamt = "";
+                var inVal = document.getElementById(inId).textContent;
+                var element5 = "denomId5_" + newId;
+                var DenomDataToaddssMan = element5;
+                if (inVal != "") {
+                    if (document.getElementById(DenomDataToaddssMan).value != "") {
+                        dnamt = parseInt(document.getElementById(DenomDataToaddssMan).value);
+                        dCount_Manual.push(dnamt);
+                        dArray_Manual.push(row.cells[0].innerHTML);
+                    }
+                }
+                else {
+                    if (document.getElementById(DenomDataToaddssMan).value != "") {
+                        dnamt = parseInt(document.getElementById(DenomDataToaddssMan).value);
+                        dCount_Manual.push(dnamt);
+                        dArray_Manual.push(row.cells[0].innerHTML);
+                    }
+                }
+            }
+            //------------ Added on 2022-03-21 ----------- By Aniketadit Jamuar ----------- End
+        }
+
+        var count = 1;
+        var INR = 'INR';
+        var y = "ManualDataEntry";
+
+        //new
+        debugger;
+        //var pd_val = document.getElementById("TransMode").value;
+        var pd_val = document.getElementById("TransMode").value;
+        var cashinout = "";
+        if (pd_val == "SOD")
+            cashinout = "v";
+        else
+            cashinout = "c";
+        debugger;
+        //if ($('#returncash').is(":checked")) {
+        //    // it is checked
+        //    //alert("true");
+        //    // alert("Hello!");
+        //    cashinout = 'out';
+        //}
+        //else {
+        //    //alert("false");
+        //    cashinout = 'in';
+
+        //}
+
+        //new
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: { Tellerid: gusername, Denoms: dArray_Manual, DenomCount: dCount_Manual, maip: machineserialno, count_id: sni_countid, local: INR, cashinout: cashinout },
+            success: getSuccessReset,
+            error: getError
+        });
+
+        //var pg_type = document.getElementById("TransMode").value;
+        //if (pg_type == "SOD")
+        //    getSubmit('WithVoucher');
+
+
+        return true;
+    }
+
+    $("#tblDenomination").on('change', 'td', function () {
+        manualTotal = parseInt(document.getElementById('DenomAmount').value);
+
+        var PageType = document.getElementById("TransMode").value;
+
+        var RowNo = this.parentNode.rowIndex;
+        var x = this.cellIndex;
+        var FinalAmt = 0;
+        var FinalCount = 0;
+        
+        if (x == 5)
+        {
+            debugger;
+            if (PageType == "SOD") {
+                var RowNo_2 = 2;
+                var cell5_InOut = 0
+                for (var i = 0; i < 10; i++) {
+
+                    var countVal = 0;
+                    var cellId = "denomId_" + i.toString();
+                    var cellId2 = "denomId5_" + i.toString();
+                    //denomId_0
+                    var calVal = 0;
+                    var cellVal = document.getElementById(cellId).innerHTML;
+                    if (cellVal != "") {
+                        if (cellId == "denomId_0") {
+                            FinalAmt = FinalAmt + (2000 * parseInt(cellVal));
+                            debugger;
+                            calVal = calVal + (2000 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_1") {
+                            FinalAmt = FinalAmt + (500 * parseInt(cellVal));
+                            calVal = calVal + (500 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_2") {
+                            FinalAmt = FinalAmt + (200 * parseInt(cellVal));
+                            calVal = calVal + (200 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_3") {
+                            FinalAmt = FinalAmt + (100 * parseInt(cellVal));
+                            calVal = calVal + (100 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_4") {
+                            FinalAmt = FinalAmt + (50 * parseInt(cellVal));
+                            calVal = calVal + (50 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_5") {
+                            FinalAmt = FinalAmt + (20 * parseInt(cellVal));
+                            calVal = calVal + (20 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_6") {
+                            FinalAmt = FinalAmt + (10 * parseInt(cellVal));
+                            calVal = calVal + (10 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_7") {
+                            FinalAmt = FinalAmt + (5 * parseInt(cellVal));
+                            calVal = calVal + (5 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_8") {
+                            FinalAmt = FinalAmt + (2 * parseInt(cellVal));
+                            calVal = calVal + (2 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_9") {
+                            FinalAmt = FinalAmt + parseInt(cellVal);
+                            calVal = calVal + parseInt(cellVal);
+                        }
+
+                        countVal = countVal + parseInt(cellVal);
+                        FinalCount = FinalCount + parseInt(cellVal);
+                    }
+                    debugger;
+                    var cellVal2 = document.getElementById(cellId2).value;
+
+                    var intCellval = parseInt(cellVal2);
+
+                    if (intCellval < 0) {
+                        cellVal2 = null;
+                        document.getElementById(cellId2).value = 0;
+                    }
+
+                    if (cellVal2 != "") {
+                        if (cellId2 == "denomId5_0") {
+                            FinalAmt = FinalAmt + (2000 * parseInt(cellVal2));
+                            debugger;
+                            calVal = calVal + (2000 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_1") {
+                            FinalAmt = FinalAmt + (500 * parseInt(cellVal2));
+                            calVal = calVal + (500 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_2") {
+                            FinalAmt = FinalAmt + (200 * parseInt(cellVal2));
+                            calVal = calVal + (200 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_3") {
+                            FinalAmt = FinalAmt + (100 * parseInt(cellVal2));
+                            calVal = calVal + (100 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_4") {
+                            FinalAmt = FinalAmt + (50 * parseInt(cellVal2));
+                            calVal = calVal + (50 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_5") {
+                            FinalAmt = FinalAmt + (20 * parseInt(cellVal2));
+                            calVal = calVal + (20 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_6") {
+                            FinalAmt = FinalAmt + (10 * parseInt(cellVal2));
+                            calVal = calVal + (10 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_7") {
+                            FinalAmt = FinalAmt + (5 * parseInt(cellVal2));
+                            calVal = calVal + (5 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_8") {
+                            FinalAmt = FinalAmt + (2 * parseInt(cellVal2));
+                            calVal = calVal + (2 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_9") {
+                            FinalAmt = FinalAmt + parseInt(cellVal2);
+                            calVal = calVal + parseInt(cellVal2);
+                        }
+
+                        cell5_InOut = cell5_InOut + parseInt(cellVal2);
+                        countVal = countVal + parseInt(cellVal2);
+                        FinalCount = FinalCount + parseInt(cellVal2);
+                    }
+
+                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo_2].cells[4].innerHTML = calVal.toString();
+                    document.getElementById("denomId5_C").innerHTML = cell5_InOut.toString();
+                    RowNo_2++;
+                }
+
+                //var coin = document.getElementById("denomId").value;
+                //if (coin != "") {
+                //    calVal = calVal + parseInt(coin);
+                //    document.getElementById("tblDenomination").getElementsByTagName('tr')[10].cells[4].innerHTML = coin;
+                //    FinalCount = FinalCount + parseInt(coin);
+                //    FinalAmt = FinalAmt + parseInt(coin);
+                //}
+
+                debugger;
+                document.getElementById("denomcount").value = FinalCount.toString();
+
+                document.getElementById("DenomAmount").value = FinalAmt.toString();
+            }
+            else if (PageType == "EOD") {
+                var RowNo_2 = 2;
+                var cell5_InOut = 0
+                for (var i = 0; i < 10; i++) {
+
+                    var countVal = 0;
+                    var cellId = "denomId_" + i.toString();
+                    var cellId2 = "denomId5_" + i.toString();
+                    //denomId_0
+                    var calVal = 0;
+                    var cellVal = document.getElementById(cellId).innerHTML;
+                    if (cellVal != "") {
+                        if (cellId == "denomId_0") {
+                            FinalAmt = FinalAmt + (2000 * parseInt(cellVal));
+                            debugger;
+                            calVal = calVal + (2000 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_1") {
+                            FinalAmt = FinalAmt + (500 * parseInt(cellVal));
+                            calVal = calVal + (500 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_2") {
+                            FinalAmt = FinalAmt + (200 * parseInt(cellVal));
+                            calVal = calVal + (200 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_3") {
+                            FinalAmt = FinalAmt + (100 * parseInt(cellVal));
+                            calVal = calVal + (100 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_4") {
+                            FinalAmt = FinalAmt + (50 * parseInt(cellVal));
+                            calVal = calVal + (50 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_5") {
+                            FinalAmt = FinalAmt + (20 * parseInt(cellVal));
+                            calVal = calVal + (20 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_6") {
+                            FinalAmt = FinalAmt + (10 * parseInt(cellVal));
+                            calVal = calVal + (10 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_7") {
+                            FinalAmt = FinalAmt + (5 * parseInt(cellVal));
+                            calVal = calVal + (5 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_8") {
+                            FinalAmt = FinalAmt + (2 * parseInt(cellVal));
+                            calVal = calVal + (2 * parseInt(cellVal));
+                        }
+                        if (cellId == "denomId_9") {
+                            FinalAmt = FinalAmt + parseInt(cellVal);
+                            calVal = calVal + parseInt(cellVal);
+                        }
+
+                        countVal = countVal + parseInt(cellVal);
+                        FinalCount = FinalCount + parseInt(cellVal);
+                    }
+                    debugger;
+                    var cellVal2 = document.getElementById(cellId2).value;
+                    if (cellVal2 != "") {
+                        if (cellId2 == "denomId5_0") {
+                            FinalAmt = FinalAmt + (2000 * parseInt(cellVal2));
+                            debugger;
+                            calVal = calVal + (2000 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_1") {
+                            FinalAmt = FinalAmt + (500 * parseInt(cellVal2));
+                            calVal = calVal + (500 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_2") {
+                            FinalAmt = FinalAmt + (200 * parseInt(cellVal2));
+                            calVal = calVal + (200 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_3") {
+                            FinalAmt = FinalAmt + (100 * parseInt(cellVal2));
+                            calVal = calVal + (100 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_4") {
+                            FinalAmt = FinalAmt + (50 * parseInt(cellVal2));
+                            calVal = calVal + (50 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_5") {
+                            FinalAmt = FinalAmt + (20 * parseInt(cellVal2));
+                            calVal = calVal + (20 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_6") {
+                            FinalAmt = FinalAmt + (10 * parseInt(cellVal2));
+                            calVal = calVal + (10 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_7") {
+                            FinalAmt = FinalAmt + (5 * parseInt(cellVal2));
+                            calVal = calVal + (5 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_8") {
+                            FinalAmt = FinalAmt + (2 * parseInt(cellVal2));
+                            calVal = calVal + (2 * parseInt(cellVal2));
+                        }
+                        if (cellId2 == "denomId5_9") {
+                            FinalAmt = FinalAmt + parseInt(cellVal2);
+                            calVal = calVal + parseInt(cellVal2);
+                        }
+
+                        cell5_InOut = cell5_InOut + parseInt(cellVal2);
+                        countVal = countVal + parseInt(cellVal2);
+                        FinalCount = FinalCount + parseInt(cellVal2);
+                    }
+
+
+
+                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo_2].cells[4].innerHTML = calVal.toString();
+                    document.getElementById("denomId5_C").innerHTML = cell5_InOut.toString();
+                    RowNo_2++;
+                }
+
+                //var coin = document.getElementById("denomId").value;
+                //if (coin != "") {
+                //    calVal = calVal + parseInt(coin);
+                //    document.getElementById("tblDenomination").getElementsByTagName('tr')[10].cells[4].innerHTML = coin;
+                //    FinalCount = FinalCount + parseInt(coin);
+                //    FinalAmt = FinalAmt + parseInt(coin);
+                //}
+
+                debugger;
+                document.getElementById("denomcount").value = FinalCount.toString();
+
+                document.getElementById("DenomAmount").value = FinalAmt.toString();
+            }
+            else {
+                var dnamt = "";
+                var Demon = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[5].innerHTML;
+                var rowdata = [];
+                rowdata = Demon.split(" ");
+                debugger;
+                var idVal = [];
+                idVal = rowdata[3].split("=\"");
+                var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+
+                if (document.getElementById(DenomDataToaddss).value != "") {
+                    dnamt = parseInt(document.getElementById(DenomDataToaddss).value);
+                }
+                else {
+                    dnamt = 0;
+                }
+
+                debugger;
+                var dvLen = DenomDataToaddss.length;
+                var dv = DenomDataToaddss.substring(dvLen, dvLen - 1);
+                var inId = 'denomId_' + dv;
+                var inVal = document.getElementById(inId).textContent;
+                var dnamt2 = "";
+                if (inVal != "") {
+                    var inValInt = parseInt(inVal);
+                    dnamt2 = inValInt
+                }
+                else
+                    dnamt2 = 0;
+
+                //var Demon2 = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[2].innerHTML;
+                //var rowdata2 = [];
+                //rowdata2 = Demon2.split(" ");
+                //var idVal2 = [];
+                //idVal2 = rowdata2[3].split("=\"");
+                //var DenomDataToaddss2 = idVal2[1].replace(/['"]+/g, '');
+                //var dnamt2 = "";
+                //if (document.getElementById(DenomDataToaddss2).value != "") {
+                //    dnamt2 = parseInt(document.getElementById(DenomDataToaddss2).value);
+                //}
+                //else {
+                //    dnamt2 = 0;
+                //}
+
+                var totalamt = dnamt + dnamt2;
+                var Demon3 = 0;
+                if (document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML == "COINS") {
+                    Demon3 = 1;
+
+                }
+                else {
+                    Demon3 = parseInt(document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML);
+                }
+                var dnmtotal = Demon3 * totalamt;
+                document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = dnmtotal;
+
+                var tbldenom = document.getElementById("tblDenomination");
+                var Denomination = 0;
+                TotalManualDenomDataToadd = 0;
+
+                for (var i = 2; i < tblDenomination.rows.length; i++) {
+
+                    var DemonT = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[4].innerHTML;
+                    DemonT = DemonT.replace('<label>', '');
+                    DemonT = parseInt(DemonT.replace('</label>', ''));
+
+                    Denomination = parseInt(Denomination + DemonT);
+
+
+
+                    var dnamtll = "";
+                    var Demonll = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[5].innerHTML;
+                    var rowdatall = [];
+                    rowdatall = Demonll.split(" ");
+                    var idValll = [];
+                    idValll = rowdatall[3].split("=\"");
+                    var DenomDataToaddssll = idValll[1].replace(/['"]+/g, '');
+
+                    if (document.getElementById(DenomDataToaddssll).value != "") {
+                        dnamt11 = parseInt(document.getElementById(DenomDataToaddssll).value);
+                    }
+                    else {
+                        dnamt11 = 0;
+                    }
+
+                    debugger;
+                    var dvLen2 = DenomDataToaddss.length;
+                    var dv2 = DenomDataToaddss.substring(dvLen2, dvLen2 - 1);
+                    var inId2 = 'denomId_' + dv2;
+                    var inVal2 = document.getElementById(inId2).textContent;
+                    var Ddnamt2 = "";
+                    if (inVal2 != "") {
+                        var inValInt = parseInt(inVal2);
+                        Ddnamt2 = inValInt
+                    }
+                    else
+                        Ddnamt2 = 0;
+
+                    //debugger;
+                    //var Ddnamt2 = "";
+                    //var DDemon2 = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[2].innerHTML;
+                    //var Drowdata2 = [];
+                    //Drowdata2 = DDemon2.split(" ");
+                    //var DidVal2 = [];
+                    //DidVal2 = Drowdata2[3].split("=\"");
+                    //var DDenomDataToaddss2 = DidVal2[1].replace(/['"]+/g, '');
+
+                    //if (document.getElementById(DDenomDataToaddss2).value != "") {
+                    //    Ddnamt2 = parseInt(document.getElementById(DDenomDataToaddss2).value);
+                    //}
+                    //else {
+                    //    Ddnamt2 = 0;
+                    //}
+
+
+                    TotalManualDenomDataToadd = TotalManualDenomDataToadd + dnamt11 + Ddnamt2;
+
+                }
+
+                document.getElementById("denomcount").value = TotalManualDenomDataToadd;
+
+                document.getElementById("DenomAmount").value = Denomination;
+            }
+
+        }
+    });
+
+
+
+    //------------------added by me--------------------------------------------------
+
+    $(document).ready(function () {
+
+        var typeTrans = urlParams.get('Name');
+        document.getElementById("TransMode").value = typeTrans;
+
+        debugger;
+        //if (typeTrans != "SOD") {
+        //    $('#btnPost').hide();
+        //}
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- by me----------------------------------------------------------
+</script>
+<style type="text/css">
+    .tableClass {
+        width: 50px;
+    }
+
+    .tableBack {
+        background-color: cadetblue;
+        color: white;
+        text-align: center;
+    }
+
+    .rowalign {
+        text-align: center;
+    }
+</style>

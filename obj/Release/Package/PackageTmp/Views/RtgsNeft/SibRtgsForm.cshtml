@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "SibRtgsForm";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<input id="RecordId" value="@ViewBag.RecordId" hidden />
+<input id="sni_id" value="" hidden />
+
+<script type="text/javascript" >
+    $(document).ready(function () {
+
+        var x = document.getElementById("urlVal").value;
+        var y = "getRtgsFormData";
+        var userId = document.getElementById("tellerDetails").value;
+
+        var count_id = document.getElementById("RecordId").value;
+
+        debugger;
+
+        var access_token = window.localStorage.getItem('AccessToken');
+        var bearer = window.localStorage.getItem('TokenType');
+        var gusername = window.localStorage.getItem('username');
+        //var gusername = "MERAJ";
+        var authHeaders = {};
+        var ProcessType = "";
+        authHeaders.Authorization = bearer + " " + access_token;
+
+
+        //$.ajax({
+        //    url: x + y,
+        //    headers: authHeaders,
+        //    type: 'POST',
+        //    //data: { 'pType': 'RTGS', 'INtellerid': userId },
+        //    data: { 'count_id': count_id },
+        //    success: function (result) {
+        //        RtgsFormData(result);
+        //    },
+        //    error: getError
+        //});
+    });
+</script>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                SIB Rtgs Form
+            </h1>
+        </div>
+        <div class="page-content">
+            <div class="col-sm-12">
+                <div class="col-sm-4">
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch:</b></label>
+                        <input id="remittance_type" />
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch:</b></label>
+                        <input id="remittance_type" />
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch:</b></label>
+                        <input id="remittance_type" />
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch:</b></label>
+                        <input id="remittance_type" />
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch:</b></label>
+                        <input id="remittance_type" />
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <img id="FrontImg" src="" style="width:100%" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

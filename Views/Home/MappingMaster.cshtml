@@ -1,0 +1,269 @@
+﻿@model iBAS.Models.MappingMaster
+@{
+    ViewBag.Title = "MappingMaster";
+    ViewBag.header = "Mapping Module";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/Search.js"></script>
+
+<style>
+    select {
+        width: 280px;
+        height: 37px;
+    }
+
+    a {
+        font-size: 30px;
+        float: right;
+    }
+</style>
+
+<h2 style="margin-top:40px;text-align:center;font-weight:bold"> Printer Mapping Master </h2>
+
+<a href="~/home/PrinterMaster">Back</a>
+<div class="container">
+
+    <div class="well bs-component" style="background-color:lightgray" >
+    @*<div class="well well-lg" style="background-color:lightgray">*@
+        <div class="row">
+
+            <div class="col-sm-3">
+                <label for="uname"><b>Enter Branch Code</b></label>
+                <input type="text" style="font-size:22px" id="branch_code" maxlength="5" pattern="[0-9]" />
+            </div>
+
+            <div class="col-sm-3">
+                <label><b>Select Sorter SerialNo</b></label>
+                <select id="drpsorter"></select>
+            </div>
+
+            <div class="col-sm-3">
+                <label for="uname"><b>Enter Sorter IP</b></label>
+                <input type="text" style="font-size:22px" id="sorter_ip" maxlength="16">
+            </div>
+
+            <div class="col-sm-3">
+                <label for="uname"><b>Enter Sorter Port</b></label>
+                <input type="text" style="font-size:22px" id="sorter_port" maxlength="5">
+            </div>&nbsp;
+
+            <div class="col-sm-3">
+                <label for="uname"><b>Enter Printer IP</b></label>
+                <input type="text" style="font-size:22px" id="printer_ip" maxlength="21">
+            </div>
+
+            <div class="col-sm-3">
+                <label for="uname"><b>Enter Printer Port</b></label>
+                <input type="text" style="font-size:22px" id="printer_port" maxlength="5">
+            </div>
+
+            <div class="col-sm-3">
+                <label><b>Select Printer Model</b></label>
+                <select id="printer_model">
+                    <option>TP805</option>
+                </select>
+            </div>
+
+            <div class="col-sm-3">
+                <label><b>Enter Receipt Priting</b></label>
+                <select id="receipt_printing">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+
+            <div class="row" style="margin-top:40px;text-align:center">
+                <div class="col-sm-11">
+                    <input class="btn btn-primary" style="float: initial;font-weight:bold; padding: 10px 20px" type="submit" id="btnSave" name="btnSave" value="Save">
+                    <input class="btn btn-primary" style="float: initial;font-weight:bold; padding: 10px 20px" type="submit" id="btnBck" name="btnSearch" value="Back">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var RootUrl = '@Url.Content("~/")';
+
+
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    //For Serial no DropDown
+    $(document).ready(function () {
+        var x = '@ViewBag.URL';
+        var y = "getsorterdetails";
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            success: function (result) {
+
+                var district = "";
+                $("#drpsorter").empty();
+                console.log(result);
+                $("#drpsorter").append(
+                    $('<option></option>').val(0).html("Select Sorter SerialNo"));
+                $.each(result, function (i, drpsorter) {
+                    $("#drpsorter").append(
+                        $('<option></option>').val(drpsorter.inmachineserialno).html(drpsorter.inmachineserialno));
+                });
+
+            },
+            error: getError
+        });
+
+    });
+
+    function getError(result) {
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+    $("body").on("click", "#btnSave", function () {
+        var x = '@ViewBag.URL';
+        var y = "insertprinterdetails";
+        debugger;
+        var branch_code = $("#branch_code").val();
+        var drpsorter = $("#drpsorter").val();
+        var sorter_ip = $("#sorter_ip").val();
+        var sorter_port = $("#sorter_port").val();
+        var printer_ip =    $("#printer_ip").val();
+        var printer_port =  $("#printer_port").val();
+        var printer_model = $("#printer_model").val();
+        var receipt_printing = $("#receipt_printing").val();
+
+        if (branch_code == "" || drpsorter == "" || sorter_ip == "" || sorter_port == "" || printer_ip == "" || printer_port == "" || printer_model == "" || receipt_printing == "") {
+            alert("Fields should not be empty");
+            //location.reload();
+            return;
+
+        }
+        debugger;
+        var regexbranch_code = /^[0-9]+$/;
+        if (!regexbranch_code.test(branch_code)) {
+            alert("Branch Code can only accept numbers !!");
+            document.getElementById("branch_code").value = "";
+            $("#branch_code").focus();
+            //location.reload();
+            return;
+        }
+
+        var regexsorter_ip = /^[0-9.]+$/;
+        //var regexsorter_ip = /^[0-9]+$/ && /^[.]+$/;
+        if (!regexsorter_ip.test(sorter_ip)) {
+            alert("Please enter proper Ip details !!");
+            document.getElementById("sorter_ip").value = "";
+            document.getElementById("sorter_ip").focus();
+            //location.reload();
+            return;
+        }
+
+        var regexsorter_port = /^[0-9]+$/;
+        if (!regexsorter_port.test(sorter_port)) {
+            alert("Sorter Port can only accept numbers !!");
+            document.getElementById("sorter_port").value = "";
+            document.getElementById("sorter_port").focus();
+            //location.reload();
+            return;
+        }
+
+        var regexprinter_ip = /^[A-Za-z0-9,.]+$/;
+        //var regexprinter_ip = /^[A-Z]+$/ && /^[a-z]+$/ && /^[0-9]+$/ && /^[,]+$/ && /^[.]+$/;
+        if (!regexprinter_ip.test(printer_ip)) {
+            alert("Printer Ip.. Should contain numcers,characters comma dot only !!");
+            document.getElementById("printer_ip").value = "";
+            document.getElementById("printer_ip").focus();
+            //location.reload();
+            return;
+        }
+
+
+        //a
+        var regexprinter_port = /^[0-9]+$/;
+        if (!regexprinter_port.test(printer_port)) {
+            alert("Printer Port can only accept numbers !!");
+            document.getElementById("printer_port").value = "";
+            document.getElementById("printer_port").focus();
+            //location.reload();
+            return;
+        }
+
+        
+
+
+
+
+        var regex = /^[A-Za-z0-9.,]+$/;
+        if (!regex.test(branch_code) || !regex.test(drpsorter) || !regex.test(sorter_ip) || !regex.test(sorter_port) || !regex.test(printer_ip) || !regex.test(printer_port) || !regex.test(printer_model) || !regex.test(receipt_printing)) {
+            alert("Fields should not contain special characters");
+            //location.reload();
+            return;
+        }
+
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'inbranch_code': branch_code, 'inmachineserialno': drpsorter, 'insorter_ip': sorter_ip, 'insorter_port': sorter_port,
+                'inprinter_ip': printer_ip, 'inprinter_port': printer_port, 'inprinter_model': printer_model, 'inteller_id': gusername, 'inrecieptprinting': 'YES'
+            },
+            success: function(data, textStatus, xhr) {
+                console.log(data);
+                alert("Printer Mapped Successfully!!!!!");
+                $("#branch_code").val('');
+                $("#drpsorter").val('');
+                $("#sorter_ip").val('');
+                $("#sorter_port").val('');
+                $("#printer_ip").val('');
+                $("#printer_port").val('');
+                $("#printer_model").val('');
+                $("#receipt_printing").val('');
+                location.replace('PrinterMaster');
+            },
+            error: getError
+
+        });
+
+    });
+
+    $("body").on("click", "#btnBck", function () {
+        window.location = rooturl + "home/PrinterMaster";
+    });
+
+    //------------------added by me--------------------------------------------------
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- by me----------------------------------------------------------
+
+</script>
+
+

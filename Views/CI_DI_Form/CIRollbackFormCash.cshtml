@@ -1,0 +1,550 @@
+﻿@*<script src="~/Scripts/RollbackForm.js"></script>*@
+<script src="~/Scripts/CI_RollbackCash.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+<script src="~/Scripts/SignPopUp.js"></script>
+
+@{
+    ViewBag.Title = "CIRollbackFormCash";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="Url" value="@ViewBag.URL" hidden />
+<input id="WebImageURL" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageURL" value="@ViewBag.PhysicalImageURL" hidden />
+
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+
+<input id="CheckerModule" name="CheckerModule" value="@Session["CheckerModule"]" hidden />
+<input id="Pancard_Verf" value="@Session["Pancard_Verf"]" hidden />
+
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+<input id="L3StartLimit" value="@Session["l3startlimit"]" hidden />
+<input id="pancard_verf_limit" value="@Session["pancard_verf_limit"]" hidden />
+
+<input id="BankCode" name="BankCode" value="@Session["BankCode"]" hidden />
+
+<input id="AccNoMinLength" value="@Session["AccNoMinLength"]" hidden />
+<input id="AccNoMaxLength" value="@Session["AccNoMaxLength"]" hidden />
+
+<input id="RefNo" value="@ViewBag.RefNo" hidden />
+<input id="Count_id" value="@ViewBag.Count_id" hidden />
+<input id="transType" value="@ViewBag.transType" hidden />
+
+<input id="DotAccNo" value="@Session["DotAccNo"]" hidden />
+<input id="DotAccNoPartA" value="@Session["DotA"]" hidden />
+<input id="DotAccNoPartB" value="@Session["DotB"]" hidden />
+<input id="DotAccNoPartC" value="@Session["DotC"]" hidden />
+
+<input id="KVal" value="@Session["KVal"]" hidden />
+
+<div class="row col-12 mb-3 my-0">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <h3 class="mb-0 text-primary position-relative">
+                <span id="spam_header" class="bg-200 dark__bg-1100 pe-3">
+
+                </span>
+            </h3>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 d-md-block">
+                @*<button class="btn btn-sm btn-primary ml-2" type="button" onclick="getVoucherData()"> Get Instrument </button>*@
+                <button class="btn btn-sm btn-primary mx-2" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" onclick="getSignDetails();">
+                    Verify Sign
+                </button>
+                <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#resetmodal" onclick="ResetDataFunctionCall()">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row mb-2">
+    <div id="div_cheque" class="col-lg-8 col-md-8 col-sm-12">
+        <div class="card">
+            <div class="card-body p-2">
+                <div class="row">
+                    <div class="col-lg-12 ">
+                        <div class="form-group row mx-1 mb-0">
+                            <div class="form-check form-check-inline col">
+                                <label class="form-check-label" for="optionsRadios1">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
+                                           value="option1" onclick="switchimage('frontGimg', 'BOT_RGB')" checked /> Front
+                                </label>
+                            </div>
+                            <div class="form-check col">
+                                <label class="form-check-label" for="optionsRadios2">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
+                                           value="option2" onclick="switchimage('backGimg', 'TOP_RGB')" /> Back
+                                </label>
+                            </div>
+                            <div class="form-check col">
+                                <label class="form-check-label" for="optionsRadios3">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3"
+                                           value="option3" onclick="switchimage('frontIRimg', 'BOT_IRR')" /> IR
+                                </label>
+                            </div>
+                            <div class="form-check col">
+                                <label class="form-check-label" for="optionsRadios4">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios4"
+                                           value="option4" onclick="switchimage('waterMark', 'TOP_QIR')" /> WM
+                                </label>
+                            </div>
+                            <div class="col">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" title="Rotate">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                             class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
+                                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <img id="FG" src="" class="img-fluid" style="height: 300px; width:auto" alt="INSTRUMENT" onclick="ChqSlipPopUp();">
+                        </div>
+                        @*<div id="popup1" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                                <div id="popup_bar1" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move "><b>Chq/Slip</b><span id="btn_close" onclick="closeButton1()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                                <table id="chqSlipTable" style="width:800px;">
+                                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>*@
+
+
+                        <div id="popup1" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                            <div id="popup_bar1" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move ">
+                                <span id="id_title"></span>
+                                <span id="btn_close" onclick="closeButton1()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span>
+                            </div>
+                            <table id="chqSlipTable" style="width:800px;">
+                                <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div id="div_srl_date_alpha" class="table-responsive mt-3">
+                            <table class="table table-sm table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td scope="col">Instrument SRL No</td>
+                                        <td scope="col">Instrument Date</td>
+                                        <td scope="col">Instrument Alpha</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-wrap">
+                                            <input id="chqnoDataEntry" type="text" class="form-control form-control-sm" placeholder="123456">
+                                        </td>
+                                        <td class="text-wrap">
+                                            <input id="ChequeDateTxt" type="text" class="form-control form-control-sm" placeholder="dd-MM-yyyy">
+                                        </td>
+                                        <td class="text-wrap">
+                                            <input id="instrument_alpha" type="text" class="form-control form-control-sm" placeholder="">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div_cheque_data" class="col-lg-4 col-md-4 col-sm-12">
+        <div class="card">
+            <!-- <h6 class="text-center mt-3 font-weight-bolder">Credit Account</h6> -->
+            <div class="card-body p-2 ">
+                <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text">Account No.</span>
+                    <input id="AccountNo" type="text" class="form-control" placeholder="Search" data-bs-toggle="tooltip" data-bs-placement="top"
+                           onfocusout="GetPayeee('NONAME');" onkeyup="changeAccNo();">
+                    <button class="btn btn-primary" onclick="GetPayeee('CASHDEP');"><i class="fas fa-search"></i></button>
+                </div>
+                <div id="Payeeee">
+                    <select id="PayeeName" class="form-select form-select-sm mb-2"></select>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-wrap">Acc Status</td>
+                                <td class="text-wrap text-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="Account Status">
+                                    <label id="accStatus" style="font-style:bold;font-size:15px;"></label>@*A-Active*@
+                                    @*<span id="span_acc_status" class="badge badge-sm bg-warning">
+                                            <label id="lbl"></label>
+                                        </span>*@
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Amount</td>
+                                <td class="text-wrap">
+                                    <input id="amt" type="number" class="form-control form-control-sm" placeholder="12345678" min="1"
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Transaction Amount" onfocusout="preCheckPancard();">
+                                </td>
+                            </tr>
+                            <tr id="row_pan">
+                                <td class="text-wrap">PAN / Form 16</td>
+                                <td class="text-wrap">
+                                    <input id="pan" type="text" class="form-control form-control-sm" placeholder="12345678" min="1"
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="PAN / Form 16">
+                                </td>
+                            </tr>
+                            @*<tr id="tr_WDL_trans_par">
+                                    <td class="text-wrap">Instrument Type</td>
+                                    <td class="text-wrap">
+                                        <select id="trans_particular" class="form-select form-select-sm" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Transaction Particular">
+                                            <option value="CHQ">Cheque</option>
+                                            <option value="WF">Slip</option>
+                                        </select>
+                                    </td>
+                                </tr>*@
+                            <tr id="tr_WDL_inst_type" hidden>
+                                <td class="text-wrap">Instrument Type</td>
+                                <td class="text-wrap">
+                                    <select id="inst_type" class="form-select form-select-sm" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Instrument Type">
+                                        <option id="CHQ" value="CHQ">Cheque</option>
+                                        <option id="WF" value="WF">Slip</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr id="tr_DEP_trans_par">
+                                <td class="text-wrap">Trans. Particular</td>
+                                <td class="text-wrap">
+                                    <input id="transParticular" type="text" class="form-control form-control-sm" placeholder="12345678" min="1"
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Transaction Particulars" value="By Cash">
+                                </td>
+                            </tr>
+                            <tr hidden>
+                                <td class="text-wrap">Report Code</td>
+                                <td id="rpt_list" class="text-wrap">
+                                    <select id="rpt_code" class="form-select form-select-sm mb-2"></select>
+                                    @*<select id="rpt_code" class="form-select form-select-sm">
+                                            <option value="0" selected>Select Report Code</option>
+                                            <option value="LW">LW</option>
+                                            <option value="PR">PR</option>
+                                            <option value="TR">TR</option>
+                                            <option value="CR">CR</option>
+                                        </select>*@
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Remark 1</td>
+                                <td class="text-wrap">
+                                    <input id="remark_1" type="text" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Remark 2</td>
+                                <td class="text-wrap">
+                                    <input id="remark_2" type="text" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Rollback Desc</td>
+                                <td class="text-wrap">
+                                    <input id="rollback" type="text" class="form-control form-control-sm" disabled>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center">
+                    <a id="btn_submit" href="#authenticationmodal" data-bs-toggle="modal">
+                        <button class="btn btn-primary btn-sm" onclick="SubmitData();">Verify</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<footer class="footer">
+        <div class="row g-0 justify-content-between fs--1 mt-4 mb-3">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-600">
+                    Copyright © <span class="d-none d-sm-inline-block">| </span><br class="d-sm-none" /> 2023 &copy; <a href="https://kores.in/">Kores India Ltd.</a>All rights
+                    reserved.
+                </p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-600">Designed By <a href="https://prysomsystems.com/">Prysom Systems</a></p>
+            </div>
+        </div>
+    </footer>*@
+
+<!-- Authentication Model on submit -->
+<div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-1" data-bs-theme="light">
+                    <h4 class="mb-0 text-white" id="authentication-modal-label">Verification</h4>
+                </div>
+                <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2 px-1">
+                <table id="tbl_verf_fail" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Error Msg</th>
+                            <td class="text-wrap">
+                                <lable id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbl_verf_result" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Response</th>
+                            <td class="text-wrap">
+                                <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbl_verf_pass" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Name</th>
+                            <td class="text-wrap"><lable id="name"></lable></td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Schema Code</th>
+                            <td class="text-wrap"><lable id="FinScheme"></lable></td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Account Status</th>
+                            <td class="text-wrap"><label id="FinAccountStatus" style="font-style:bold;font-size:15px;"></label></td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Freeze Code</th>
+                            <td class="text-wrap"><label id="FinFreeze"></label></td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Mode Of Operation</th>
+                            <td class="text-wrap"><label id="FinMOP"></label></td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">NRE Flag</th>
+                            <td class="text-wrap"><label id="NREFlag"></label></td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Scheme Type</th>
+                            <td class="text-sucess"><label id="FinSchemeType"></label></td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Account Ownership</th>
+                            <td class="text-wrap"><label id="FinAccOwner"></label></td>
+                        </tr>
+                        <tr hidden>
+                            <th class="text-wrap">IQA</th>
+                            <td class="text-wrap">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="btn_iqa" onclick="change_iqa('CASHWDL');">
+                                    <label class="badge bg-success" id="pass_iqa">Pass</label>
+                                    <label class="badge bg-danger" id="fail_iqa">Fail</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="tr_uv">
+                            <th class="text-wrap">UV</th>
+                            <td class="text-wrap">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="btn_uv" onclick="change_uv('CASHWDL');">
+                                    <label class="badge bg-success" id="pass_uv">Pass</label>
+                                    <label class="badge bg-danger" id="fail_uv">Fail</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="tr_ir">
+                            <th class="text-wrap">IR</th>
+                            <td class="text-wrap">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="btn_ir" onclick="change_ir('CASHWDL');">
+                                    <label class="badge bg-success" id="pass_ir">Pass</label>
+                                    <label class="badge bg-danger" id="fail_ir">Fail</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="tr_ml">
+                            <th class="text-wrap">Micro Lettering</th>
+                            <td class="text-wrap">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="btn_ml" onclick="change_ml('CASHWDL');">
+                                    <label class="badge bg-success" id="pass_ml">Pass</label>
+                                    <label class="badge bg-danger" id="fail_ml">Fail</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                    <div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="DataPush()">Submit</a></div>
+                    <div class="col-sm-6">
+                        <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                           aria-label="Close">Cancel</a>
+                    </div>
+                </div>
+                <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                    </div>
+                </div>
+                <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="CheckerList()">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Authentication Model on submit -->
+
+<script type="text/javascript">
+
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var popup = "";
+    var recipt = "no";
+
+    var ErrorMessage = "";
+
+    var rooturl = '@Url.Content("~/")';
+
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    var AccountValidation = false;
+    var CompleteValidation = false;
+
+    // Data Field
+    var AccountNo = "";
+    var amount = 0;
+    var instrument_srl_no = "";
+    var instrument_date = "";
+    var instrument_alpha = "";
+    var trans_particular = "";
+    var rpt_code = "";
+    var remark1 = "";
+    var remark2 = "";
+    var pancard_form16 = "";
+    var inst_type = "";
+
+    var transtype = "";
+    var ImageUrl = "";
+    var BankCode = "";
+    var flag = "";
+
+    var RefNo = "";
+    var Count_id = "";
+    var username = "";
+    var old_rpt_code = "";
+
+    var instrument_available = false;
+
+    var PanValidationStatus = false;
+
+    var ValidateAccBalance = "";
+    var AccBalance = "";
+
+    // PAN validation
+    var PanValidation_Req = false;
+    var PanValidation_Status = false;
+
+    // Cheque Instrument
+    var chq_validation = false;
+    var chq_validation_msg = "";
+
+    // DOT function Account No
+    var finalAccount = "";
+    var acc1 = "";
+    var acc2 = "";
+    var acc3 = "";
+
+    var NRE_Flag = "N";
+    var imgRotateVal = 0;
+    var CustId = "";
+
+    var CheckerPage = false;
+
+    $("#row_pan").hide();
+
+    $("#div_cheque").hide();
+    $("#ProcessingBar").hide();
+    //$("#div_cheque_data").hide();
+
+    // Reset Logic Begin
+    $("#div_reset_msg").show();
+    $("#div_reset_button").show();
+    $("#btn_close_reset").show();
+    $("#btn_yes_reset").show();
+    $("#btn_no_reset").show();
+    $("#div_reset_success").hide();
+    $("#tbl_reset_response").hide();
+    $("#success_reset").hide();
+    $("#failed_reset").hide();
+    $("#div_reload_page_button").hide();
+    $("#btn_reload").hide();
+    // Reset Logic End
+
+    $(document).ready(function () {
+
+        debugger;
+        BankCode = document.getElementById("BankCode").value;
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+        RefNo = document.getElementById("RefNo").value;
+        Count_id = document.getElementById("Count_id").value;
+        transtype = document.getElementById("transType").value;
+        username = document.getElementById("loginid").value;
+
+        if (transtype == "CI01") {
+            document.getElementById("spam_header").innerHTML = "Credit Intimation Cash - Rollback";
+        }
+
+
+
+        var y = 'getWithdrawData';
+
+        debugger;
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: { TransactionRefNo: RefNo, count_id: Count_id, btnVal: 'ROLLBACK' },
+            success: getSuccessVoucher
+        });
+
+    });
+
+</script>

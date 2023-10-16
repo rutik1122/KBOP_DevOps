@@ -1,0 +1,278 @@
+﻿
+@{
+    ViewBag.Title = "DetailedDashboard";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input type="hidden" id="usertype" value="@Session["UserType"].ToString()" />
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+<input id="L3StartLimit" value="@Session["l3startlimit"]" hidden />
+
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+
+    var usertype = document.getElementById("usertype").value;
+    var bankcode = document.getElementById("bankcode").value;
+
+    $(document).ready(function () {
+
+        $("#CASHWDL_DIV").hide();
+        $("#DATAENTRY_DIV").hide();
+
+
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+    });
+
+    function getError(result) {
+
+        var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+
+    function radioFunction() {
+
+        var type = document.getElementById("Data_Type").value;
+
+        var currentDate = new Date();
+        var yyyy = currentDate.getFullYear();
+        var mm = String(currentDate.getUTCMonth() + 1).padStart(2, '0');
+        var dd = String(currentDate.getDate()).padStart(2, '0');
+        debugger;
+
+        var date = yyyy + '/' + mm + '/' + dd;
+        debugger;
+
+
+        $("#CASHWDL_DIV").hide();
+        $("#DATAENTRY_DIV").hide();
+
+        var x = document.getElementById("urlVal").value;
+        var y = "getDetailedDashboard";
+
+        if (type == "CASHWDL" || type == "CASHDEP" || type == "CTS") {
+
+            $("#tbl_cashwdl").find("tr:gt(0)").remove();
+            if ($("#tbl_cashwdl tbody").length == 0) {
+                $("#tbl_cashwdl").append("<tbody></tbody>");
+            }
+
+            $.ajax({
+                url: x + y,
+                type: 'POST',
+                data: { processDate: date, BankCode: bankcode, transactionType: type },
+                success: function (result) {
+                    DataList(result);
+                    //DataList_new(result);
+                },
+                error: getError
+            });
+        }
+        else if (type == "RTGS_WITHOUT_CHEQUE" || type == "RTGS_WITH_CHEQUE" || type == "TRF") {
+
+            $("#tbl_with_dataentry").find("tr:gt(0)").remove();
+            if ($("#tbl_with_dataentry tbody").length == 0) {
+                $("#tbl_with_dataentry").append("<tbody></tbody>");
+            }
+
+            $.ajax({
+                url: x + y,
+                type: 'POST',
+                data: { processDate: date, BankCode: bankcode, transactionType: type },
+                success: function (result) {
+                    DataList_2(result);
+                    //DataList_new(result);
+                },
+                error: getError
+            });
+
+        }
+
+    }
+
+    //function DataList_new(printer) {
+    //    debugger;
+    //    $.each(printer, function (index, print) {
+    //        document.getElementById("l2_pending").innerHTML = print.L2_pending;
+    //        document.getElementById("l3_pending").innerHTML = print.L3_pending;
+    //        document.getElementById("rejected").innerHTML = print.Rejected;
+    //        document.getElementById("cash_pending").innerHTML = print.get_cash_peinding;
+    //        document.getElementById("trans_completed").innerHTML = print.trans_completed;
+    //        document.getElementById("total_count").innerHTML = print.total_count;
+    //    });
+
+    //}
+
+
+    function DataList(printer) {
+        debugger;
+
+        $("#CASHWDL_DIV").show();
+
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            debugger;
+            AddRecordRow_CashWdl(print);
+        });
+    }
+
+    function DataList_2(printer) {
+        debugger;
+
+        $("#DATAENTRY_DIV").show();
+
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            debugger;
+            AddRecordRow_2(print);
+        });
+    }
+
+    function AddRecordRow_CashWdl(print) {
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+
+        // Append row to <table>
+        $("#tbl_cashwdl tbody").append(
+            RecordTableRow_CashWdl(print));
+    }
+
+    function AddRecordRow_2(print) {
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+
+        // Append row to <table>
+        $("#tbl_with_dataentry tbody").append(
+            RecordTableRow_2(print));
+    }
+
+    function RecordTableRow_CashWdl(print) {
+        debugger;
+
+        var RetRow =
+            "<tr>" +
+            '<td style="text-align:center;font-size: 14px;">' + print.L2_pending + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.L3_pending + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.Rejected + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.get_cash_peinding + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.trans_completed + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.total_count + '</td></tr>';
+
+        return RetRow;
+    }
+
+    function RecordTableRow_2(print) {
+        debugger;
+
+        var RetRow =
+            "<tr>" +
+            '<td style="text-align:center;font-size: 14px;">' + print.DE_pending + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.L2_pending + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.L3_pending + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.Rejected + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.get_cash_peinding + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.trans_completed + '</td>' +
+            '<td style="text-align:center;font-size: 14px;">' + print.total_count + '</td></tr>';
+
+        return RetRow;
+    }
+
+</script>
+
+<div class="main-content-inner">
+    <div class="page-header">
+        <h1>
+            Detailed Dashboard
+        </h1>
+    </div>
+    <div class="page-content">
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <label class="col-sm-2" style="font-size:15px"><b>Record Type</b></label>
+            <div class="col-sm-3">
+                @Html.DropDownList("Data_Type", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text = "Cash Withdrawal", Value = "CASHWDL" },
+                    new SelectListItem{ Text = "Cash Deposit", Value = "CASHDEP" },
+                    new SelectListItem{ Text = "RTGS without Cheque", Value = "RTGS_WITHOUT_CHEQUE" },
+                    new SelectListItem{ Text = "RTGS with Cheque", Value = "RTGS_WITH_CHEQUE" },
+                    new SelectListItem{ Text = "Transfer", Value = "TRF" },
+                    new SelectListItem{ Text = "CTS", Value = "CTS" }
+                })
+            </div>
+            <dib class="col-sm-1">
+                <input type="button" id="btnList" value="Get list" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="radioFunction();" />
+            </dib>
+            @*<div class="col-sm-2">
+                    <input type="radio" id="CASHWDL" name="data_type" value="CASHWDL" onclick="radioFunction('CASHWDL');" />
+                    <label for="CASHWDL"><b>Cash Withdrawal</b></label>
+                </div>
+                <div class="col-sm-2">
+                    <input type="radio" id="CASHDEP" name="data_type" value="CASHDEP" onclick="radioFunction('CASHDEP');" />
+                    <label for="CASHDEP"><b>Cash Deposit</b></label>
+                </div>*@
+        </div>
+        <br />
+
+        <div class="row" id="CASHWDL_DIV">
+            <table id="tbl_cashwdl" style="overflow-x: auto; width: 100%; border: 1px solid black;">
+                <thread>
+                    <tr style="background-color: #438EB9; font-size:15px;color:white;">
+                        @*<th class="col-sm-2" style="text-align:center;">Branch Code</th>*@
+                        <th class="col-sm-2" style="text-align:center;">L2 Verification Pending</th>
+                        <th class="col-sm-2" style="text-align:center;">L3 Verification Pending</th>
+                        <th class="col-sm-2" style="text-align:center;">Rejected</th>
+                        <th class="col-sm-2" style="text-align:center;">Get Cash Pending</th>
+                        <th class="col-sm-2" style="text-align:center;">Completed</th>
+                        <th class="col-sm-2" style="text-align:center;">Total</th>
+                    </tr>
+                </thread>
+            </table>
+        </div>
+
+        <div class="row" id="DATAENTRY_DIV">
+            <table id="tbl_with_dataentry" style="overflow-x: auto; width: 100%; border: 1px solid black;">
+                <thread>
+                    <tr style="background-color: #438EB9; font-size:15px;color:white;">
+                        <th class="col-sm-2" style="text-align:center;">Data Entry Pending</th>
+                        <th class="col-sm-2" style="text-align:center;">L2 Verification Pending</th>
+                        <th class="col-sm-2" style="text-align:center;">L3 Verification Pending</th>
+                        <th class="col-sm-2" style="text-align:center;">Rejected</th>
+                        <th class="col-sm-2" style="text-align:center;">Get Cash Pending</th>
+                        <th class="col-sm-2" style="text-align:center;">Completed</th>
+                        <th class="col-sm-2" style="text-align:center;">Total</th>
+                    </tr>
+                </thread>
+            </table>
+        </div>
+
+    </div>

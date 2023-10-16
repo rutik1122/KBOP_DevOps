@@ -1,0 +1,301 @@
+﻿
+<script src="~/Scripts/CheckerList.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+<input id="usertype" value="@Session["UserType"].ToString()" hidden />
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+<input type="hidden" id="startlimit" value="@Session["CheckerStartLimit"].ToString()" />
+<input type="hidden" id="stoplimit" value="@Session["CheckerStopLimit"].ToString()" />
+
+<input type="hidden" id="startlimit_l3" value="@Session["CheckerStartLimit_l3"].ToString()" />
+<input type="hidden" id="stoplimit_l3" value="@Session["CheckerStopLimit_l3"].ToString()" />
+
+<input id="CheckerModule" name="CheckerModule" value="@Session["CheckerModule"]" hidden />
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+
+<input id="CheckerModule_L3" name="CheckerModule_L3" value="@Session["CheckerModule_L3"]" hidden />
+<input id="l3startlimit" value="@Session["l3startlimit"]" hidden />
+
+<input id="CASHWDL_CHECKER" value="@Session["cashwithdrawalchecker"]" hidden />
+<input id="CASHDEP_CHECKER" value="@Session["cashdepositchecker"]" hidden />
+<input id="TRF_CHECKER" value="@Session["transferchecker"]" hidden />
+<input id="branchcodehidden" value="@Session["BranchCode"]" hidden />
+
+<div class="row col-12 mb-3 mt-1">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <h4 class="mb-0 text-primary position-relative" >
+                <span class="bg-200 dark__bg-1100 pe-3" style="color:gray; font-family:Calibri;">Payment Queue</span>
+            </h4>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="row me-3">
+            @Html.DropDownList("Transaction_Type", new List<SelectListItem>
+                    {
+                        new SelectListItem{ Text = "Deposit", Value = "01" },
+                        new SelectListItem{ Text = "Withdrawal", Value = "02" },
+                        new SelectListItem{ Text = "Transfer CHQ Without Slip", Value = "TRF02" },
+                        new SelectListItem{ Text = "Transfer CHQ With Slip (Single Debit Single Credit)", Value = "03" },
+                        new SelectListItem{ Text = "Transfer WF With Slip (Single Debit Single Credit)", Value = "04" },
+                        new SelectListItem{ Text = "Transfer DI With Slip (Single Debit Single Credit)", Value = "05" },
+                        new SelectListItem{ Text = "Transfer CHQ With Slip (Single Debit Multiple Credit)", Value = "TRF06" },
+                        new SelectListItem{ Text = "Transfer WF With Slip (Single Debit Multiple Credit)", Value = "TRF07" },
+                        new SelectListItem{ Text = "Transfer DI With Slip (Single Debit Multiple Credit)", Value = "TRF08" },
+                        new SelectListItem{ Text = "Debit Intimation With Cash", Value = "DI01" },
+                        new SelectListItem{ Text = "Debit Intimation With Slip", Value = "06" },
+                        new SelectListItem{ Text = "Debit Intimation With CI", Value = "07" },
+                        new SelectListItem{ Text = "Credit Intimation With Cash", Value = "CI01" },
+                        new SelectListItem{ Text = "Credit Intimation With Cheque", Value = "08" },
+                        new SelectListItem{ Text = "Credit Intimation With DI", Value = "09" },
+                        new SelectListItem{ Text = "Credit Intimation With Withdrawal Slip", Value = "10" },
+                        new SelectListItem{ Text = "RTGS With Cheque", Value = "RTGS_03_04" },
+
+                    })
+        </div>
+        <div class="row me-3">
+            <a id="btn_submit" href="#authenticationmodal" data-bs-toggle="modal">
+                <button class="btn btn-primary btn-sm" onclick="GetList()">Get List</button>
+            </a>
+        </div>
+    </form>
+</div>
+
+
+<div id="div_cash_deposit" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 class="mb-0 text-center">Cash Deposit</h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_Cash_Deposit" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" hidden>Count Id</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Account No</th>
+                            <th scope="col">Acc Holder Name</th>
+                            <th scope="col">Amount</th>
+                            @*<th scope="col">Cheque Date</th>*@
+                            @*<th scope="col">Instrument Type</th>*@
+                            <th scope="col">Maker ID</th>
+                            <th scope="col">L2 Verified By</th>
+                            <th id="CASHDEP_L3_user" scope="col">L3 Verified By</th>
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="div_cash_withdraw" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 class="mb-0 text-center">Cash Withdraw</h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_Cash_Withdraw" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" hidden>Count Id</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Account No</th>
+                            <th scope="col">Acc Holder Name</th>
+                            <th scope="col">Amount</th>
+                            @*<th scope="col">Cheque Date</th>*@
+                            <th scope="col">Maker ID</th>
+                            <th scope="col">L2 Verified By</th>
+                            <th id="CASHWDL_L3_user" scope="col">L3 Verified By</th>
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="div_cash_transfer_03_04_05" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 class="mb-0 text-center" id="h5_trf"></h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_Cash_transfer_03_04_05" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" hidden>Count Id</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Debit Account No</th>
+                            <th scope="col">Acc Holder Name</th>
+                            <th scope="col">Amount</th>
+                            @*<th scope="col">Cheque Date</th>*@
+                            <th scope="col">Maker ID</th>
+                            <th scope="col">L2 Verified By</th>
+                            <th id="trf_03_04_05" scope="col">L3 Verified By</th>
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="div_cash_debit_intimation_06_07" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 class="mb-0 text-center" id="h5_trf"></h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_Cash_debit_intimation_06_07" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" hidden>Count Id</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Debit Account No</th>
+                            <th scope="col">Payee Name</th>
+                            <th scope="col">Amount</th>
+                            @*<th scope="col">Cheque Date</th>*@
+                            <th scope="col">Maker ID</th>
+                            <th scope="col">L2 Verified By</th>
+                            <th id="di_06_07" scope="col">L3 Verified By</th>
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="div_cash_credit_intimation_08_09_10" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 class="mb-0 text-center" id="h5_trf"></h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_Cash_credit_intimation_08_09_10" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" hidden>Count Id</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Debit Account No</th>
+                            <th scope="col">Payee Name</th>
+                            <th scope="col">Amount</th>
+                            @*<th scope="col">Cheque Date</th>*@
+                            <th scope="col">Maker ID</th>
+                            <th scope="col">L2 Verified By</th>
+                            <th id="trf_03_04_05" scope="col">L3 Verified By</th>
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="div_rtgs_cheque_03_04" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 class="mb-0 text-center" id="h5_trf"></h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_rtgs_cheque_03_04" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" hidden>Count Id</th>
+                            <th scope="col">Reference No</th>
+                            <th scope="col">Transaction Type</th>
+                            <th scope="col">Debit Account No</th>
+                            <th scope="col">Acc Holder Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Maker ID</th>
+                            <th scope="col">L2 Verified By</th>
+                            @*<th id="rtgs_chq_03_04" scope="col">L3 Verified By</th>*@
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var popup = "";
+    var recipt = "no";
+
+    var ErrorMessage = "";
+
+    var rooturl = '@Url.Content("~/")';
+
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    var CheckerModule = "";
+    var L2StartLimit = "";
+    var CheckerModule_L3 = "";
+    var l3startlimit = "";
+
+    var trfType = "";
+    var Branchcode = " ";
+    var bankcode = "";
+
+    $("#div_cash_deposit").hide();
+    $("#div_cash_withdraw").hide();
+    $("#div_cash_transfer_03_04_05").hide();
+    $("#div_cash_debit_intimation_06_07").hide();
+    $("#div_cash_credit_intimation_08_09_10").hide();
+    $("#div_rtgs_cheque_03_04").hide();
+    $("#ProcessingBar").hide();
+
+    $(document).ready(function () {
+
+        Branchcode = document.getElementById("branchcodehidden").value;
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+    });
+
+</script>

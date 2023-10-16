@@ -1,0 +1,115 @@
+﻿<script src="~/Scripts/EditRole.js"></script>
+<script src="~/Scripts/CommonRole.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+@{
+    ViewBag.Title = "Detials";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="uid" name="uid" value="@Session["uid"]" hidden />
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card overflow-hidden">
+                <div class="card-header bg-light py-2">
+                    <h5 class="mb-0 text-center">Role Details</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row mb-4 mt-2">
+                            <div class="col-lg-4">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter Role name" autofocus  disabled/>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Description</label>
+                                <input type="text" class="form-control" id="description" placeholder="Enter Description" autofocus disabled/>
+                            </div>
+                        </div>
+                        <!--<div class="row mb-4 mt-2">
+                            <div id="div_list" class="col-lg-3">-->
+                        @*<label class="form-label">Roles</label>*@
+                        <!--</div>
+                        </div>-->
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="div_list" class="col">
+        <div class="card overflow-hidden">
+            <div class="card-body py-0">
+                <div class="table-responsive scrollbar">
+                    <table id="tbl_list" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                        <thead>
+                            <tr>
+                                <th scope="col">Role List</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="row mb-4 mt-2">
+                    <div class="d-grid gap-2 d-md-block text-center mb-3">
+
+                        <a href="~/RoleMaster/ListOfRoles" class="btn btn-secondary btn-sm px-4">Back</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var userId = "";
+    var rowcount = 0;
+    var id = @ViewBag.Id;
+    var uid = "";
+    var name1 = "";
+    var desc = "";
+    var list = "";
+
+    var actionType = "FETCH";
+
+    $(document).ready(function () {
+        debugger;
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+        uid = document.getElementById("uid").value;
+
+
+        var y = "GetRoleData";
+        debugger;
+        $.ajax({
+            type: 'POST',
+            url: x + y,
+            data: { Id: id },
+            success: GetRoleCreateChecker,
+            error: getError
+        });
+     
+    });
+
+</script>
+
+
+

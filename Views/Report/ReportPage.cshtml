@@ -1,0 +1,239 @@
+﻿
+<script src="~/Scripts/ReportPage.js"></script>
+<script src="~/Scripts/xlsx.full.min.js"></script>
+<script src="~/Scripts/pdfmake.min.js"></script>
+<script src="~/Scripts/html2pdf.bundle.min.js"></script>
+@{
+    ViewBag.Title = "ReportPage";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+@model iBAS.Models.Transaction_CTSwise_Presentation
+
+@*@using (Html.BeginForm("ReportPage", "Report"))
+    {*@
+<input name="yes1" id="yes1" value="" hidden />
+<input name="yes2" id="yes2" value="" hidden />
+
+<input id="bankname" value="@Session["BankName"]" hidden />
+<input id="branchname" value="@Session["BranchName"]" hidden />
+
+<div class="row col-12 mb-3">
+    <div class="card ms-3 py-1">
+        <form class="mb-2" action="#">
+            <div class="row g-3 align-items-center">
+
+                <div class="row g-3">
+
+
+                    <div class="col text-left" style="padding-left: 50px;">
+                        <div class="col-md-2 text-center">
+                            <div class="d-flex justify-content-lg-center">
+                                <img class="ms-n2" src="~/assets/images/crm-bar-chart.png" alt="" width="90" />
+                                <div>
+                                    <h6 class="text-primary fs--1 mb-0">Welcome to</h6>
+                                    <h4 class="text-primary fw-bold mb-0"><span class="text-info fw-medium">Reports</span></h4>
+                                </div>
+                            </div>
+                            <img class="ms-n4 d-md-none d-lg-block" src="~/assets/images/crm-line-chart.png" alt="" width="150" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                        <label class="form-label">Report Type</label>
+                        <select id="sel_ReportType" class="form-select form-select-sm" onchange="ChangeReportType()">
+                            <option value="0">--select--</option>
+                            <option value="1">CTS</option>
+                            <option value="2">Cash Deposit</option>
+                            <option value="2">Cash Withdrawl</option>
+                            <option value="2">Transfer</option>
+                            <option value="2">RTGS</option>
+                        </select>
+                        @*User04 --ends*@
+                    </div>
+                    <div class="col-lg-2">
+
+                        <label class="form-label">Report Name</label>
+                        <select id="reportName" class="form-select form-select-sm" onchange="ChangeReportType()">
+                            <option id="sel_ReportName" value="0">--select--</option>
+                            <option id="Presentation_Report" value="1">Presentation Report</option>
+                            <option id="Transaction_Summary" value="2">Transaction Summary</option>
+                        </select>
+                        @*User04 --ends*@
+                    </div>
+
+                    <div class="col-sm-2">
+                        @Html.LabelFor(model => model.from_date, htmlAttributes: new { @class = "control-label col-lg-6" })
+                        <input id="fromDate" type="date" class="form-control form-control-sm">
+                        @Html.ValidationMessageFor(model => model.from_date, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="col-sm-2">
+                        @Html.LabelFor(model => model.to_date, htmlAttributes: new { @class = "control-label col-lg-6" })
+                        <input id="toDate" type="date" class="form-control form-control-sm">
+                        @Html.ValidationMessageFor(model => model.to_date, "", new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+            </div>
+            <hr>
+
+            <!--<div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2 text-end">-->
+            @*<input type="button" value="View" id="rptgetid" class="btn btn-primary" />*@
+            <!--<input type="button" value="View" onclick="GenerateReport()" class="btn btn-primary" />
+
+                    <button id="exportToExcelButton" class="btn btn-success" onclick="exportToExcel()">Export to Excel</button>
+                    <button id="exportToPDFButton" class="btn btn-success" onclick="exportToPDF()">Export to PDF</button>
+                    <button id="exportToPDFButton" class="btn btn-success" onclick="exportToCSV()">Export to CSV</button>
+
+                </div>
+            </div>-->
+
+            <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2 text-end">
+                    <div class="btn-group" role="group">
+                        @*<input type="button" value="View" onclick="GenerateReport()" class="btn btn-primary btn-sm" />*@
+                        <button id="viewButton" class="btn btn-primary btn-sm" onclick="GenerateReport()">View</button><br>
+                        @*<button id="exportToExcelButton" class="btn btn-success btn-sm" onclick="exportToExcel()">Export to Excel</button>*@
+                        <button id="exportToPDFButton" class="btn btn-warning btn-sm" onclick="exportToPDF()">Export to PDF</button>
+                        <button id="exportToCSVButton" class="btn btn-success btn-sm" onclick="exportToCSV()">Export to CSV</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </form>
+    </div>
+</div>
+<div id="tableContainer"></div>
+@*}*@
+
+<div id="div_Report_data" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 class="mb-0 text-center">report data</h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_Report_Data" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col">sr. no.</th>
+                            <th scope="col">udfk</th>
+                            <th scope="col">process date</th>
+                            <th scope="col">branch code</th>
+                            <th scope="col">scan node id</th>
+                            <th scope="col">batch no</th>
+                            <th scope="col">batch seq no</th>
+                            <th scope="col">cheque no</th>
+                            <th scope="col">amount</th>
+                            <th scope="col">sort code</th>
+                            <th scope="col">tc</th>
+                            <th scope="col">trans. ref no.</th>
+                            <th scope="col">account number</th>
+
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    @*var logoImageUrl = '@Url.Content("~/vendors/assets/img/favicons/KoresLogo.png")';*@
+
+
+    $("#exportToPDFButton").hide();
+    $("#exportToCSVButton").hide();
+
+    var today = new Date();
+
+    // Calculate two days ago
+    var twoDaysAgo = new Date(today);
+    twoDaysAgo.setDate(today.getDate() - 2);
+
+    // Convert the dates to ISO format (YYYY-MM-DD)
+    var todayISO = today.toISOString().split('T')[0];
+    var twoDaysAgoISO = twoDaysAgo.toISOString().split('T')[0];
+
+    // Set the default value and the minimum attribute of the date input
+    var fromDateInput = document.getElementById("fromDate");
+    fromDateInput.value = todayISO;
+    fromDateInput.setAttribute("min", twoDaysAgoISO);
+    document.getElementById("fromDate").setAttribute("max", todayISO);
+
+
+    var toDateInput = document.getElementById("toDate");
+    toDateInput.value = todayISO;
+    toDateInput.setAttribute("min", todayISO);
+    toDateInput.setAttribute("max", todayISO);
+
+
+
+    var rooturl = '@Url.Content("~/")';
+    $("#div_Report_data").hide();
+
+    var recordId = 0;
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+
+        //$("#exportToPDFButton").hide();
+        //$("#exportToCSVButton").hide();
+
+
+        //$("#viewButton").click(function () {
+        //    $("#exportToPDFButton").show();
+        //    $("#exportToCSVButton").show();
+        //});
+
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+    });
+
+
+     function ChangeReportType() {
+         debugger;
+         var reportType = document.getElementById("sel_ReportType").value;
+
+         $("#Presentation_Report").show();
+         $("#Transaction_Summary").show();
+
+         if (reportType == "1") {
+             $("#Transaction_Summary").hide();
+         }
+         else if (reportType == "2") {
+             $("#Presentation_Report").hide();
+         }
+
+     }
+
+    //window.onload = function () {
+    //    document.getElementById("exportToPDFButton").style.display = "none";
+    //    document.getElementById("exportToCSVButton").style.display = "none";
+    //};
+
+
+</script>

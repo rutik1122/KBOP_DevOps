@@ -1,0 +1,87 @@
+﻿<script src="~/Scripts/Data.js"></script>
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    function goBack() {
+        var url = rooturl + "Home/Index";
+        window.location.href = url;
+    }
+
+    function fileDownload() {
+        //var url = rooturl + "Home/Index";
+        //window.location.href = url;
+        var y = "XmlFileRequest";
+        $.ajax({
+            // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+            //url: x + y,
+            // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+            url: "http://localhost:8198/api/Scanner/" + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: {},
+            success: function (data) {
+                console.log(data);
+                //var xmlDocument = $($.parseXML('<?xml version="1.0" encoding="utf-8" ?><roots><item>1</item><item>2</item></roots>'));
+                var xmlDocument = $($.parseXML(data));
+                var $downloadAnchor = $("<a/>", {
+                    href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument[0]),
+                    download: "MyXML.xml"
+
+                });
+
+                $downloadAnchor.text("Click me to download XML");
+                $("body").append($downloadAnchor);
+            },
+            error: getError
+        });
+        //href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument.context),
+
+        
+        //e.preventDefault();
+    }
+
+
+    //------------------added by me--------------------------------------------------
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- by me----------------------------------------------------------
+</script>
+
+<div class="row" style="padding-top:1px;font-size: smaller">
+    <div class="col-sm-3">
+        <input type="button" id="btnGoBack" value="Back" class="btn-sm" style="background-color:black;color:white;font-size: x-small;" onclick="goBack();" />
+    </div>
+    <div class="col-sm-3">
+        <input type="button" id="btnFileDownload" value="Download" class="btn-sm" style="background-color:black;color:white;font-size: x-small;" onclick="fileDownload();" />
+    </div>
+</div>
+<br />
+<div class="row" style="padding:10px;">
+    <span id="downloadLink"></span>
+    <label id="loader" style="display:none"> <span style="color:red">  Loading...</span><img src="~/Content/images/progressss.gif" /></label>
+</div>
+
+

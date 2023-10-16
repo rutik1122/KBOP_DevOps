@@ -1,0 +1,122 @@
+﻿@model IEnumerable<iBAS.Models.Modeofoperation_master>
+
+@{
+    ViewBag.Title = "OperationList";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+
+<div class="container">
+
+    <div class="row col-12 mb-3 mt-1">
+        <form class="d-flex align-items-center" action="#">
+            <div class="row">
+                <h3 class="mb-0 text-primary position-relative">
+                    <span class="bg-200 dark__bg-1100 pe-3">Modeofoperation Master</span>
+                </h3>
+            </div>
+            <div class="row">
+                <div class="d-grid gap-2 d-md-block">
+                    @*<a href="~/BranchMaster/CreateBranch" class="btn btn-sm btn-primary ml-2"><i class="fas fa-plus-circle text-white"></i>&nbsp;&nbsp;Create Branch</a>*@
+                    <div class="btn btn-sm btn-primary ml-2">
+                        <i class="fas fa-plus-circle text-white"></i>&nbsp;&nbsp;
+                        @Html.ActionLink("Add MOP", "Create", "ModeofOperation", null, new { style = "color:white" })
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <p class="error-message"><font color="red" size="+1">@ViewBag.ErrorMessage</font></p>
+    }
+    else if (Model == null)
+    {
+        <p><font color="red" size="+1"><strong>No Data Found!</strong></font></p>
+    }
+    else
+    {
+        <div id="div_rolelist" class="col">
+            <div class="card overflow-hidden">
+                <div class="card-body py-0">
+                    <div class="table-responsive scrollbar">
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Ref_Code)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Ref_Desc)
+                                </th>
+
+                              
+
+                            </tr>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Ref_Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Ref_Desc)
+                                    </td>
+                                    <td width="18%">
+
+                                        <a href="@Url.Action("Edit","ModeofOperation",new { id = item.Id})" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("Details","ModeofOperation",new { id = item.Id})" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="View Details"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("Delete","ModeofOperation",new { id = item.Id})" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash-alt text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                        </a>
+                                        @*@Html.ActionLink(" ", "Delete", new { id = item.Id },new {@class= "btn btn-sm btn-danger fas fa-trash-alt text-white" })*@
+                                    </td>
+
+
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+</div>
+
+@{
+    var message = TempData["success"] ?? string.Empty;
+}
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var message = '@message';
+    if (message)
+       alert(message);
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+    });
+
+</script>

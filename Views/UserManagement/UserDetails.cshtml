@@ -1,0 +1,185 @@
+﻿@model iBAS.Models.UserMaster
+
+
+@{
+    ViewBag.Title = "UserDetails";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+<script src="~/Scripts/UserManagement.js"></script>
+<script src="~/Scripts/EditUser.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+
+@*<input id="AccessLevelData" value="@ViewBag.AccesslevelData" hidden />*@
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+<input id="BankCode" name="BankCode" value="@Session["BankCode"]" hidden />
+<input id="uid" name="uid" value="@Session["uid"]" hidden />
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card overflow-hidden">
+                <div class="card-header bg-light py-2">
+                    <h5 class="mb-0 text-center">User Details</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row mb-4 mt-2">
+                            <div class="col-lg-3">
+                                <label class="form-label">Login Id</label>
+                                @Html.TextBoxFor(model => model.LoginId, new { @disabled = "disabled", @class = "form-control" })
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">First Name</label>
+                                @Html.TextBoxFor(model => model.FirstName, new { autofocus = "autofocus", @class = "form-control", @disabled = "disabled" })
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Last Name</label>
+                                @Html.TextBoxFor(model => model.LastName, new { autofocus = "autofocus", @class = "form-control", @disabled = "disabled" })
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Email Id</label>
+                                <input type="email" class="form-control" id="emailId" placeholder="Enter Email" autofocus disabled />
+                                @*@Html.TextBoxFor(model => model.EmailId, new { @class = "form-control" })*@
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+
+                            <div class="col-lg-3">
+                                <label class="form-label">User Type</label>
+                                <div id="userType">
+                                    <select id="UserLevel" name="UserLevel" class="form-control form-select form-select">
+                                    </select>
+                                </div>
+                                @*<div>
+                                        <select id="UserLevel" name="UserLevel" class="form-control form-select form-select" onchange="RestrictData(this.value)">
+                                            <option id="AccSelect" value="0">Select</option>
+                                            <option id="DEVLOPER" value="Developer">Developer</option>
+                                            <option id="ADMIN" value="Admin">Admin</option>
+                                            <option id="TELLER" value="Teller">Teller</option>
+                                        </select>
+                                    </div>*@
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Access Type</label>
+                                <div>
+                                    <select id="accesstype" class="form-control form-select form-select" onchange="GetMasterList(this.value)" disabled>
+                                        <option id="select" value="0">select</option>
+                                        <option id="org" value="ORG">Organization</option>
+                                        <option id="customer" value="CUST">Customer</option>
+                                        <option id="domain" value="DOM">Domain</option>
+                                        <option id="branch" value="BRANCH">Branch</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-3">
+                                <label class="form-label">L1 Maker Limit</label>
+                                <input type="number" class="form-control form-control-sm mb-1" id="L1StartLimit" placeholder="0" disabled />
+                                <input type="number" class="form-control form-control-sm" id="L1StopLimit" placeholder="5000" disabled />
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">L2 Checker Limit</label>
+                                <input type="number" class="form-control form-control-sm mb-1" id="L2StartLimit" placeholder="5000" disabled />
+                                <input type="number" class="form-control form-control-sm" id="L2StopLimit" placeholder="10000" disabled />
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">L3 Checker Limit</label>
+                                <input type="number" class="form-control form-control-sm mb-1" id="L3StartLimit" placeholder="10000" disabled />
+                                <input type="number" class="form-control form-control-sm" id="L3StopLimit" placeholder="20000" disabled />
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-block text-center mb-3">
+                           
+                            <a href="~/UserManagement/UserList" class="btn btn-secondary btn-sm px-4">Back</a>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card overflow-hidden">
+                <div class="card-body py-0 mt-3">
+                    <div class="table-responsive">
+                        <table id="data_list" class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th id="th_head"></th>
+                                    @*<th>Label</th>*@
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+
+    $("#ProcessingBar").hide();
+
+    var x = '@ViewBag.URL';
+    var rooturl = '@Url.Content("~/")';
+    var userId = "";
+    var BankCode = "";
+    var rowcount = 0;
+    var id = @ViewBag.Id;
+    var uid = "";
+    var UserLevel = "";
+    var old_UserLevel = "";
+
+    var actionType = "FETCH";
+
+    $(document).ready(function () {
+        debugger;
+        //var userSelected = document.getElementById('UserLevel').value;
+        //document.getElementById('userType').selectedIndex = userSelected;
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+        userId = document.getElementById("loginid").value;
+        BankCode = document.getElementById("BankCode").value;
+        uid = document.getElementById("uid").value;
+        var y = "GetUserData";
+
+        $.ajax({
+            type: "POST",
+            url: x + y,
+            data: { Id: id },
+            success: GetUserDetails,
+            error: getError
+        });
+        debugger;
+
+        UserLevel = document.getElementById("UserLevel").value;
+        GetRoleUserChecker();
+    });
+
+</script>
+
+
+
+
+
+
+
+

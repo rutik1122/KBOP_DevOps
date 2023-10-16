@@ -1,0 +1,707 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>Kores Intelligent Branch Automation System</title>
+
+    <meta name="description" content="overview &amp; stats" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+    <!-- page specific plugin styles -->
+    <!-- text fonts -->
+    <link rel="stylesheet" href="~/assets/css/fonts.googleapis.com.css" />
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="~/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+    <link rel="stylesheet" href="~/assets/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="~/assets/css/ace-rtl.min.css" />
+
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+
+
+    <script src="~/assets/js/ace-extra.min.js"></script>
+
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    @*<script src="~/Scripts/jquery-1.12.4.min.js"></script>*@
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+
+    @*<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jqueryui.js")"></script>
+        <script src="@Url.Content("~/Scripts/pdfmake.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/html2canvas.min.js")"></script>*@
+    @*<script src="@Url.Content("~/Scripts/JsPDF.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.datetimepicker.full.min.js")"></script>*@
+
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jqueryui.js"></script>
+    <script src="~/Scripts/pdfmake.min.js"></script>
+    <script src="~/Scripts/html2canvas.min.js"></script>
+    <script src="~/Scripts/jquery.table2excel.min.js"></script>
+    <script src="~/Scripts/JsPDF.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+    @*<script src="~/Scripts/Data.js"></script>*@
+    @*<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>*@
+
+
+    @*<script src="@Url.Content("~/Scripts/font.js")"></script>*@
+
+    <style>
+        .form-popup {
+            display: none;
+            position: fixed;
+            align-content: center;
+            /*bottom: 50px;
+            right: 15px;*/
+            border: 3px solid #f1f1f1;
+            z-index: 9;
+        }
+    </style>
+
+</head>
+@*<script src="@Url.Content("~/Scripts/IWDataEntry.js")"></script>*@
+<body class="no-skin">
+    <div id="navbar" class="navbar navbar-default          ace-save-state">
+        <div class="navbar-container ace-save-state" id="navbar-container">
+            <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                <span class="sr-only">Toggle sidebar</span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+            </button>
+
+            <div class="navbar-header pull-left">
+                <a href="#" class="navbar-brand">
+                    <small>
+                        @*<i class="fa fa-leaf"></i>*@
+                        Kores Intelligent Branch Automation System
+                    </small>
+                </a>
+            </div>
+
+            <div class="navbar-buttons navbar-header pull-right" role="navigation">
+                <ul class="nav ace-nav">
+                    <li class="light-blue dropdown-modal">
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <img class="nav-user-photo" src="~/assets/images/avatars/avatar2.png" alt="Jason's Photo" />
+                            <span class="user-info">
+                                <small>Welcome,</small>
+                                @Session["Login_Page_Id"].ToString()
+                            </span>
+
+                            <i class="ace-icon fa fa-caret-down"></i>
+                        </a>
+
+                        <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+
+                            @*<li>
+                                    <a href="@Url.Action("Index","ChangePassword")">
+                                        <i class="ace-icon fa fa-user"></i>
+                                        Change Password
+                                    </a>
+                                </li>
+
+                                <li class="divider"></li>*@
+
+                            <li>
+                                <a href="@Url.Action("iBasLogout", "Home")">
+                                    <i class="ace-icon fa fa-power-off"></i>
+                                    Logout
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div><!-- /.navbar-container -->
+    </div>
+
+    <div class="main-container ace-save-state" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.loadState('main-container') } catch (e) { }
+        </script>
+
+        <div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+            <script type="text/javascript">
+                try { ace.settings.loadState('sidebar') } catch (e) { }
+            </script>
+
+            <ul class="nav nav-list">
+                <li class="active">
+                    <a href="~/Home/Index">
+                        <i class="menu-icon fa fa-list"></i>
+                        <span class="menu-text"> Menu Bar </span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                @if ((bool)Session["sod"] == true)
+                {
+                    <li class="">
+                        <a href="~/home/SOD?Name=SOD">
+                            <i class="menu-icon fa fa-user"></i>
+                            <span class="menu-text">Branch SOD</span>
+                        </a>
+                    </li>
+                }
+
+                @if ((bool)Session["cashwithdrawalmaker"] == true || (bool)Session["transfermaker"] == true || (bool)Session["cashdepositmaker"] == true || (bool)Session["rtgsmaker"] == true)
+                {
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-money"></i>
+                            <span class="menu-text">Maker Module</span>
+
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+                            @if ((bool)Session["cashwithdrawalmaker"] == true)
+                            {
+                                <li class="">
+                                    <a href="~/DepositWithdraw/Withdraw?Name=WithDraw">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Cash WithDraw
+                                    </a>
+                                </li>
+                            }
+
+                            @if ((bool)Session["cashdepositmaker"] == true)
+                            {
+                                <li class="">
+                                    <a href="~/DepositWithdraw/Deposit?Name=Deposit">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Cash Deposit
+                                    </a>
+                                </li>
+                            }
+
+                            @if ((bool)Session["transfermaker"] == true)
+                            {
+                                <li class="">
+                                    <a href="~/TransferCts/Transfer?Name=TRF">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Transfer Cheque
+                                    </a>
+                                </li>
+                            }
+
+                            @*@if ((bool)Session["rtgsmaker"] == true)
+                            {
+                                <li class="">
+                                    <a href="~/RtgsNeft/RtgsList">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Rtgs/Neft
+                                    </a>
+                                </li>
+                            }*@
+
+                            @*<li class="">
+                                <a href="~/DemandDraft/DemandDraftSelection">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Demand Draft
+                                </a>
+                            </li>*@
+
+                        </ul>
+                    </li>
+                }
+
+                @*@if ((bool)Session["cashwithdrawalmaker"] == true)
+                    {
+                        <li class="">
+                            <a href="~/DepositWithdraw/Withdraw?Name=WithDraw">
+                                <i class="menu-icon fa fa-caret-square-o-up"></i>
+                                <span class="menu-text">Cash WithDraw</span>
+                            </a>
+                        </li>
+                    }*@
+
+                @*@if ((bool)Session["cashdepositmaker"] == true)
+                    {
+                        <li class="">
+                            <a href="~/DepositWithdraw/Deposit?Name=Deposit">
+                                <i class="menu-icon fa fa-caret-square-o-down"></i>
+                                <span class="menu-text">Cash Deposit</span>
+                            </a>
+                        </li>
+                    }*@
+
+                @if ((bool)Session["ctsmaker"] == true)
+                {
+                    <li class="">
+                        <a href="~/TransferCts/Transfer?Name=CTS">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text">CTS Cheque</span>
+                        </a>
+                    </li>
+                }
+
+                @*@if ((bool)Session["transfermaker"] == true)
+                    {
+                        <li class="">
+                            <a href="~/TransferCts/Transfer?Name=TRF">
+                                <i class="menu-icon fa fa-money"></i>
+                                <span class="menu-text">Transfer Cheque</span>
+                            </a>
+                        </li>
+                    }*@
+
+                @if ((bool)Session["formupload"] == true)
+                {
+                    <li class="">
+                        <a href="~/RtgsNeft/Index">
+                            <i class="menu-icon fa fa-upload"></i>
+                            <span class="menu-text">Form Upload</span>
+                        </a>
+                    </li>
+                }
+
+
+                @*@if ((bool)Session["rtgsmaker"] == true)
+                {
+                    <li class="">
+                        <a href="~/RtgsNeft/RtgsList">
+                            <i class="menu-icon fa fa-bank"></i>
+                            <span class="menu-text">Rtgs/Neft</span>
+                        </a>
+                    </li>
+                }*@
+
+
+                @*<li class="">
+                        <a href="~/RtgsNeft/FixDepositList">
+                            <i class="menu-icon fa fa-bank"></i>
+                            <span class="menu-text">Fix Deposit</span>
+                        </a>
+                    </li>*@
+
+                @*<li class="">
+                        <a href="~/RtgsNeft/ClosedAccountList">
+                            <i class="menu-icon fa fa-bank"></i>
+                            <span class="menu-text">Closed Account</span>
+                        </a>
+                    </li>*@
+
+
+                @if ((bool)Session["cashwithdrawalchecker"] == true || (bool)Session["transferchecker"] == true || (bool)Session["cashdepositchecker"] == true
+                    || (bool)Session["rtgschecker"] == true)
+                {
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-money"></i>
+                            <span class="menu-text">Checker Module</span>
+
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+                            @if ((bool)Session["cashwithdrawalchecker"] == true)
+                            {
+                                <li class="">
+                                    <a href="~/Checker/Index">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Cash Withdrawal
+                                    </a>
+                                </li>
+                            }
+
+                            @if ((bool)Session["cashdepositchecker"] == true)
+                            {
+                                <li class="">
+                                    <a href="~/Checker/Index">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Cash Deposit
+                                    </a>
+                                </li>
+                            }
+
+                            @if ((bool)Session["transferchecker"] == true)
+                            {
+                                <li class="">
+                                    @*<a href="~/TransferCts/TrfCheckerList">*@
+                                    <a href="~/Checker/Index">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Transfer
+                                    </a>
+                                </li>
+                            }
+
+                            @*@if ((bool)Session["rtgschecker"] == true)
+                            {
+                                <li class="">
+                                    <a href="~/RtgsNeft/RtgsList?checker=true">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        <span class="menu-text">Rtgs/Neft</span>
+                                    </a>
+                                </li>
+                            }*@
+
+                        </ul>
+                    </li>
+                }
+
+
+                @*<li class="">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-money"></i>
+                            <span class="menu-text">Rtgs/Neft</span>
+
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+                            <li class="">
+                                <a href="~/RtgsNeft/Index">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Upload Menu
+                                </a>
+
+                                <b class="arrow"></b>
+                            </li>
+
+                            <li class="">
+                                <a href="~/RtgsNeft/RtgsList">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Pending Forms
+                                </a>
+
+                                <b class="arrow"></b>
+                            </li>
+                        </ul>
+                    </li>*@
+
+                @if ((bool)Session["eod"] == true)
+                {
+                    <li class="">
+                        <a href="~/home/SOD?Name=EOD">
+                            <i class="menu-icon fa fa-user"></i>
+                            <span class="menu-text">Send To CC</span>
+                            @*<span class="menu-text">Currency Chest</span>*@
+                        </a>
+                    </li>
+                }
+
+                @if ((bool)Session["printermapping"] == true)
+                {
+                    <li class="">
+                        <a href="~/home/PrinterMaster">
+                            <i class="menu-icon fa fa-print"></i>
+                            <span class="menu-text">Printer Mapping</span>
+                        </a>
+                    </li>
+                }
+
+
+                @*<li class="">
+                        <a href="@Url.Action("Home", "Printer")">
+                            <i class="menu-icon fa fa-print"></i>
+                            <span class="menu-text">New Printer Mapping</span>
+                        </a>
+                    </li>*@
+
+                @*<li class="">
+                        <a href="~/home/UserManagement">
+                            <i class="menu-icon fa fa-users"></i>
+                            <span class="menu-text">User Managment Old</span>
+                        </a>
+                    </li>*@
+
+                @if ((bool)Convert.ToBoolean(Session["usermanagementmaker"]) == true)
+                {
+                    <li class="">
+                        <a href="~/UserManagement/UserList">
+                            <i class="menu-icon fa fa-users"></i>
+                            <span class="menu-text">User Managment</span>
+                        </a>
+                    </li>
+                }
+
+
+                @*<li class="">
+                        <a href="~/home/SearchOld">
+                            <i class="menu-icon fa fa-search"></i>
+                            <span class="menu-text">Search Old</span>
+                        </a>
+                    </li>*@
+
+                @if ((bool)Session["search"] == true)
+                {
+                    <li class="">
+                        <a href="~/home/Search">
+                            <i class="menu-icon fa fa-search"></i>
+                            <span class="menu-text">Search</span>
+                        </a>
+                    </li>
+                }
+
+                @if ((bool)Session["filedownload"] == true)
+                {
+                    <li class="">
+                        <a href="~/home/FileDownload">
+                            <i class="menu-icon fa fa-download"></i>
+                            <span class="menu-text">CTS File Download</span>
+                        </a>
+                    </li>
+                }
+
+                @if ((bool)Session["branchreconcilation"] == true)
+                {
+                    <li class="">
+                        @*<a href="~/home/BranchReconcilation">*@
+                        <a href="@Url.Action("Index", "Reconcile")">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text">Branch Reconcilation</span>
+                        </a>
+                    </li>
+                }
+
+
+                @if ((bool)Session["dashboard"] == true)
+                {
+                    <li class="">
+                        <a href="@Url.Action("Index", "Dashboard")">
+                            <i class="menu-icon fa fa-pie-chart"></i>
+                            <span class="menu-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="@Url.Action("DetailedDashboard", "Dashboard")">
+                            <i class="menu-icon fa fa-pie-chart"></i>
+                            <span class="menu-text">Detailed Dashboard</span>
+                        </a>
+                    </li>
+                }
+
+
+                @*<li class="">
+                        <a href="@Url.Action("BranchReconcilation", "Home")">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            Old Branch Reconcilation
+                        </a>
+                    </li>*@
+
+            </ul><!-- /.nav-list -->
+
+            <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+            </div>
+        </div>
+
+        <div class="main-content">
+            @RenderBody()
+        </div><!-- /.main-content -->
+    </div><!-- /.main-container -->
+
+    <script src="~/assets/js/jquery-2.1.4.min.js"></script>
+    @*<script src="~/Scripts/jquery-3.6.0.js"></script>*@
+
+    <script type="text/javascript">
+        if ('ontouchstart' in document.documentElement) document.write("<script src='~/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </script>
+    <script src="~/assets/js/bootstrap.min.js"></script>
+
+    <script src="~/assets/js/jquery-ui.custom.min.js"></script>
+    <script src="~/assets/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/assets/js/chosen.jquery.min.js"></script>
+    <script src="~/assets/js/spinbox.min.js"></script>
+    <script src="~/assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/js/moment.min.js"></script>
+    <script src="~/assets/js/daterangepicker.min.js"></script>
+    <script src="~/assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/assets/js/bootstrap-colorpicker.min.js"></script>
+    <script src="~/assets/js/jquery.knob.min.js"></script>
+    <script src="~/assets/js/autosize.min.js"></script>
+    <script src="~/assets/js/jquery.inputlimiter.min.js"></script>
+    <script src="~/assets/js/jquery.maskedinput.min.js"></script>
+    <script src="~/assets/js/bootstrap-tag.min.js"></script>
+    <script src="~/assets/js/jquery.easypiechart.min.js"></script>
+    <script src="~/assets/js/jquery.sparkline.index.min.js"></script>
+    @*<script src="~/assets/js/jquery.flot.min.js"></script>
+        <script src="~/assets/js/jquery.flot.pie.min.js"></script>
+        <script src="~/assets/js/jquery.flot.resize.min.js"></script>*@
+
+    <!-- ace scripts -->
+    <script src="~/assets/js/ace-elements.min.js"></script>
+    <script src="~/assets/js/ace.min.js"></script>
+
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('#id-disable-check').on('click', function () {
+                var inp = $('#form-input-readonly').get(0);
+                if (inp.hasAttribute('disabled')) {
+                    inp.setAttribute('readonly', 'true');
+                    inp.removeAttribute('disabled');
+                    inp.value = "This text field is readonly!";
+                }
+                else {
+                    inp.setAttribute('disabled', 'disabled');
+                    inp.removeAttribute('readonly');
+                    inp.value = "This text field is disabled!";
+                }
+            });
+
+            $('.sparkline').each(function () {
+                var $box = $(this).closest('.infobox');
+                var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+                $(this).sparkline('html',
+                    {
+                        tagValuesAttribute: 'data-values',
+                        type: 'bar',
+                        barColor: barColor,
+                        chartRangeMin: $(this).data('min') || 0
+                    });
+            });
+
+            $('.date-picker').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                dateFormat: "yyyy-MM-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-15:+15",
+                showOn: "both"
+            })
+                //show datepicker when clicking on the icon
+                .next().on(ace.click_event, function () {
+                    $(this).prev().focus();
+                });
+
+
+            var placeholder = $('#piechart-placeholder').css({ 'width': '90%', 'min-height': '150px' });
+            var data = [
+                { label: "social networks", data: 38.7, color: "#68BC31" },
+                { label: "search engines", data: 24.5, color: "#2091CF" },
+                { label: "ad campaigns", data: 8.2, color: "#AF4E96" },
+                { label: "direct traffic", data: 18.6, color: "#DA5430" },
+                { label: "other", data: 10, color: "#FEE074" }
+            ]
+
+            //pie chart tooltip example
+            var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+            var previousPoint = null;
+
+            placeholder.on('plothover', function (event, pos, item) {
+                if (item) {
+                    if (previousPoint != item.seriesIndex) {
+                        previousPoint = item.seriesIndex;
+                        var tip = item.series['label'] + " : " + item.series['percent'] + '%';
+                        $tooltip.show().children(0).text(tip);
+                    }
+                    $tooltip.css({ top: pos.pageY + 10, left: pos.pageX + 10 });
+                } else {
+                    $tooltip.hide();
+                    previousPoint = null;
+                }
+
+            });
+
+            $(document).one('ajaxloadstart.page', function (e) {
+                $tooltip.remove();
+            });
+
+
+
+
+            var d1 = [];
+            for (var i = 0; i < Math.PI * 2; i += 0.5) {
+                d1.push([i, Math.sin(i)]);
+            }
+
+            var d2 = [];
+            for (var i = 0; i < Math.PI * 2; i += 0.5) {
+                d2.push([i, Math.cos(i)]);
+            }
+
+            var d3 = [];
+            for (var i = 0; i < Math.PI * 2; i += 0.2) {
+                d3.push([i, Math.tan(i)]);
+            }
+
+            $('#recent-box [data-rel="tooltip"]').tooltip({ placement: tooltip_placement });
+            function tooltip_placement(context, source) {
+                var $source = $(source);
+                var $parent = $source.closest('.tab-content')
+                var off1 = $parent.offset();
+                var w1 = $parent.width();
+
+                var off2 = $source.offset();
+                //var w2 = $source.width();
+
+                if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+                return 'left';
+            }
+
+
+            $('.dialogs,.comments').ace_scroll({
+                size: 300
+            });
+
+
+            var agent = navigator.userAgent.toLowerCase();
+            if (ace.vars['touch'] && ace.vars['android']) {
+                $('#tasks').on('touchstart', function (e) {
+                    var li = $(e.target).closest('#tasks li');
+                    if (li.length == 0) return;
+                    var label = li.find('label.inline').get(0);
+                    if (label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation();
+                });
+            }
+
+            $('#tasks').sortable({
+                opacity: 0.8,
+                revert: true,
+                forceHelperSize: true,
+                placeholder: 'draggable-placeholder',
+                forcePlaceholderSize: true,
+                tolerance: 'pointer',
+                stop: function (event, ui) {
+                    //just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
+                    $(ui.item).css('z-index', 'auto');
+                }
+            }
+            );
+            $('#tasks').disableSelection();
+            $('#tasks input:checkbox').removeAttr('checked').on('click', function () {
+                if (this.checked) $(this).closest('li').addClass('selected');
+                else $(this).closest('li').removeClass('selected');
+            });
+
+
+            //show the dropdowns on top or bottom depending on window height and menu position
+            $('#task-tab .dropdown-hover').on('mouseenter', function (e) {
+                var offset = $(this).offset();
+
+                var $w = $(window)
+                if (offset.top > $w.scrollTop() + $w.innerHeight() - 100)
+                    $(this).addClass('dropup');
+                else $(this).removeClass('dropup');
+            });
+
+        })
+
+    </script>
+</body>
+</html>
+<script src="~/Scripts/toastr.js"></script>

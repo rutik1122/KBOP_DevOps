@@ -1,0 +1,331 @@
+﻿
+@{
+    ViewBag.Title = "MakerDemandDraft";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" hidden />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+
+<input type="text" id="dd_type" name="dd_type" value="@ViewBag.DD_Type" hidden />
+
+<div class="main-content-inner">
+    <div class="page-header">
+        <h1>
+            @ViewBag.TitleName
+        </h1>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2">
+                <input type="radio" id="DD" name="file_type" value="DD" onclick="radioFunction('DD');" />
+                <label for="DD" style="font-weight:bold">Demand Draft</label>
+            </div>
+            <div class="col-sm-2">
+                <input type="radio" id="supporting" name="file_type" value="supporting" onclick="radioFunction('supporting');" />
+                <label for="supporting" id="supporting_id" style="font-weight:bold"></label>
+            </div>
+        </div>
+        <br />
+
+        <div id="div_DemandDraft" class="row">
+
+            <div class="col-sm-4">
+                <div class="row">
+                    <label class="col-sm-5"><b>Payee Branch:</b></label>
+                    <input id="dd_payee_branch" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Account No:</b></label>
+                    <input id="dd_account_no" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>DD Date:</b></label>
+                    <input id="dd_date" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Payee Name:</b></label>
+                    <input id="dd_payee_name" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Amount In Words:</b></label>                  <!-- Non Mandatory -->
+                </div>
+                <div class="row">
+                    <textarea id="dd_amount_in_words" style="width:100%"></textarea>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Drawee Branch:</b></label>
+                    <input id="dd_drawee_branch" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Amount In Figures:</b></label>
+                    <input id="dd_amount_in_figures" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Name of Applicant:</b></label>
+                    <input id="dd_name_of_applicant" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Address of Applicant:</b></label>
+                </div>
+                <div class="row">
+                    <textarea id="dd_address_of_applicant" style="width:100%"></textarea>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Mobile/Telephone Number:</b></label>
+                    <input id="dd_mobile_no" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>PAN:</b></label>
+                    <input id="dd_pan" />
+                </div>
+                <br />
+            </div>
+            <div class="col-sm-8">
+                <img id="dd_img" src="" style="width:100%" />
+
+            </div>
+
+        </div>
+
+        <div id="div_Cash" class="row" hidden>
+
+
+
+        </div>
+
+        <div id="div_Cheque" class="row" hidden>
+            <div class="col-sm-4">
+                <div class="row">
+                    <label class="col-sm-5"><b>Cheque Date:</b></label>
+                    <input id="chq_date" />
+                    @*<input id="chq_date" onfocusin="mouseDown('rtgs_chq_date')" onfocusout="mouseup('rtgs_chq_date')" />*@
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>IFSC Code:</b></label>
+                    <input id="chq_ifscCode" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Payee Name:</b></label>
+                    <input id="chq_payeeName" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Amount In Words:</b></label>
+                </div>
+                <div class="row">
+                    <textarea id="chq_amtInWords" style="width:100%" ></textarea>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Amount:</b></label>
+                    <input id="chq_amount" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Debit Account No:</b></label>
+                    <input id="chq_debitAccNo" type="number" />
+                </div>
+                <br />
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    <img id="FG" src="" style="height:100%" />
+                    @*<img id="FG" src="" style="height:100%" hidden />
+        <canvas id="myCanvas" height="450" width="900"></canvas>*@
+                </div>
+                <br /><br />
+                <div class="row">
+                    <label class="col-sm-3" style="text-align:center"><b>Cheque No</b></label>
+                    <label class="col-sm-3" style="text-align:center"><b>Sort Code</b></label>
+                    <label class="col-sm-3" style="text-align:center"><b>SAN</b></label>
+                    <label class="col-sm-3" style="text-align:center"><b>TR</b></label>
+                </div>
+                <div class="row">
+
+                    <input type="number" class="col-sm-3" id="chqnoDataEntry" min="0" max="999999" placeholder="Cheque No" style="text-align: center" />
+                    <input type="number" class="col-sm-3" id="sortcodeDataEntry" min="0" max="999999999" placeholder="Sort Code" style="text-align: center" />
+                    <input type="number" class="col-sm-3" id="sanDataEntry" min="0" max="999999" placeholder="SAN" style="text-align: center" />
+                    <input type="number" class="col-sm-3" id="trDataEntry" min="0" max="999" placeholder="TR" style="text-align: center" />
+
+                    @*<input type="number" class="col-sm-3" id="chqnoDataEntry" min="0" max="999999" placeholder="Cheque No" style="text-align: center" onfocusin="mouseDown('chqnoDataEntry')" onfocusout="mouseup('chqnoDataEntry')" />
+        <input type="number" class="col-sm-3" id="sortcodeDataEntry" min="0" max="999999999" placeholder="Sort Code" style="text-align: center" onfocusin="mouseDown('sortcodeDataEntry')" onfocusout="mouseup('sortcodeDataEntry')" />
+        <input type="number" class="col-sm-3" id="sanDataEntry" min="0" max="999999" placeholder="SAN" style="text-align: center" onfocusin="mouseDown('sanDataEntry')" onfocusout="mouseup('sanDataEntry')" />
+        <input type="number" class="col-sm-3" id="trDataEntry" min="0" max="999" placeholder="TR" style="text-align: center" onfocusin="mouseDown('trDataEntry')" onfocusout="mouseup('trDataEntry')" />*@
+                </div>
+            </div>
+            <br />
+        </div>
+
+        <div id="div_WithdrawalSlip" class="row" hidden>
+
+            <div class="col-sm-4">
+                <div class="row">
+                    <label class="col-sm-5"><b>Slip No:</b></label>
+                    <input id="WDSlip_slip_no" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>:</b></label>
+                    <input class="col-sm-1" type="radio" id="Cash" name="trantype" value="Cash" />
+                    <label class="col-sm-2" for="Cash" style="font-weight:bold">Cash</label>
+                    <input class="col-sm-1" type="radio" id="Transfer" name="trantype" value="Transfer" />
+                    <label class="col-sm-2" for="Transfer" style="font-weight:bold">Transfer</label>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Pay To:</b></label>
+                    <input id="WDSlip_pay_to" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Amount In Words:</b></label>                  <!-- Non Mandatory -->
+                </div>
+                <div class="row">
+                    <textarea id="WDSlip_amount_in_words" style="width:100%"></textarea>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-5"><b>Amount in Figure:</b></label>
+                    <input id="WDSlip_amount_in_figure" />
+                </div>
+                <br />
+            </div>
+            <div class="col-sm-8">
+                <img id="WDSlip_Img" src="" style="width:100%" />
+            </div>
+
+        </div>
+
+        <div id="div_DebitIntimation" class="row" hidden>
+
+            <div class="sol-sm-4">
+
+            </div>
+            <div class="col-sm-8">
+                <img id="DD_Img" src="" style="width:100%" />
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    var x = document.getElementById("urlVal").value;
+    var dd_type = document.getElementById("dd_type").value;
+    var rooturl = '@Url.Content("~/")';
+
+    var bearer = window.localStorage.getItem('TokenType');
+    var access_token = window.localStorage.getItem('AccessToken');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    $(document).ready(function () {
+        debugger;
+
+        if (dd_type == "01") {
+            document.getElementById("supporting_id").innerHTML = "Cash";
+        }
+        else if (dd_type == "02") {
+            document.getElementById("supporting_id").innerHTML = "Cheque";
+        }
+        else if (dd_type == "03") {
+            document.getElementById("supporting_id").innerHTML = "Withdrawal Slip";
+        }
+        else if (dd_type == "04") {
+            document.getElementById("supporting_id").innerHTML = "Debit Intimation";
+        }
+
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '/' + mm + '/' + dd;
+
+        debugger;
+        y = "getVoucherDetails_New";
+        var userId = document.getElementById("tellerDetails").value;
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: { transtype: "DD", INtellerid: userId, pdate: today, pType: dd_type },
+            success: function (result) {
+                DemandDraftData(result);
+            },
+            error: getError
+        });
+
+    });
+
+    function getError(result) {
+
+        debugger;
+        //var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+            window.location = rooturl + "DemandDraft/DemandDraftSelection";
+        }
+    }
+
+    function DemandDraftData(result) {
+        debugger;
+    }
+
+    function radioFunction(action_type) {
+        debugger;
+
+        $("#div_DemandDraft").hide();
+        $("#div_Cash").hide();
+        $("#div_Cheque").hide();
+        $("#div_WithdrawalSlip").hide();
+        $("#div_DebitIntimation").hide();
+
+        if (action_type == "DD") {
+            $("#div_DemandDraft").show();
+        }
+        else {
+            if (dd_type == "01") {
+                $("#div_Cash").show();
+            }
+            else if (dd_type == "02") {
+                $("#div_Cheque").show();
+            }
+            else if (dd_type == "03") {
+                $("#div_WithdrawalSlip").show();
+            }
+            else if (dd_type == "04") {
+                $("#div_DebitIntimation").show();
+            }
+        }
+
+    }
+
+</script>

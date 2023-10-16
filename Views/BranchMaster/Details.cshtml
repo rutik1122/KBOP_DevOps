@@ -1,0 +1,146 @@
+﻿@model iBAS.Models.Branch_Master
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/BranchMaster.js"></script>
+@using (Html.BeginForm())
+{
+    <input type="hidden" id="selectedBranchValue" value="@ViewBag.selectedDomainId" />
+
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <form>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card overflow-hidden">
+                        <div class="card-header bg-light py-2">
+                            <h5 class="mb-0 text-center">Detials</h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id)
+
+                            <div class="row mb-4 mt-4">
+                                @Html.HiddenFor(model => model.CreatedBy)
+                            </div>
+                            <div class="row mb-4 mt-4">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    @*<div class="col-md-9">*@
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    @*</div>*@
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Address1, htmlAttributes: new { @class = "control-label col-md-3" })
+
+                                    @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" , @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+                            <div class="row mb-4 mt-2">
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "control-label col-md-3" })
+
+                                    @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control" , @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.IfscCode, htmlAttributes: new { @class = "control-label col-md-3" })
+
+                                    @Html.EditorFor(model => model.IfscCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.IfscCode, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.MicrCode, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.MicrCode, new { htmlAttributes = new { @class = "form-control" , @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.MicrCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-2">
+
+                                <div class="col-lg-4">
+                                   
+                                        @Html.LabelFor(model => model.DomId, "Domain", htmlAttributes: new { @class = "control-label col-md-4" })
+                                        @Html.EditorFor(model => model.DomId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })                        
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Scan_cutoffTime, "CutOff Time", htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Scan_cutoffTime, new { htmlAttributes = new { @class = "form-control",@readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Scan_cutoffTime, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="row mb-1 mt-6">
+                                    <div class="d-grid gap-2 d-md-block text-center mb-3">
+                                        @*<input type="button" value="Save" class="btn btn-primary btn-sm px-4 me-2" href="#authenticationmodal" data-bs-toggle="modal" onclick="ValidateData()" />*@
+                                        @*<input type="submit" value="Save" class="btn btn-primary btn-sm px-4 me-2"/>*@
+                                        @*<button href="#authenticationmodal" data-bs-toggle="modal" type="button" class="btn btn-primary btn-sm px-4 me-2" onclick="ValidateData()">Save</button>*@
+                                        @Html.ActionLink("Back", "BranchList", null, new { @class = "btn btn-secondary btn-sm px-4", style = "color:white" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+@{
+    var message = TempData["success"] ?? string.Empty;
+}
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var message = '@message';
+    if (message)
+       alert(message);
+
+    $(document).ready(function () {
+        debugger;
+
+        $("#ProcessingBar").hide();
+        var branchSelectedValue = document.getElementById('selectedBranchValue').value;
+        document.getElementById('Branch').selectedIndex = branchSelectedValue;
+
+     
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+
+</script>
+
+

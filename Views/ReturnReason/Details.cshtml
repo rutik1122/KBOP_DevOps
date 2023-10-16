@@ -1,0 +1,85 @@
+﻿@model iBAS.Models.ReasonMaster
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/ReasonMaster.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <form>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card overflow-hidden">
+                        <div class="card-header bg-light py-2">
+                            <h5 class="mb-0 text-center">Edit Reason</h5>
+                        </div>
+
+                        <div class="card-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.oldCode)
+                            <div class="row mb-4 mt-4">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.ReasonCode, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.ReasonCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.ReasonCode, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+
+                                </div>
+                                <div class="row mb-1 mt-6">
+                                    <div class="d-grid gap-2 d-md-block text-center mb-3">
+                                        
+                                        @Html.ActionLink("Back", "List", null, new { @class = "btn btn-secondary btn-sm px-4", style = "color:white" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         
+
+        </form>
+    </div>
+
+}
+@{
+    var message = TempData["success"] ?? string.Empty;
+}
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var message = '@message';
+    if (message)
+       alert(message);
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+</script>

@@ -1,0 +1,152 @@
+﻿@{
+    //ViewBag.Title = "MappingMaster";
+    //ViewBag.header = "Mapping Module";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title> iBAS</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    @*----------- Changes made on 2022-03-28 -------- By Aniketadit Jamuar -------- Begin*@
+    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    @*----------- Changes made on 2022-03-28 -------- By Aniketadit Jamuar -------- End*@
+</head>
+
+
+
+<body>
+    <style>
+        a {
+            font-size: 30px;
+            float: right;
+        }
+    </style>
+    <a href="~/home/Index">Back</a>
+    <div class="container">
+        <div class="wrapper">
+            <div class="form-signin">
+                <h2 class="form-signin-heading text-center">Register</h2>
+                <div>
+                    <div class="form-group">
+                        <input type="text" id="username" placeholder="Username" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="password" class="form-control" placeholder="Password" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" @*class="product-list"*@ id="AD" name="AD" value="Y">
+                        <label for="vehicle1"> AD</label>
+                        @*<input type="checkbox" class="product-list"  id="NonAD" name="NonAD" value="N">
+                        <label for="vehicle2"> Non AD</label><br>*@
+                        </div>
+
+                        @*<div class="col-sm-3">*@
+                        @*<label for="uname"><b>Enter Printer Port</b></label>*@
+                        @*<input type="text" style="font-size:22px" id="printer_port" maxlength="15" placeholder="Password" />
+            </div><br/>*@
+
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block" id="RegisterUser" onclick="RegisterUser();">Register</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")'
+
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    function RegisterUser() {
+        debugger;
+        var adauth = '';
+        if (document.getElementById("AD").checked == true) {
+            adauth = "Y";
+        }
+        else {
+            adauth = "N";
+        }
+       // event.preventDefault();
+        var ProcessType = "registeruser";
+        var credentials = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+        };
+
+        var x = '@ViewBag.URL';
+        var y = "RegisterUser";
+        $.ajax({
+            type: 'POST',
+            url: x + y,
+            headers: authHeaders,
+            data: { pType: ProcessType, user_id: credentials.username, user_pass: credentials.password, ADAuthentication: adauth},
+           // //crossDomain: true,
+            success: callbackFunction,
+            error:errorResponse
+
+        });
+    }
+
+    
+    //$('.product-list').click(function () {
+    //    $(this).siblings('input:checkbox').prop('checked', false);
+    //});
+
+
+    function callbackFunction(result) {
+        debugger;
+        if (result==0)
+        {
+            alert("This user name is already registered.");
+        }
+        else
+        {
+            alert("User registered successfully.");
+        }
+
+        window.location = rooturl + "home/Usermanagement";
+    }
+    function errorResponse(result)
+    {
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+    //------------------added by me--------------------------------------------------
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- by me----------------------------------------------------------
+</script>

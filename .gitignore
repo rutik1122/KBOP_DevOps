@@ -1,0 +1,13 @@
+
+*.vsidx
+.vs/iBAS_AU/config/applicationhost.config
+.vs/iBAS_AU/FileContentIndex/read.lock
+.vs/iBAS_AU/v17/.suo
+bin/iBAS.dll
+bin/iBAS.dll
+bin/iBAS.dll.config
+bin/iBAS.pdb
+bin/Microsoft.Web.Infrastructure.xml
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+obj/Debug/iBAS_AU.csproj.AssemblyReference.cache
+Logs/28082023Logs.txt

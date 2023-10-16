@@ -1,0 +1,165 @@
+﻿{
+    Layout = null;
+}
+
+
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+        
+        <title> iBAS</title>
+
+        <link href="~/Content/bootstrap.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/Site.css" rel="stylesheet" />
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+        <style>
+            .btn-iBAS {
+                background: #AE275F;
+            }
+
+            .xyz {
+                text-align: center;
+                background: #AE275F;
+                border: 15px solid #AE275F;
+                font-size: 25px;
+            }
+
+            .abc {
+                color: white;
+            }
+
+            .btn, btn-primary, btn-block {
+                background: #AE275F;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="container">
+            <div class="wrapper">
+                <div class="form-signin">
+
+                    <div class="form-group">
+
+                        <div class="xyz"><span class="abc">iBAS</span></div>
+
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <input type="text" id="username" placeholder="Username" class="form-control" @*autocomplete="off"*@ />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="password" class="form-control" placeholder="Password" />
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block" id="Login" onclick="Login();">LOGIN</button>
+
+                        </div>
+                        <div class="form-group">
+                            <p class="text-center">
+
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+
+            var rooturl = '@Url.Content("~/")'
+
+            @*function Login() {
+                debugger;
+
+
+                var credentials = {
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value
+                };
+
+                var user = document.getElementById("username").value;
+                localStorage.setItem("username", user);
+
+                var x = '@ViewBag.URL';
+                var y = "token";
+                $.ajax({
+                    url: x + y,
+                    type: 'POST',
+                    data: { 'username': credentials.username, 'password': credentials.password, 'grant_type': 'password' },
+                    crossDomain: true,
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: "json",
+                    //success: callbackFunction,
+                    success: function (result, textStatus, xhr) {
+                        callbackFunction(result);
+                    },
+                    error: errorResponse
+                });
+            }*@
+
+            function Login() {
+                debugger;
+
+
+                var credentials = {
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value
+                };
+                //------------------------------------------------------------------------
+                $.ajax({
+                    url: rooturl + "Home/Login1",
+                    type: 'POST',
+                    data: { 'username': credentials.username, 'password': credentials.password },
+                    
+                    //crossDomain: true,
+                    contentType: "application/x-www-form-urlencoded",
+                    
+                    dataType: "json",
+                    //success: callbackFunction,
+                    success: function (result, textStatus, xhr) {
+                        callbackFunction(result);
+                    },
+
+                    error: errorResponse
+                });
+            }
+
+                
+            //------------------------------------------------------------------------
+
+            function Register() {
+                window.location = rooturl + "home/Register";
+            }
+
+            function callbackFunction(result) {
+                debugger;
+                window.localStorage.setItem('AccessToken', result.access_token);
+                window.localStorage.setItem('TokenType', result.token_type);
+                window.localStorage.setItem('username', document.getElementById("username").value);
+                alert("Login Successfully");
+                window.location = rooturl + "home/Index";
+            }
+            function errorResponse(result) {
+                debugger;
+                alert(result.responseText);
+                //alert("Something went wrong ");
+              
+            }
+
+
+
+        </script>
+
+        
+</body>
+</html>
+
+

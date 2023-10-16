@@ -1,0 +1,253 @@
+﻿@*<script src="~/Scripts/Data.js"></script>*@
+<script type="text/javascript">
+    //debugger;
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var popup = "";
+    var recipt = "no";
+    var Submit = "";
+    var flag = "";
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    //var gusername = "MERAJ";
+    var authHeaders = {};
+    var ProcessType = "";
+    authHeaders.Authorization = bearer + " " + access_token;
+    var flag = "";
+    function getSubmit(resultPassed) {
+        debugger;
+        var cashinout = "";
+        var TypeTran = localStorage.getItem("typeOfTran");
+
+        if (TypeTran == "CTS") {
+            Submit = "ChequeVoucher";
+            ProcessType = "CTS";
+            flag = "CTS";
+        }
+        if (TypeTran == "TC") {
+            Submit = "TransferCheque";
+            ProcessType = "TC";
+            flag = "TC";
+        }
+        else {
+            Submit = "ChequeVoucher";
+            ProcessType = "CTS";
+            flag = "CTS";
+        }
+        debugger;
+        // aniket - added TypeTran AND resultPassed conditon - 2022-05-09
+        if ((Submit == "WithVoucher" && resultPassed == "Voucher") || Submit == "ChequeVoucher" || Submit == "TransferCheque" || (TypeTran == "Deposit" && resultPassed == "Voucher")) {
+            $("#ProcessingBar").show();
+            var y = "getvoucherdetails";
+            $.ajax({
+            // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+                url: x + y ,
+               // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+                headers: authHeaders,
+                type: 'POST',
+                data: { 'pType': 'TRF', 'Intellerid': gusername },
+                success: getSuccessVoucher,
+                error: getError
+            });
+        }
+
+
+        //debugger;
+        //if (TypeTran == "WithDraw") {
+        //    cashinout = 'out';
+        //    flag = "With"; //checked case : out
+        //}
+        if (TypeTran == "Deposit" && resultPassed == "Voucher") {
+            if ($('#returncash').is(":checked")) {
+                //debugger;
+                // it is checked
+                //alert("true");
+                // alert("Hello!");
+                cashinout = 'out';
+                //flag = "With"; //checked case : out
+            }
+            else { //
+                //debugger;
+                //alert("false");
+                cashinout = 'in';
+                //flag = "Cash"; //unchecked  case : in
+
+            }
+        }
+        else if (TypeTran == "Deposit" && resultPassed == "Cash") {
+            if ($('#returncash').is(":checked")) {
+                //debugger;
+                // it is checked
+                //alert("true");
+                // alert("Hello!");
+                cashinout = 'out';
+                //flag = "With"; //checked case : out
+            }
+            else { //
+                //debugger;
+                //alert("false");
+                cashinout = 'in';
+                //flag = "Cash"; //unchecked  case : in
+
+            }
+        }
+        //else {
+        //    if ($('#returncash').is(":checked")) {
+        //        //debugger;
+        //        // it is checked
+        //        //alert("true");
+        //        // alert("Hello!");
+        //        cashinout = 'out';
+        //        flag = "With"; //checked case : out
+        //    }
+        //    else { //
+        //        //debugger;
+        //        //alert("false");
+        //        cashinout = 'in';
+        //        flag = "Cash"; //unchecked  case : in
+
+        //    }
+        //}
+
+
+        //debugger;
+        // aniket - added resultPassed conditon - 2022-05-09
+        if ((Submit == "DepositVoucher" && resultPassed == "Cash") || (Submit == "DepositVoucher" && resultPassed == "InsertCash") || (Submit == "WithVoucher" && resultPassed == "Cash") || (Submit == "WithVoucher" && resultPassed == "InsertCash")) {
+            debugger
+
+          //  flag = "vaultcash"; //wrong
+            $.ajax({
+                type: 'POST',
+                url: x + "getcashdetails",
+                headers: authHeaders,
+                crossDomain: true,
+                data: { 'Intellerid': gusername, 'cashinout': cashinout },
+                success: getSuccess,
+                error: getError
+
+            });
+        }
+    }
+
+    function getSignDetailsCtsTr() {
+        debugger;
+        //alert("getSignDetailsCtsTr function");
+        var AccNo = document.getElementById("AccountNo").value;
+        console.log("Account no: " + AccNo);
+        if (AccNo == null || AccNo == "") {
+            alert("Account number is empty");
+            return false;
+        }
+
+        //var url = x + "GetAccSignDetails?AccNo=" + AccNo;
+        //alert("Url content : " + url);
+        debugger;
+
+        $("#ProcessingBar").show();
+
+        $.ajax({
+            type: 'POST',
+            //url: x + "GetAccSignDetails?AccNo=" + AccNo,
+            url: x + "GetAccSignDetails",
+            headers: authHeaders,
+            crossDomain: true,
+            //contentType: 'text',
+            data: { 'AccNo': AccNo },
+            //success: getSignCtsTrfSuccess,
+            success: signPopUp,
+            error: getError
+
+        });
+    }
+
+
+
+    //$("#PayeeName").onclick(function () {
+    //    debugger;
+    //    alert("New function!");
+    //});
+
+</script>
+
+<div class="row" style="font-size:small;">
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-sm-5">
+            <label>
+                From Account:
+            </label>
+        </div>
+        <div class="col-sm-7">
+            <input id="AccountNo" style="width:130px; height: 25px;" maxlength="16" onfocusout="fromAccNo()" />    @*autofocus="autofocus"*@
+            <button class="btn-sm" style="background-color:black;color:white;font-size: x-small;margin-left: -5px;padding: 4px 10px 2px 11px;" onclick="GetPayeee(AccountNo.value,'C');">
+                <span class="glyphicon glyphicon-search"></span>
+
+            </button>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+        <div class="col-sm-1"></div>
+        <input type="button" id="btnReset" value="Reset" class="btn" style="color:white;font-size: 13px; padding:6px;" onclick="getReset();" />
+        <input type="button" id="btnGetVoucher" value="Get Voucher Details" style="color: white; font-size: 13px; padding: 6px;" class="btn" onclick="getSubmit('Voucher');" />
+        <input type="button" id="btnGetSign" value="Get Sign Details" style="color: white; font-size: 13px; padding: 6px;" class="btn" onclick="getSignDetailsCtsTr()" />
+    </div>
+
+
+    <div id="Payeeee" class="col-sm-12" style="padding-top: 10px">
+        <select id="PayeeName" style="width: 300px;"></select>
+    </div>
+    <div class="col-sm-12" style="padding-top: 10px">
+        <div class="col-sm-12" style="background-color: rgb(242, 242, 242); height:270px">
+            <div class="col-sm-12">
+                Name:<label id="FinName"></label>
+            </div>
+            <div class="col-sm-12">
+                Scheme Code:<label id="FinScheme"></label>
+            </div>
+            <div class="col-sm-12">
+                Freeze Code:<label id="FinFreeze"></label>
+            </div>
+            <div class="col-sm-12">
+                Mode Of Operation:<label id="FinMOP"></label>
+            </div>
+            <div class="col-sm-12">
+                Account Status:<label id="FinAccountStatus"></label>
+            </div>
+            <div class="col-sm-12">
+                NRE Flag:<label id="FinNRE"></label>
+            </div>
+            <div class="col-sm-12">
+                Scheme Type:<label id="FinSchemeType"></label>
+            </div>
+            <div class="col-sm-12">
+                Account Ownership:<label id="FinAccOwner"></label>
+            </div>
+            <div class="col-sm-12">
+                Amount:<label id="FinAmount"></label>
+            </div>
+            <div class="col-sm-12">
+                Mobile Number:<label id="FinMobNo"></label>
+            </div>
+            <div class="col-sm-12">
+                PAN No:<label id="FinPAN"></label>
+            </div>
+            <div class="col-sm-12">
+                Date:<label id="FinDate"></label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" style="padding-top: 10px;padding-bottom:10px">
+        @*<button class="btn" style="background-color:black;color:white;font-size: x-small;">
+                OK
+            </button>*@
+        @*<button class="btn" style="background-color:black;color:white;font-size: x-small;">
+                Close
+            </button>*@
+        <input type="button" id="btnSubmit" value="Submit" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 6px;" onclick="SubmitData();" />
+        <input type="button" id="btnValid" value="Get Cash" class="btn " style="background-color:black;color:white;font-size: x-small; display:none" onclick="getCash();" />
+
+    </div>
+</div>

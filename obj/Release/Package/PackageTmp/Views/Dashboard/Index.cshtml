@@ -1,0 +1,179 @@
+﻿@*<script src="~/Scripts/Dashboard.js"></script>*@
+<script src="~/assets/js/jquery-2.1.4.min.js"></script>
+<script src="~/assets/js/jquery.flot.min.js"></script>
+<script src="~/assets/js/jquery.flot.pie.min.js"></script>
+<script src="~/assets/js/jquery.flot.resize.min.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+
+<div class="main-content-inner">
+    <div class="page-header">
+        <h1>
+            Dashboard
+        </h1>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div id="piechart-placeholder"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+
+
+        //flot chart resize plugin, somehow manipulates default browser resize event to optimize it!
+        //but sometimes it brings up errors with normal resize event handlers
+        $.resize.throttleWindow = false;
+        debugger;
+        var placeholder = $('#piechart-placeholder').css({ 'width': '100%', 'height': '650px' });
+
+        var cw = "3";
+
+        var data = [
+            { label: "Cash Withdraw - " + cw, data: 3, color: "#68BC31" },
+            { label: "Cash Deposit", data: 8, color: "#2091CF" },
+            { label: "CTS", data: 3, color: "#AF4E96" },
+            { label: "Transfer", data: 5, color: "#DA5430" },
+            { label: "other", data: 0, color: "#FEE074" }
+        ]
+        function drawPieChart(placeholder, data, position) {
+            debugger;
+            $.plot(placeholder, data, {
+                series: {
+                    pie: {
+                        show: true,
+                        tilt: 0.8,
+                        highlight: {
+                            opacity: 0.25
+                        },
+                        stroke: {
+                            color: '#fff',
+                            width: 2
+                        },
+                        startAngle: 2
+                    }
+                },
+                legend: {
+                    show: false,
+                    position: position || "ne",
+                    labelBoxBorderColor: null,
+                    margin: [-30, 15]
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true
+                }
+            })
+        }
+
+
+        function fetchData() {
+            debugger;
+            var gusername = window.localStorage.getItem('username');
+            var x = document.getElementById("urlVal").value;
+
+            var access_token = window.localStorage.getItem('AccessToken');
+            var bearer = window.localStorage.getItem('TokenType');
+
+            var authHeaders = {};
+            authHeaders.Authorization = bearer + " " + access_token;
+
+            debugger;
+            var currentDate = new Date();
+
+            var dt = currentDate.getFullYear() + "/" + String(currentDate.getUTCMonth() + 1).padStart(2, '0') + "/" + String(currentDate.getDate()).padStart(2, '0');
+
+            var y = "ibasdashboard";
+            $.ajax({
+                // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+                url: x + y,
+                // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+                headers: authHeaders,
+                type: 'POST',
+                data: { 'ProcessingDate': dt, 'tellerid': gusername, 'dashboardtype': 'TellerWise', 'branchcode': 'dfd' },
+                success: successData,
+                error: getError
+            });
+        }
+
+        fetchData();
+
+        function getError(result) {
+            debugger;
+            alert("Error occured!");
+        }
+
+        function successData(result) {
+            debugger;
+            //alert("Success result!!");
+
+            var data = [];
+
+            debugger;
+            var count = result.length;
+            //var dd = result[0].transactiontype;
+
+            for (var i = 0; i < count; i++) {
+                debugger;
+
+                if (result[i].transactiontype != "") {
+                    var col = "";
+                    var lName = "";
+
+                    if (result[i].transactiontype == "CASHDEP") {
+                        col = "#2091CF";
+                        lName = "Cash Deposit - " + result[i].transactioncount;
+                    }
+                    else if (result[i].transactiontype == "CASHWDL") {
+                        col = "#68BC31";
+                        lName = "Cash Withdraw - " + result[i].transactioncount;
+                    }
+                    else if (result[i].transactiontype == "CTS") {
+                        col = "#AF4E96";
+                        lName = "CTS - " + result[i].transactioncount;
+                    }
+                    else if (result[i].transactiontype == "TRF") {
+                        col = "#DA5430";
+                        lName = "Transfer - " + result[i].transactioncount;
+                    }
+                    else if (result[i].transactiontype == "NEFT") {
+                        //9900FF
+                        col = "#9900FF";
+                        lName = "NEFT - " + result[i].transactioncount;
+                    }
+                    else {
+                        col = "";
+                        lName = "";
+                    }
+
+                    var l = { label: lName, data: result[i].transactioncount, color: col };
+                    data.push(l);
+                }
+            }
+
+            debugger;
+            var placeholder = $('#piechart-placeholder').css({ 'width': '100%', 'height': '650px' });
+            debugger;
+            drawPieChart(placeholder, data);
+            
+        }
+
+        //drawPieChart(placeholder, data);
+
+             
+
+
+    })
+</script>

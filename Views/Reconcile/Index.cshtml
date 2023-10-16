@@ -1,0 +1,1450 @@
+﻿@{
+    ViewBag.Title = "Branch Reconciliation";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+
+<div class="row col-12 mb-2 mt-1">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <h3 class="mb-0 text-primary position-relative">
+                <span class="bg-200 dark__bg-1100 pe-3">Branch Reconciliation</span>
+            </h3>
+        </div>
+    </form>
+</div>
+<div class="row col-12 mb-3">
+    <div class="card ms-3 py-1">
+        <form class="row g-3 mb-2" action="#">
+            <div class="col-lg-2">
+                <label class="form-label">Processing Date</label>
+                <input id="ProcessingDate" type="date" class="form-control form-control-sm">
+            </div>
+
+            <div class="col-lg-2">
+                <label class="form-label">Reconciliation Type</label>
+                <select id="Reconsilation" class="form-select form-select-sm">
+                    @*<option selected>Please select an option</option>*@
+                    <option value="1">Denomination Wise</option>
+                    @*<option value="2">Serial Number Wise</option>*@
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label class="form-label">Role</label>
+                <select id="ReType" class="form-select form-select-sm">
+                    @*<option selected>Please select an option</option>*@
+                    <option value="2">Teller Wise</option>
+                    <option value="1">Branch Wise</option>
+                </select>
+            </div>
+            @*User04 --starts*@
+            <div class="col-lg-2">
+                <div id="branchcode" class="">
+                    <label class="form-label">Branch Code</label>
+                    <select id="branch_code" class="form-select form-select-sm"></select>
+                </div>
+            </div>
+            @*User04 --ends*@
+
+            @*<div class="col-lg-2">
+                <label class="form-label">branch code</label>
+                <select id="branchtext" class="form-select form-select-sm">
+                    <option selected>please select an option</option>
+                    <option value="1">option 1</option>
+                    <option value="2">option 2</option>
+                    <option value="3">option 3</option>
+                </select>
+                </div>*@
+            <div class="col-lg-4">
+                <div class="d-md-block mt-4">
+                    <button onclick="return BranchReconsilation();" class="btn btn-sm btn-primary ml-2 "> Reconcile </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="div_records" class="row ">
+    <div class="col-xxl-3 mb-3">
+        <div class="card">
+            <div class="card-header d-flex flex-between-center py-2 border-bottom">
+                <h6 class="mb-0">Daily Data</h6>
+                <div class="dropdown font-sans-serif btn-reveal-trigger">
+                    <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                            type="button" id="dropdown-most-leads" data-bs-toggle="dropdown"
+                            data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                        <span class="fas fa-ellipsis-h fs--2"></span>
+                    </button>
+                    <!--<div class="dropdown-menu dropdown-menu-end border py-2"
+                         aria-labelledby="dropdown-most-leads">
+                        <a class="dropdown-item" href="#!">View</a>
+                        <a class="dropdown-item" href="#!">Export</a>-->
+                    <!-- <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a> -->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div class="row align-items-center">
+                    <div class="col-md-5 col-xxl-12 mb-xxl-1">
+                        <div class="position-relative">
+                            <!-- Find the JS file for the following chart at: src/js/charts/echarts/most-leads.js-->
+                            <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
+                            <div class="echart-doughnut-chart-example2 my-2"
+                                 style="width: auto;height:300px;" data-echart-responsive="true">
+                            </div>
+                            <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                <p class="fs--1 mt-5 mb-0 text-400 font-sans-serif fw-medium">
+                                    Cash
+                                    Avail.
+                                </p>
+                                <p id="cashAvailable" class="fs-3 mb-0 font-sans-serif fw-medium mt-n2">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-12 col-md-7">
+                        <hr class="mx-nx1 mb-0 d-md-none d-xxl-block" />
+                        <div class="table-responsive scrollbar pt-0 mt-0">
+                            <!-- <table class="table table-bordered table-sm table-hover my-2 fs--1" style="border: 1px solid black;"> -->
+                            <table id="tellerOpeningBalance" class="table table-sm table-hover my-2 fs--1" style="display:none;">
+                                <thead class="table-secondary shadow">
+                                    <tr>
+                                        <th scope="col" rowspan="3"
+                                            class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2; border-left: 1px solid #d6d6c2;">
+                                            Denom
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">
+                                            <u>
+                                                Teller
+                                                Opening Balance
+                                            </u>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="table-secondary shadow">
+
+                                </tfoot>
+                            </table>
+                            <table id="cashBalance" class="table table-sm table-hover my-2 fs--1">
+                                <thead class="table-secondary shadow">
+                                    <tr>
+                                        @*<th scope="col" class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;" colspan="2">Denomination</th>*@
+                                        <th scope="col" class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;" colspan="2">Denom Available</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;" colspan="2">Cash Available</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="table-secondary shadow">
+
+                                </tfoot>
+                            </table>
+                            <table id="tellerClosingBalance" class="table table-sm table-hover my-2 fs--1" style="display:none;">
+                                <thead class="table-secondary shadow">
+                                    <tr>
+                                        <th scope="col" rowspan="3"
+                                            class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2; border-left: 1px solid #d6d6c2;">
+                                            Denom
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;"><u>Send To CC</u></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="table-secondary shadow">
+
+                                </tfoot>
+                            </table>
+                            <table id="withdraw" class="table table-sm table-hover my-2 fs--1" style="display:none;">
+                                <thead class="table-secondary shadow">
+                                    <tr>
+                                        <th scope="col" rowspan="3"
+                                            class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2; border-left: 1px solid #d6d6c2;">
+                                            Denom
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;"><u>Withdrawal</u></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="table-secondary shadow">
+
+                                </tfoot>
+                            </table>
+                            <table id="deposit" class="table table-sm table-hover my-2 fs--1" style="display:none;">
+                                <thead class="table-secondary shadow">
+                                    <tr>
+                                        <th scope="col" rowspan="3"
+                                            class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2; border-left: 1px solid #d6d6c2;">
+                                            Denom
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;"><u>Deposit</u></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="table-secondary shadow">
+                                    <tr>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-9">
+        <div class="card">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="table-responsive scrollbar pt-0 mt-0">
+                            <!-- <table class="table table-bordered table-sm table-hover my-2 fs--1" style="border: 1px solid black;"> -->
+                            <table id="myDatatable" class="table table-sm table-hover my-2 fs--1">
+                                <thead class="table-secondary shadow">
+                                    <tr>
+                                        <th scope="col" rowspan="3"
+                                            class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;">Denom</th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">
+                                            <u>
+                                                Teller
+                                                Opening Balance
+                                            </u>
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">
+                                            <u>Deposit</u>
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">
+                                            <u>WithDrawal</u>
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">
+                                            <u>
+                                                Send To
+                                                CC
+                                            </u>
+                                        </th>
+                                        <th scope="col" colspan="4" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">
+                                            <u>
+                                                Teller
+                                                Closing Balance
+                                            </u>
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Machine</th>
+                                        <th scope="col" colspan="2" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Manual</th>
+                                        <th scope="col" rowspan="2" colspan="2"
+                                            class="text-center align-middle p-0"
+                                            style="border-right: 1px solid #d6d6c2;">
+                                            Denoms
+                                            Available
+                                        </th>
+                                        <th scope="col" rowspan="3" colspan="2"
+                                            class="text-center align-middle">Cash Available</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" class="text-center align-middle px-2"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Count</th>
+                                        <th scope="col" class="text-center align-middle"
+                                            style="border-right: 1px solid #d6d6c2;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="table-secondary shadow">
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var authHeaders = {};
+    var gusername = ""; // window.localStorage.getItem('username');
+
+    var withdrawal, deposit, tellerOB, tellerCB, cashA;
+
+    $("#div_records").hide();
+
+    function BranchReconsilation() {
+        // alert("hi");
+        //debugger;
+        let text = "Are you sure you want to generate a Branch Reconsilation Report ?";
+        if (confirm(text) == true) {
+            //debugger;
+            var BranchCode = $("#branch_code").val();
+            var ProcessingDate = $("#ProcessingDate").val();
+
+            var ReconsilationType = $("#ReType").val();
+            var ReconsilationType_SerialNoWise = $("#Reconsilation").val(); /*today*/
+
+            if (ReconsilationType == "1") {
+
+                if (BranchCode == "" || BranchCode == "0") {
+                    alert("Please select Branch code!!!!");
+                    return;
+                }
+                else if (ProcessingDate == "") {
+                    alert("Please select Date!!!!");
+                    return;
+                }
+
+            }
+            else {
+                if (ProcessingDate == "") {
+                    alert("Please select date !!!");
+                    return;
+                }
+            }
+
+            var y = "BranchReconsilation";
+            $.ajax({
+                // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+                url: x + y,
+                // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+                headers: authHeaders,
+                type: 'POST',
+                data: { ProcessingDate: ProcessingDate, BranchCode: BranchCode, ReconsilationType: ReconsilationType, Tellerid: gusername, ReconsilationType_SerialNoWise: ReconsilationType_SerialNoWise },
+                success: function (result) {
+                    if (result.length > 0) {
+                        BranchReconsilationtable(result);
+                    }
+                    else {
+                        alert("No Records Found!!!")
+                    }
+
+                },
+                error: getError
+            });
+        }
+        return false;
+    }
+
+
+    function BranchReconsilationtable(printer) {
+        // Iterate over the collection of data,below line for removing table data except header
+        //debugger;
+        $("#myDatatable").find("tr:gt(2)").remove();
+        $("#tellerOpeningBalance").find("tr:gt(2)").remove();
+        $("#tellerClosingBalance").find("tr:gt(2)").remove();
+        $("#deposit").find("tr:gt(2)").remove();
+        $("#withdraw").find("tr:gt(2)").remove();
+        $("#cashBalance").find("tr:gt(2)").remove();
+
+        $("#div_records").show();
+
+        $.each(printer, function (index, print) {
+
+            // Add a row to the Product table
+            AddRow(print);
+        });
+        echartsDoughnutChartInitBranchReconcil();
+    }
+
+
+    function AddRow(print) {
+        debugger;
+
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myDatatable tbody").length == 0) {
+            $("#myDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        if (print.denom != "") {
+            $("#myDatatable tbody").append(
+                TableRow(print));
+        }
+        else {
+            $("#myDatatable tfoot").append(
+                TableRow(print));
+        }
+
+
+        // Check if <tbody> tag exists, add one if not
+        if ($("#tellerOpeningBalance tbody").length == 0) {
+            $("#tellerOpeningBalance").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        if (print.denom != "") {
+            $("#tellerOpeningBalance tbody").append(
+                TellerOpeningBalanceRow(print));
+        }
+        else {
+            $("#tellerOpeningBalance tfoot").append(
+                TellerOpeningBalanceRow(print));
+        }
+
+        //debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#deposit tbody").length == 0) {
+            $("#deposit").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        if (print.denom != "") {
+            $("#deposit tbody").append(
+                Deposit(print));
+        }
+        else {
+            $("#deposit tfoot").append(
+                Deposit(print));
+        }
+
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#withdraw tbody").length == 0) {
+            $("#withdraw").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        if (print.denom != "") {
+            $("#withdraw tbody").append(
+                Withraw(print));
+        }
+        else {
+            $("#withdraw tfoot").append(
+                Withraw(print));
+        }
+
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#tellerClosingBalance tbody").length == 0) {
+            $("#tellerClosingBalance").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        if (print.denom != "") {
+            $("#tellerClosingBalance tbody").append(
+                TellerClosingBalanceRow(print));
+        }
+        else {
+            $("#tellerClosingBalance tfoot").append(
+                TellerClosingBalanceRow(print));
+        }
+
+        // Check if <tbody> tag exists, add one if not
+        if ($("#cashBalance tbody").length == 0) {
+            $("#cashBalance").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        if (print.denom != "") {
+            $("#cashBalance tbody").append(
+                CashAvailable(print));
+        }
+        else {
+            $("#cashBalance tfoot").append(
+                CashAvailable(print));
+        }
+
+
+    }
+
+    function TableRow(print) {
+        var ac = print.denom;
+        if (ac == "") {
+            if (print.denom != null) {
+
+                var cVault = parseFloat(print.vault_Count) + parseFloat(print.vault_Count_Manual);
+                var aVault = parseFloat(print.vault_Total_Amount) + parseFloat(print.vault_Total_Amount_Manual);
+                tellerOB = parseFloat(print.vault_Total_Amount) + parseFloat(print.vault_Total_Amount_Manual);
+
+                var cDeposit = parseFloat(print.cashin_denomCount) + parseFloat(print.cashin_denomCount_Manual);
+                var aDeposit = parseFloat(print.cashin_Total_Amount) + parseFloat(print.cashin_Total_Amount_Manual);
+                deposit = parseFloat(print.cashin_Total_Amount) + parseFloat(print.cashin_Total_Amount_Manual);
+
+                var cWithdrawal = parseFloat(print.cashout_denomCount) + parseFloat(print.cashout_denomCount_Manual);
+                var aWithdrawal = parseFloat(print.cashout_Total_Amount) + parseFloat(print.cashout_Total_Amount_Manual);
+                withdrawal = parseFloat(print.cashout_Total_Amount) + parseFloat(print.cashout_Total_Amount_Manual);
+
+                var cCurrency = parseFloat(print.currency_chest_denomCount) + parseFloat(print.currency_chest_denomCount_Manual);
+                var aCurrency = parseFloat(print.currency_chest_Total_Amount) + parseFloat(print.currency_chest_Total_Amount_Manual);
+                tellerCB = parseFloat(print.currency_chest_Total_Amount) + parseFloat(print.currency_chest_Total_Amount_Manual);
+
+                cashA = print.Final_Cash_Available;
+                $("#cashAvailable").html(cashA);
+
+                //debugger;
+
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.vault_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashin_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashout_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.currency_chest_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;" colspan="2">' +
+                    '<span class="">' + print.Cash_Denoms_Available + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" colspan="2">' +
+                    '<span class="">' + print.Final_Cash_Available + '</span>' +
+                    '</td>' +
+
+                    "</tr>" +
+
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class=""><b>Total</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cVault.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aVault.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cDeposit.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aDeposit.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cWithdrawal.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aWithdrawal.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cCurrency.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aCurrency.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.Cash_Denoms_Available + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.Final_Cash_Available + '</span>' +
+                    '</td>' +
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        else {
+            if (print.denom != null) {
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.vault_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashin_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashout_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.currency_chest_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;" colspan="2">' +
+                    '<span class="">' + print.Cash_Denoms_Available + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" colspan="2">' +
+                    '<span class="">' + print.Final_Cash_Available + '</span>' +
+                    '</td>' +
+
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+
+    }
+
+    function CashAvailable(print) {
+        //debugger;
+
+        var ac = print.denom;
+        if (ac == "") {
+            if (print.denom != null) {
+
+                var cVault = parseFloat(print.vault_Count) + parseFloat(print.vault_Count_Manual);
+                var aVault = parseFloat(print.vault_Total_Amount) + parseFloat(print.vault_Total_Amount_Manual);
+
+                var ret =
+                    "<tr>" +
+
+                    //'<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;" colspan="2">' +
+                    //'<span class="">' + print.denom + '</span>' +
+                    //'</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;" colspan="2">' +
+                    '<span class="">' + print.Cash_Denoms_Available + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" colspan="2">' +
+                    '<span class="">' + print.Final_Cash_Available + '</span>' +
+                    '</td>' +
+
+                    "</tr>" +
+
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.Cash_Denoms_Available + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.Final_Cash_Available + '</span>' +
+                    '</td>' +
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        else {
+            if (print.denom != null) {
+                var ret =
+                    "<tr>" +
+
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;" colspan="2">' +
+                    '<span class="">' + print.Cash_Denoms_Available + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" colspan="2">' +
+                    '<span class="">' + print.Final_Cash_Available + '</span>' +
+                    '</td>' +
+
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+
+    }
+
+    function TellerOpeningBalanceRow(print) {
+        //debugger;
+        var ac = print.denom;
+        if (ac == "") {
+            if (print.denom != null) {
+
+                var cVault = parseFloat(print.vault_Count) + parseFloat(print.vault_Count_Manual);
+                var aVault = parseFloat(print.vault_Total_Amount) + parseFloat(print.vault_Total_Amount_Manual);
+
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.vault_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>" +
+
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class=""><b>Total</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cVault.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aVault.toString() + '</span>' +
+                    '</td>' +
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        else {
+            if (print.denom != null) {
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.vault_Count_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.vault_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+
+    }
+
+    function TellerClosingBalanceRow(print) {
+
+        var ac = print.denom;
+        if (ac == "") {
+            if (print.denom != null) {
+
+                var cCurrency = parseFloat(print.currency_chest_denomCount) + parseFloat(print.currency_chest_denomCount_Manual);
+                var aCurrency = parseFloat(print.currency_chest_Total_Amount) + parseFloat(print.currency_chest_Total_Amount_Manual);
+
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.currency_chest_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>" +
+
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class=""><b>Total</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cCurrency.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aCurrency.toString() + '</span>' +
+                    '</td>' +
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        else {
+            if (print.denom != null) {
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.currency_chest_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.currency_chest_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+
+    }
+
+    function Deposit(print) {
+
+        var ac = print.denom;
+        if (ac == "") {
+            if (print.denom != null) {
+
+                var cDeposit = parseFloat(print.cashin_denomCount) + parseFloat(print.cashin_denomCount_Manual);
+                var aDeposit = parseFloat(print.cashin_Total_Amount) + parseFloat(print.cashin_Total_Amount_Manual);
+
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashin_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>" +
+
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class=""><b>Total</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cDeposit.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aDeposit.toString() + '</span>' +
+                    '</td>' +
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        else {
+            if (print.denom != null) {
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashin_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashin_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+
+    }
+
+    function Withraw(print) {
+        debugger;
+        var ac = print.denom;
+        if (ac == "") {
+            if (print.denom != null) {
+
+                var cWithdrawal = parseFloat(print.cashout_denomCount) + parseFloat(print.cashout_denomCount_Manual);
+                var aWithdrawal = parseFloat(print.cashout_Total_Amount) + parseFloat(print.cashout_Total_Amount_Manual);
+
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashout_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>" +
+
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class=""><b>Total</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Count</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + cWithdrawal.toString() + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class=""><b>Amount</b></span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + aWithdrawal.toString() + '</span>' +
+                    '</td>' +
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        else {
+            if (print.denom != null) {
+                var ret =
+                    "<tr>" +
+                    '<td class="text-wrap text-center align-middle px-2" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.denom + '</span>' +
+                    '</td>' +
+
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_Total_Amount + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle">' +
+                    '<span class="">' + print.cashout_denomCount_Manual + '</span>' +
+                    '</td>' +
+                    '<td class="text-wrap text-center align-middle" style="border-right: 1px solid #d6d6c2;">' +
+                    '<span class="">' + print.cashout_Total_Amount_Manual + '</span>' +
+                    '</td>' +
+
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+
+    }
+
+    function RecordReconsilationtable(printer) {
+        // Iterate over the collection of data,below line for removing table data except header
+        $("#myRecordDatatable").find("tr:gt(0)").remove();
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            AddRecordRow(print);
+        });
+    }
+
+    function AddRecordRow(print) {
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myRecordDatatable tbody").length == 0) {
+            $("#myRecordDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myRecordDatatable tbody").append(
+            RecordTableRow(print));
+    }
+
+    var echartsDoughnutChartInitBranchReconcil = function () {
+        //debugger;
+        var e = document.querySelector(".echart-doughnut-chart-example2");
+        if (e) {
+            var t = utils.getData(e, "options");
+            e = window.echarts.init(e);
+            echartSetOption(e, t, function () {
+                return {
+                    legend: {
+                        left: "left",
+                        textStyle: {
+                            color: utils.getGrays()[600]
+                        }
+                    },
+                    series: [{
+                        type: "pie",
+                        radius: ["40%", "70%"],
+                        center: ["50%", "55%"],
+                        avoidLabelOverlap: false,
+                        label: {
+                            show: false,
+                            position: "center"
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [{
+                            value: withdrawal,
+                            name: "Withdrawal",
+                            itemStyle: {
+                                color: utils.getColor("primary")
+                            }
+                        },
+                        {
+                            value: tellerOB,
+                            name: "Teller Opening Balance",
+                            itemStyle: {
+                                color: utils.getColor("danger")
+                            }
+                        },
+                        {
+                            value: tellerCB,
+                            name: "Teller Closing Balance",
+                            itemStyle: {
+                                color: utils.getColor("info")
+                            }
+                        },
+                        {
+                            value: deposit,
+                            name: "Deposit",
+                            itemStyle: {
+                                color: utils.getColor("success")
+                            }
+                        },
+                        {
+                            value: cashA,
+                            name: "Cash Available",
+                            itemStyle: {
+                                color: utils.getColor("warning")
+                            }
+                        },
+                        ]
+                    }],
+                    tooltip: {
+                        trigger: "item",
+                        padding: [7, 10],
+                        backgroundColor: utils.getGrays()[100],
+                        borderColor: utils.getGrays()[300],
+                        textStyle: {
+                            color: utils.getColors().dark
+                        },
+                        borderWidth: 1,
+                        transitionDuration: 0,
+                        axisPointer: {
+                            type: "none"
+                        },
+                        formatter: function (params) {
+                            return params.name + ": " + params.value;
+                        }
+                    }
+                };
+            });
+
+            // Attach a click event listener to the chart
+            e.on("click", function (params) {
+                var selectedData = params.data;
+                var selectedName = selectedData.name;
+
+                $("#cashBalance").hide();
+                $("#tellerOpeningBalance").hide();
+                $("#tellerClosingBalance").hide();
+                $("#withdraw").hide();
+                $("#deposit").hide();
+
+                if (selectedName === "Teller Opening Balance") {
+
+                    $("#tellerOpeningBalance").show();
+                }
+                if (selectedName === "Deposit") {
+
+                    $("#deposit").show();
+                }
+                if (selectedName === "Withdrawal") {
+
+                    $("#withdraw").show();
+                }
+                if (selectedName === "Cash Available") {
+
+                    $("#cashBalance").show();
+                }
+                if (selectedName === "Teller Closing Balance") {
+
+                    $("#tellerClosingBalance").show();
+                }
+
+            });
+        }
+    };
+
+
+    function getError(result) {
+
+        $("#div_records").hide();
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/LoginiBAS";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+
+        gusername = document.getElementById("loginid").value;
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+        $("#branchcode").hide();
+        $("#ReType").change(function () {
+            var selectedOption = $(this).val();
+            if (selectedOption == "1")
+                $("#branchcode").show();
+            else
+                $("#branchcode").hide();
+        })
+
+        var y = "getBranchCodeReconcile";
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: { Tellerid: gusername },
+            success: function (result) {
+                //debugger;
+                $("#branch_code").empty();
+                console.log(result);
+                $("#branch_code").append(
+                    $('<option></option>').val(0).html("Select Branch Code"));
+                //$.each(result, function (i, branch_code) {
+                //    $("#branch_code").append(
+                //        $('<option></option>').val(branch_code.inbranch_code).html(branch_code.inbranch_code));
+                //});
+                result.forEach(function (branchCode) {
+                    $("#branch_code").append($('<option></option>').val(branchCode.BranchCode).html(branchCode.BranchCode));
+                });
+
+            },
+            error: getError
+        });
+
+    });
+
+
+</script>

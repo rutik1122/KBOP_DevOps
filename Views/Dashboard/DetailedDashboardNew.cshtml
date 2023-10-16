@@ -1,0 +1,368 @@
+﻿
+@{
+    ViewBag.Title = "DetailedDashboardNew";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="card bg-100 shadow-none border">
+            <div class="row gx-0 flex-between-center">
+                <div class="col-sm-auto d-flex align-items-center">
+                    <img class="ms-n2" src="~/assets/images/crm-bar-chart.png" alt="" width="90" />
+                    <div>
+                        <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
+                        <h4 class="text-primary fw-bold mb-0">K-BOP <span class="text-primary fw-medium">Dashboard</span></h4>
+                    </div><img class="ms-n4 d-md-none d-lg-block" src="~/assets/images/crm-line-chart.png" alt="" width="150" />
+                </div>
+                <div class="col-md-auto p-3">
+                    <form class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <h6 class="text-700 mb-0">Detailed Dashboard</h6>
+                        </div>
+                        <div class="col-md-auto position-relative">
+                            <select id="dataType" class="form-select form-select-sm" onchange="handleOnChange()" @*onchange="GetChartData()"*@>
+                                @*<option selected value="ALL">All Transactions</option>*@
+                                <option id="select" selected value="select">Select</option>
+                                <option selected value="CASHWDL">Cash Withdrawal</option>
+                                <option value="CASHDEP">Cash Deposit</option>
+                                <option value="RTGS_WITHOUT_CHEQUE">RTGS without Cheque</option>
+                                <option value="RTGS_WITH_CHEQUE">RTGS with Cheque</option>
+                                <option value="TRF">Transfer</option>
+                                <option value="CTS">CTS</option>
+                                <option value="CI">Credit Intimation</option>
+                                <option value="DI">Debit Intimation</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body pt-0">
+    <div class="d-flex bg-100 py-2 mb-3 justify-content-center mx-nx1 fs--1 border-bottom border-200">
+        <p class="text-600 mb-0 border-end border-200 px-x1 d-flex align-items-center">Total Count: <span id="totalCount" class="fs-sm-1 font-sans-serif ms-2 text-700"> 0</span><span class="fas fa-caret-up ms-2 ms-xxl-3 fs--1 text-success"></span></p>
+        @*<p class="text-600 mb-0 px-x1">Total Amount:<span class="fs-sm-1 font-sans-serif ms-2 text-700" id="totalAmount"> 0</span></p>*@
+    </div>
+</div>
+<div id="all" class="card-body pt-0">
+    <div class="echart-horizontal-stacked-chart-exampleAll" style="min-height: 350px;" data-echart-responsive="true"> </div>
+</div>
+<div id="single" class="card-body pt-0">
+    <div class="echart-horizontal-stacked-chart-example" style="min-height: 200px;" data-echart-responsive="true"> </div>
+</div>
+
+<script type="text/javascript">
+
+    var total_count = 0;
+    var L2_pending = [];
+    var L3_pending = [];
+    var Rejected = [];
+    var get_cash_pending = [];
+    var de_Pending = [];
+    var trans_completed = [];
+    var type = "";
+    var typeNameWithData = [];
+    var typeName = [];
+    var totalCount = 0;
+    var totalAmount = 0;
+
+    function GetChartData() {
+
+        debugger;
+        L2_pending = [];
+        L3_pending = [];
+        Rejected = [];
+        get_cash_pending = [];
+        de_Pending = [];
+        trans_completed = [];
+        typeName = [];
+        typeNameWithData = [];
+        totalCount = 0;
+        totalAmount = 0;
+
+        var currentDate =  new Date();
+        var yyyy = currentDate.getFullYear();
+        var mm = String(currentDate.getUTCMonth() + 1).padStart(2, '0');
+        var dd = String(currentDate.getDate()).padStart(2, '0');
+        var bankcode = 20;
+        var date = yyyy + '/' + mm + '/' + dd;
+        type = document.getElementById("dataType").value;
+
+        var x = '@ViewBag.URL';
+        var y = "getDetailedDashboard";
+        debugger;
+
+        if (type == "CASHWDL" || type == "CASHDEP" || type == "CTS"
+            || type == "RTGS_WITHOUT_CHEQUE" || type == "RTGS_WITH_CHEQUE" || type == "TRF" || type == "ALL" || type == "CI" || type == "DI") {
+
+            $.ajax({
+                url: x + y,
+                type: 'POST',
+                data: { processDate: date, BankCode: bankcode, transactionType: type },
+                success: function (result) {
+                    DataList(result);
+                },
+                error: getError
+            });
+        }
+
+
+
+    }
+
+    function DataList(printer) {
+
+        debugger;
+        $.each(printer, function (index, print) {
+
+            RecordTableRow(print);
+        });
+
+        debugger;
+
+        if (type == "ALL") {
+
+            for (var i = 0; i < L2_pending.length; i++) {
+                if (L2_pending[i] == null) {
+                    L2_pending[i] = 'NA';
+                }
+            }
+
+            for (var i = 0; i < L3_pending.length; i++) {
+                if (L3_pending[i] == null) {
+                    L3_pending[i] = 'NA';
+                }
+            }
+
+            for (var i = 0; i < Rejected.length; i++) {
+                if (Rejected[i] == null) {
+                    Rejected[i] = 'NA';
+                }
+            }
+
+            for (var i = 0; i < get_cash_pending.length; i++) {
+                if (get_cash_pending[i] == null) {
+                    get_cash_pending[i] = 'NA';
+                }
+            }
+            for (var i = 0; i < de_Pending.length; i++) {
+                if (de_Pending[i] == null) {
+                    de_Pending[i] = 'NA';
+                }
+            }
+
+
+            $("#single").hide();
+            $("#all").show();
+            echartsHorizontalStackedChartInitAllTrx();
+        }
+        else {
+
+            $("#all").hide();
+            $("#single").show();
+            echartsHorizontalStackedChartInitSingle();
+        }
+    }
+
+
+    function RecordTableRow(print) {
+
+        //L2_pending.push(20);
+        //L3_pending.push(30);
+        //Rejected.push(50);
+        //get_cash_pending.push(10);
+        //de_Pending.push(80);
+
+        //if (false) {
+
+        //    L2_pending.push(0);
+        //}
+        //L3_pending.push(20);
+        //Rejected.push(30);
+        //get_cash_pending.push(40);
+        //de_Pending.push(50);
+        //trans_completed.push(print.trans_completed);
+
+        debugger;
+        var trType = print.transactionType;
+
+        if (type == "ALL") {
+            if (print.L2_pending != 0 || print.L3_pending != 0 || print.Rejected != 0 ||
+                print.get_cash_peinding != 0 || print.DE_pending != 0 || print.trans_completed != 0) {
+
+                if (trType == "CASHWDL" || trType == "CASHWDL01" || trType == "CASHWDL02") {
+                    typeNameWithData.push("Cash Withdrawal");
+                }
+                else if (trType == "CASHDEP") {
+                    typeNameWithData.push("Cash Deposit");
+                }
+                else if (trType == "CTS") {
+                    typeNameWithData.push("CTS");
+                }
+                else if (trType == "RTGS_WITHOUT_CHEQUE") {
+                    typeNameWithData.push("RTGS WITHOUT CHEQUE");
+                }
+                else if (trType == "TRF" || trType == "TRF02" || trType == "TRF03" || trType == "TRF04" || trType == "TRF05") {
+                    typeNameWithData.push("Transfer");
+                }
+                else if (trType == "RTGS_WITH_CHEQUE") {
+                    typeNameWithData.push("RTGS WITH CHEQUE");
+                }
+                else if (trType == "CI_WITH_SLIP" || trType == "CI01" || trType == "CI02" || trType == "CI03" || trType == "CI04") {
+                    typeNameWithData.push("Credit Intimation");
+                }
+                else if (trType == "DI_WITH_SLIP" || trType == "DI01" || trType == "DI02" || trType == "DI03") {
+                    typeNameWithData.push("DI WITH SLIP");
+                }
+                else if (trType == "CI" || trType == "CI01" || trType == "CI02" || trType == "CI03" || trType == "CI04") {
+                    typeNameWithData.push("Credit Intimation");
+                }
+                else if (trType == "DI" || trType == "DI01" || trType == "DI02" || trType == "DI03") {
+                    typeNameWithData.push("Debit Intimation");
+                }
+            }
+        }
+        else {
+            debugger;
+            if (trType == "CASHWDL" || trType == "CASHWDL01" || trType == "CASHWDL02") {
+                typeName.push("Cash Withdrawal");
+            }
+            else if (trType == "CASHDEP") {
+                typeName.push("Cash Deposit");
+            }
+            else if (trType == "CTS") {
+                typeName.push("CTS");
+            }
+            else if (trType == "RTGS_WITHOUT_CHEQUE") {
+                typeName.push("RTGS WITHOUT CHEQUE");
+            }
+            else if (trType == "TRF" || trType == "TRF02" || trType == "TRF03" || trType == "TRF04" || trType == "TRF05") {
+                typeName.push("Transfer");
+            }
+            else if (trType == "RTGS_WITH_CHEQUE") {
+                typeName.push("RTGS WITH CHEQUE");
+            }
+            //else if (trType == "CI_WITH_SLIP" || trType == "CI01" || trType == "CI02" || trType == "CI03" || trType == "CI04") {
+            //    typeName.push("CI WITH SLIP");
+            //}
+            //else if (trType == "DI_WITH_SLIP" || trType == "DI01" || trType == "DI02" || trType == "DI03") {
+            //    typeName.push("DI WITH SLIP");
+            //}
+            else if (trType == "CI" || trType == "CI01" || trType == "CI02" || trType == "CI03" || trType == "CI04") {
+                typeName.push("  Credit Intimation");
+            }
+            else if (trType == "DI" || trType == "DI01" || trType == "DI02" || trType == "DI03") {
+                typeName.push("  Debit Intimation");
+            }
+        }
+
+
+        if (print.L2_pending != 0)
+            L2_pending.push(print.L2_pending);
+
+        if (print.L3_pending != 0)
+            L3_pending.push(print.L3_pending);
+        if (print.Rejected != 0)
+            Rejected.push(print.Rejected);
+        if (print.get_cash_peinding != 0)
+            get_cash_pending.push(print.get_cash_peinding);
+        if (print.DE_pending != 0)
+            de_Pending.push(print.DE_pending);
+        if (print.trans_completed != 0)
+            trans_completed.push(print.trans_completed);
+
+        debugger;
+        if (print.total_amount != null) {
+
+            totalAmount = totalAmount + parseInt(print.total_amount, 10);
+        }
+        if (print.total_count != null) {
+            totalCount = totalCount + parseInt(print.total_count, 10);
+        }
+
+        $("#totalCount").html(totalCount);
+        $("#totalAmount").html(totalAmount);
+    }
+
+
+    var echartsHorizontalStackedChartInitAllTrx = function () {
+        var t, e, r = document.querySelector(".echart-horizontal-stacked-chart-exampleAll"); r && (t = utils.getData(r, "options"), r = window.echarts.init(r),
+            e = typeNameWithData,
+            echartSetOption(r, t, function () {
+                return {
+                    color: [utils.getColor("purple"), utils.getColor("danger"), utils.getColor("warning"), utils.getColor("success"), utils.getColor("gray"), utils.getColor("info")], tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, padding: [7, 10], backgroundColor: utils.getGrays()[100], borderColor: utils.getGrays()[300], textStyle: { color: utils.getColors().dark }, borderWidth: 1, transitionDuration: 0, formatter: tooltipFormatter }, toolbox: { feature: { magicType: { type: ["stack", "tiled"] } }, right: 0 },
+                    legend: {
+                        data: ["Data Entry Pending", "L2 Verification Pending", "L3 Verification Pending", "Rejected", "Get Cash Pending", "Accepted"], textStyle: { color: utils.getGrays()["black"], fontWeight: "bold" }, left: 0 }, xAxis: { type: "value", axisLine: { show: !0, lineStyle: { color: utils.getGrays()[300] } }, axisTick: { show: !1 }, axisLabel: { color: utils.getGrays()[500] }, splitLine: { lineStyle: { show: !0, color: utils.getGrays()[200] } } }, yAxis: { type: "category", data: e, axisLine: { lineStyle: { show: !0, color: utils.getGrays()[300] } }, axisTick: { show: !1 }, axisLabel: { color: utils.getGrays()[500]} },
+                    series: [
+                        { name: "Data Entry Pending", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: de_Pending },
+                        { name: "L2 Verification Pending", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: L2_pending },
+                        { name: "L3 Verification Pending", type: "bar", stack: "total", label: { show: !0 }, emphasis: { focus: "series" }, data: L3_pending },
+                        { name: "Rejected", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: Rejected },
+                        { name: "Get Cash Pending", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: get_cash_pending },
+                        { name: "Accepted", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: trans_completed },
+                    ], grid: { right: 15, left: 5, bottom: 5, top: "15%", containLabel: !0 }
+                }
+            }))
+    }
+
+    var echartsHorizontalStackedChartInitSingle = function () {
+
+        var t, e, r = document.querySelector(".echart-horizontal-stacked-chart-example"); r && (t = utils.getData(r, "options"), r = window.echarts.init(r),
+            e = typeName,
+            echartSetOption(r, t, function () {
+                return {
+                    color: [utils.getColor("purple"), utils.getColor("danger"), utils.getColor("warning"), utils.getColor("success"), utils.getColor("gray"), utils.getColor("info")], tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, padding: [7, 10], backgroundColor: utils.getGrays()[100], borderColor: utils.getGrays()[300], textStyle: { color: utils.getColors().dark }, borderWidth: 1, transitionDuration: 0, formatter: tooltipFormatter }, toolbox: { feature: { magicType: { type: ["stack", "tiled"] } }, right: 0 },
+                    legend: { data: ["Data Entry Pending", "L2 Verification Pending", "L3 Verification Pending", "Rejected", "Get Cash Pending", "Accepted"], textStyle: { color: utils.getGrays()["black"], fontWeight: "bold" }, left: 0 }, xAxis: { type: "value", axisLine: { show: !0, lineStyle: { color: utils.getGrays()[300] } }, axisTick: { show: !1 }, axisLabel: { color: utils.getGrays()[500] }, splitLine: { lineStyle: { show: !0, color: utils.getGrays()[200] } } }, yAxis: { type: "category", data: e, axisLine: { lineStyle: { show: !0, color: utils.getGrays()[300] } }, axisTick: { show: !1 }, axisLabel: { color: utils.getGrays()[500] } },
+                    series: [
+                        { name: "Data Entry Pending", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: de_Pending },
+                        { name: "L2 Verification Pending", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: L2_pending },
+                        { name: "L3 Verification Pending", type: "bar", stack: "total", label: { show: !0 }, emphasis: { focus: "series" }, data: L3_pending },
+                        { name: "Rejected", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: Rejected },
+                        { name: "Get Cash Pending", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: get_cash_pending },
+                        { name: "Accepted", type: "bar", stack: "total", label: { show: !0, textStyle: { color: "#fff" } }, emphasis: { focus: "series" }, data: trans_completed },
+                    ], grid: { right: 15, left: 5, bottom: 5, top: "15%", containLabel: !0 }
+                }
+            }))
+    }
+
+
+    function getError(result) {
+
+        var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+    function toggleCardBody() {
+
+        var selectElement = document.getElementById("dataType").value;
+        if (selectElement == "select") {
+            $("#cardBodyDiv").hide();
+            $("#single").hide();
+        } else {
+            $("#cardBodyDiv").show();
+        }
+    }
+
+    function handleOnChange() {
+        toggleCardBody();
+        GetChartData();
+    }
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+        //GetChartData();
+        handleOnChange();
+    });
+</script>
+

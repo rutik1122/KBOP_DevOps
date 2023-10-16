@@ -1,0 +1,431 @@
+﻿
+@{
+    ViewBag.Title = "FixDepositForm";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<input id="RecordId" value="@ViewBag.RecordId" hidden />
+<input id="sni_id" value="" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var x = document.getElementById("urlVal").value;
+        var y = "getFixDepositFormData";
+        var userId = document.getElementById("tellerDetails").value;
+
+        var count_id = document.getElementById("RecordId").value;
+
+        debugger;
+
+        var access_token = window.localStorage.getItem('AccessToken');
+        var bearer = window.localStorage.getItem('TokenType');
+        var gusername = window.localStorage.getItem('username');
+        //var gusername = "MERAJ";
+        var authHeaders = {};
+        var ProcessType = "";
+        authHeaders.Authorization = bearer + " " + access_token;
+
+        //var today = new Date();
+        //var dd = String(today.getDate()).padStart(2, '0');
+        //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        //var yyyy = today.getFullYear();
+
+        //today = yyyy + '/' + mm + '/' + dd;
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            //data: { 'pType': 'RTGS', 'INtellerid': userId },
+            data: { 'count_id': count_id },
+            success: function (result) {
+                FixDepositFormData(result);
+            },
+            error: getError
+        });
+
+    });
+
+    function getError(result) {
+        var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+    function DateValidation(result) {
+        var date = result;
+        debugger;
+        if (date == null || date == "") {
+            alert("Date field is blank!");
+            document.getElementById("date").focus;
+            //ValidationPassed = false;
+            return false;
+        }
+
+        var dd = date.substring(0, 2);
+        var mm = date.substring(3, 5);
+        var yyyy = date.substring(6, 10);
+
+
+
+        if (!dd.match(/^\d+/) || !mm.match(/^\d+/) || !yyyy.match(/^\d+/)) {
+            alert("Alert! Enter Cheque Date in dd-mm-yyyy format!");
+            document.getElementById("date").focus;
+            //ValidationPassed = false;
+            return false;
+        }
+
+        var j1 = date.substring(2, 3);
+        var j2 = date.substring(5, 6);
+
+
+        if (j1 != "-" || j2 != "-") {
+            alert("Alert! Enter Cheque Date in dd-mm-yyyy format!");
+            document.getElementById("date").focus;
+            //ValidationPassed = false;
+            return false;
+        }
+
+        var fDate = dd + '-' + mm + '-' + yyyy;
+        var dateResult = validatedate(fDate);
+
+        if (dateResult == false) {
+            alert("Alert! Enter proper Cheque Date!");
+            document.getElementById("date").focus;
+            //ValidationPassed = false;
+            return false;
+        }
+    }
+
+    function validatedate(inputText) {
+
+
+        var dateformat = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        // Match the date format through regular expression
+        if (inputText.match(dateformat)) {
+            //document.form1.text1.focus();
+            //Test which seperator is used '/' or '-'
+            var opera1 = inputText.split('/');
+            var opera2 = inputText.split('-');
+            lopera1 = opera1.length;
+            lopera2 = opera2.length;
+            // Extract the string into month, date and year
+            if (lopera1 > 1) {
+                var pdate = inputText.split('/');
+            }
+            else if (lopera2 > 1) {
+                var pdate = inputText.split('-');
+            }
+            var dd = parseInt(pdate[0]);
+            var mm = parseInt(pdate[1]);
+            var yy = parseInt(pdate[2]);
+            // Create list of days of a month [assume there is no leap year by default]
+            var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            if (mm == 1 || mm > 2) {
+                if (dd > ListofDays[mm - 1]) {
+                    alert('Invalid date!');
+                    return false;
+                }
+            }
+            if (mm == 2) {
+                var lyear = false;
+                if ((!(yy % 4) && yy % 100) || !(yy % 400)) {
+                    lyear = true;
+                }
+                if ((lyear == false) && (dd >= 29)) {
+                    alert('Invalid date!');
+                    return false;
+                }
+                if ((lyear == true) && (dd > 29)) {
+                    alert('Invalid date!');
+                    return false;
+                }
+            }
+            return true;
+        }
+        else {
+            alert("Invalid date !");
+            //  document.form1.text1.focus();
+            return false;
+        }
+        //  return true;
+    }
+
+    function FixDepositFormData(result) {
+        debugger;
+        var fg = null;
+
+        document.getElementById("sni_id").value = result.sni_id;
+
+        document.getElementById("FrontImg").src = result.frontgreyimagepath;
+        //document.getElementById("remittance_type").value = result.RemittanceType;
+        //document.getElementById("branch").value = result.Branch;
+        //document.getElementById("date").value = result.Date;
+        //document.getElementById("debitAccNo").value = result.DebitAccNo;
+        //document.getElementById("Chqno").value = result.ChqNo;
+        //document.getElementById("amt").value = result.Amount;
+        //document.getElementById("amtinwords").value = result.AmountInWords;
+        //document.getElementById("PurposeCode").value = result.PurposeCode;
+        //document.getElementById("BeneficiaryAccType").value = result.BeneficiaryAccType;
+        //document.getElementById("BeneficiaryName").value = result.BeneficiaryName;
+        //document.getElementById("BeneficiaryAccNo").value = result.BeneficiaryAccNo;
+        //document.getElementById("cBeneficiaryAccNo").value = result.cBeneficiaryAccNo;
+        //document.getElementById("BeneficiaryIFSCCode").value = result.BeneficiaryIFSCCode;
+        //document.getElementById("BeneficiaryBank").value = result.BeneficiaryBank;
+        //document.getElementById("BeneficiaryBranch").value = result.BeneficiaryBranch;
+        //document.getElementById("Name").value = result.DebitName;
+    }
+
+
+    function SubmitData() {
+        debugger;
+        var count_id = document.getElementById("RecordId").value;
+        var sni_id = document.getElementById("sni_id").value;
+
+        var x = document.getElementById("urlVal").value;
+        var y = "postFixDepositData";
+
+        debugger;
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: {
+                Status: 'SUBMIT', count_id: count_id, sni_id: sni_id
+            },
+            success: function (result) {
+                PostFixDepositSuccess(result);
+            },
+            error: getError
+        });
+
+    }
+
+    function PostFixDepositSuccess(result) {
+        alert(result);
+
+        var rooturl = '@Url.Content("~/")';
+
+        window.open(rooturl + "RtgsNeft/FixDepositList", "_self");
+    }
+
+</script>
+
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Fix Deposit Form
+            </h1>
+        </div>
+        <div class="page-content">
+            <div class="col-sm-12">
+                <div class="col-sm-4" style="border-color:black">
+                    <div class="row">
+                        <label class="col-sm-5"><b>Reference No:</b></label>
+                        <input id="refNo" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Acknowledgment Date:</b></label>
+                        <input id="acknowledgmentDate" placeholder="dd-MM-yyyy" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch name:</b></label>
+                        <input id="branchName" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Application Date:</b></label>
+                        <input id="applicationDate" placeholder="dd-MM-yyyy" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label><b>(A) PERSONAL DETAILS</b></label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Fullname 1ST:</b></label>
+                        <input id="fullname1" style="width:250px;" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Fullname 2nd:</b></label>
+                        <input id="fullname2" style="width:250px;" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Fullname 3rd:</b></label>
+                        <input id="fullname3" style="width:250px;" />
+                        @*<textarea class="col-sm-7" id="amtinwords" style="width:100%"></textarea>*@
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label><b>NAME TO BE DISPLAYED ON CORRESPONDENCE</b></label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>1st Applicant Name:</b></label>
+                        <input id="1_appl_name" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-2"><b>DOB:</b></label>
+                        <input class="col-sm-4" id="dob1" placeholder="dd-MM-yyyy" style="width:110px;" />
+                        <label class="col-sm-2"><b>Gender:</b></label>
+                        <input type="radio" id="male1" name="FirstGender" value="MALE" />
+                        <label for="male1">Male</label>
+                        <input type="radio" id="female1" name="FirstGender" value="FEMALE" />
+                        <label for="female1">Female</label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>2nd Applicant Name:</b></label>
+                        <input id="2_appl_name" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-2"><b>DOB:</b></label>
+                        <input class="col-sm-4" id="dob1" placeholder="dd-MM-yyyy" style="width:110px;" />
+                        <label class="col-sm-2"><b>Gender:</b></label>
+                        <input type="radio" id="male2" name="SecondGender" value="MALE" />
+                        <label for="male2">Male</label>
+                        <input type="radio" id="female2" name="SecondGender" value="FEMALE" />
+                        <label for="female2">Female</label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>3rd Applicant Name:</b></label>
+                        <input id="3_appl_name" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-2"><b>DOB:</b></label>
+                        <input class="col-sm-4" id="dob1" placeholder="dd-MM-yyyy" style="width:110px;" />
+                        <label class="col-sm-2"><b>Gender:</b></label>
+                        <input type="radio" id="male3" name="ThirdGender" value="MALE" />
+                        <label for="male3">Male</label>
+                        <input type="radio" id="female3" name="ThirdGender" value="FEMALE" />
+                        <label for="female3">Female</label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label><b>(B) PAN No.</b></label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>1st Appl. :</b></label>
+                        <input id="1_pan" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>MOTHER'S MAIDEN NAME:</b></label>
+                        <input id="1_mom" />
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>2st Appl. :</b></label>
+                        <input id="2_pan" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>MOTHER'S MAIDEN NAME:</b></label>
+                        <input id="2_mom" />
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>3st Appl. :</b></label>
+                        <input id="3_pan" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>MOTHER'S MAIDEN NAME:</b></label>
+                        <input id="3_mom" />
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <label><b>MAILING ADDRESS</b></label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-8"><b>Company name / Flast No. & Building Name:</b></label>
+                    </div>
+                    <div class="row">
+                        <textarea class="col-sm-7" id="amtinwords" style="width:100%"></textarea>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Road No./Name:</b></label>
+                        <input id="roadname" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Landmark:</b></label>
+                        <input id="roadname" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>City:</b></label>
+                        <input id="roadname" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Pincode:</b></label>
+                        <input id="roadname" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>State:</b></label>
+                        <input id="roadname" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Tel. (O):</b></label>
+                        <input id="roadname" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Tel. (R):</b></label>
+                        <input id="roadname" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label><b>(C) If any of the applicants are EXISTING ACCOUNT HOLDERS, please mention the Customer Identification No.</b></label>
+                    </div>
+
+
+                    <br />
+                    <div class="row">
+                        @*<input type="button" id="btnReset" value="Back" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="BackBtn();" />
+                        <input type="button" id="btnReset" value="Reset" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="ResetData();" />*@
+                        <input type="button" id="btnSubmit" value="Submit" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="SubmitData();" />
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <img id="FrontImg" src="" style="width:100%" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

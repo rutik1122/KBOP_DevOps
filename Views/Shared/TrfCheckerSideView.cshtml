@@ -1,0 +1,158 @@
+﻿@*<script src="~/Scripts/Data.js"></script>*@
+<script type="text/javascript">
+    //debugger;
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var popup = "";
+    var recipt = "no";
+    var Submit = "";
+    var flag = "";
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    //var gusername = "MERAJ";
+    var authHeaders = {};
+    var ProcessType = "";
+    authHeaders.Authorization = bearer + " " + access_token;
+    var flag = "";
+    function getSubmit(resultPassed) {
+        debugger;
+
+        //$.ajax({
+        //    // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+        //    url: x + y,
+        //    // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+        //    headers: authHeaders,
+        //    type: 'POST',
+        //    data: { 'pType': 'TRF', 'Intellerid': gusername },
+        //    success: getSuccessVoucher,
+        //    error: getError
+        //});
+
+    }
+
+    function getSignDetailsCtsTr() {
+        debugger;
+        //alert("getSignDetailsCtsTr function");
+        var AccNo = document.getElementById("AccountNo").value;
+        console.log("Account no: " + AccNo);
+        if (AccNo == null || AccNo == "") {
+            alert("Account number is empty");
+            return false;
+        }
+
+        //var url = x + "GetAccSignDetails?AccNo=" + AccNo;
+        //alert("Url content : " + url);
+        debugger;
+
+        $("#ProcessingBar").show();
+
+        $.ajax({
+            type: 'POST',
+            //url: x + "GetAccSignDetails?AccNo=" + AccNo,
+            url: x + "GetAccSignDetails",
+            headers: authHeaders,
+            crossDomain: true,
+            //contentType: 'text',
+            data: { 'AccNo': AccNo },
+            //success: getSignCtsTrfSuccess,
+            success: signPopUp,
+            error: getError
+
+        });
+    }
+
+
+</script>
+
+<div class="row" style="font-size:small;">
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-sm-5">
+            <label>
+                Debit Account:
+            </label>
+        </div>
+        <div class="col-sm-7">
+            <input id="AccountNo" style="width:130px; height: 25px;" maxlength="16" onfocusout="fromAccNo_focusOut()" />    @*autofocus="autofocus"*@
+            <button class="btn-sm" style="background-color:black;color:white;font-size: x-small;margin-left: -5px;padding: 4px 10px 2px 11px;" onclick="GetPayeeeDtls(AccountNo.value,'C');">
+                <span class="glyphicon glyphicon-search"></span>
+
+            </button>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+        <div class="col-sm-1"></div>
+        @*<input type="button" id="btnReset" value="Reset" class="btn" style="color:white;font-size: 13px; padding:6px;" onclick="getReset();" />
+        <input type="button" id="btnGetVoucher" value="Get Voucher Details" style="color: white; font-size: 13px; padding: 6px;" class="btn" onclick="getSubmit('Voucher');" />*@
+        <input type="button" id="btnGetSign" value="Get Sign Details" style="color: white; font-size: 13px; padding: 6px;" class="btn" onclick="getSignDetailsCtsTr()" />
+    </div>
+
+
+    <div id="Payeeee" class="col-sm-12" style="padding-top: 10px">
+        <select id="PayeeName" style="width: 300px;"></select>
+    </div>
+    <div class="col-sm-12" style="padding-top: 10px">
+        <div class="col-sm-12" style="background-color: rgb(242, 242, 242);">
+            <div class="col-sm-12">
+                <b>Name:</b><label id="FinName"></label>
+            </div>
+            <div class="col-sm-12">
+                <b>Scheme Code:</b><label id="FinScheme"></label>
+            </div>
+            <div class="col-sm-12">
+                <b>Freeze Code:</b><label id="FinFreeze"></label>
+            </div>
+            <div class="col-sm-12">
+                <b>Mode Of Operation:</b><label id="FinMOP"></label>
+            </div>
+            <div class="col-sm-12">
+                <b>Account Status:</b><label id="FinAccountStatus"></label>
+            </div>
+            <div class="col-sm-12">
+                <b>NRE Flag:</b><label id="FinNRE"></label>
+            </div>
+            <div class="col-sm-12">
+                <b>Scheme Type:</b><label id="FinSchemeType"></label>
+            </div>
+            <div class="col-sm-12">
+                <b>Account Ownership:</b><label id="FinAccOwner"></label>
+            </div>
+            <div class="col-sm-12">
+                @*Amount:<label id="FinAmount"></label>*@
+                <b>IQA:</b><label id="iqa"></label>
+            </div>
+            <div class="col-sm-12">
+                @*Mobile Number:<label id="FinMobNo"></label>*@
+                <b>UV:</b><label id="uvData"></label>
+            </div>
+            <div class="col-sm-12">
+                @*PAN No:<label id="FinPAN"></label>*@
+                <b>IR:</b><label id="irData"></label>
+            </div>
+            <div class="col-sm-12">
+                @*Date:<label id="FinDate"></label>*@
+                <b>Micro Lettering:</b><label id="microLettering"></label>
+            </div>
+        </div>
+    </div>
+    <div class="row" >
+        <div class="col-sm-2" style="padding-top: 10px;padding-bottom:10px;padding-left:30px;">
+            <input id="decision" name="decision" value="" maxlength="1" type="text" style="width:30px;" onkeyup="decisionPress()" />
+            @*<input type="button" id="rejectList" name="rejectList" value="~~~" hidden />*@
+        </div>
+        <div class="col-sm-10"  style="padding-top: 10px;padding-bottom:10px">
+            <input type="button" id="btnSubmit" value="Submit" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 6px;" onclick="SubmitDecision('TRF','L1');" />
+            <input type="button" id="btnSubmit_l3" value="Submit" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 6px;" onclick="SubmitDecision('TRF','L2');" />
+        </div>
+    </div>
+    <div class="col-sm-12" id="rejectDiv" style="padding-top: 10px;padding-bottom:10px" hidden>
+
+        <input id="rejectCode" name="rejectCode" value="" style="width:40px; height:35px;" placeholder="CODE" disabled />
+        <input id="rejectDescription" name="rejectDescription" value="" style="height:35px;" placeholder="DESCRIPTION" disabled />
+
+    </div>
+</div>
+

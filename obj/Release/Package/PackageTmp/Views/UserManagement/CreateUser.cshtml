@@ -1,0 +1,348 @@
+﻿@model iBAS.Models.UserMaster
+
+@{
+    ViewBag.Title = "CreateUser";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+
+<input id="UserTypeData" value="@ViewBag.UserTypeData" hidden />
+<input id="AccessLevelData" value="@ViewBag.AccesslevelData" hidden />
+
+<input id="resp" value="@ViewBag.resp" hidden />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        debugger;
+        var usertype = document.getElementById("UserTypeData").value;
+        if (usertype == "BANK_USER") {
+            $("#DEVELOPER_USER").hide();
+            $("#ADMIN_USER").hide();
+        }
+        else if (usertype == "ADMIN_USER") {
+            $("#DEVELOPER_USER").hide();
+        }
+
+        debugger;
+        var accLevel = document.getElementById("AccessLevelData").value;
+        if (accLevel == "DOM") {
+            $("#AccSelect").hide();
+            $("#ORG").hide();
+            $("#CUST").hide();
+        }
+        else if (accLevel == "CUST") {
+            $("#ORG").hide();
+        }
+
+
+        var resp = document.getElementById("resp").value;
+        if (resp != null && resp != "") {
+            alert(resp);
+        }
+
+    });
+
+
+    function AccesslevelOnChange(result) {
+        debugger;
+
+        var rooturl = '@Url.Content("~/")';
+
+        if (result == "AccSelect") {
+            $("#AccessList").hide();
+
+            return false;
+        }
+
+        //window.open(rooturl + "UserManagement/AccessLevel?AccType=" + result, "_self");
+
+        $.ajax({
+            url: rooturl + 'UserManagement/AccessLevel?AccType=' + result,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'html',
+            //async: false,
+            success: function (data) {
+
+                $('#AccessList').html(data);
+                document.getElementById("AccessList").style.display = "block";
+
+            }
+        });
+
+
+    }
+
+
+    function CreateUser() {
+        debugger;
+
+        var validMatch = /^[a-zA-Z0-9]+$/;
+
+        // Login Id Verificatoin
+        var loginId = document.getElementById("LoginId").value;
+        if (loginId == null || loginId == "") {
+            alert("LoginId can not be null! Please Enter LoginId!");
+            document.getElementById("LoginId").focus();
+            return false;
+        }
+
+        if (!loginId.match(validMatch)) {
+            alert('Special characters are not allowed in LoginId!');
+            document.getElementById("LoginId").value = "";
+            document.getElementById("LoginId").focus();
+            return false;
+        }
+
+        if (loginId.length < 4) {
+            alert("Minimum 4 characters are required for LoginId!");
+            document.getElementById("LoginId").focus();
+            return false;
+        }
+
+        if(loginId.length > 25) {
+            alert("Maximum 25 characters are allowed for LoginId!");
+            document.getElementById("LoginId").focus();
+            return false;
+        }
+
+        // First name verificatoin
+        var firstName = document.getElementById("FirstName").value;
+        if (firstName == null || firstName == "") {
+            alert("First name can not be null! Please enter First name!");
+            document.getElementById("FirstName").focus();
+            return false;
+        }
+
+        if (!firstName.match(validMatch)) {
+            alert('Special characters are not allowed in First name!');
+            document.getElementById("FirstName").value = "";
+            document.getElementById("FirstName").focus();
+            return false;
+        }
+
+        if (firstName.length < 4) {
+            alert("Minimum 4 characters are required for First name!");
+            document.getElementById("FirstName").focus();
+            return false;
+        }
+
+        if (firstName.length > 25) {
+            alert("Maximum 25 characters are allowed for First Name!");
+            document.getElementById("FirstName").focus();
+            return false;
+        }
+
+        // Last name verification
+        var lastName = document.getElementById("LastName").value;
+        if (lastName != null && lastName != "") {
+            if (!lastName.match(validMatch)) {
+                alert('Special characters are not allowed in Last name!');
+                document.getElementById("LastName").value = "";
+                document.getElementById("LastName").focus();
+                return false;
+            }
+
+            if (lastName.length < 4) {
+                alert("Minimum 4 characters are required for Last name!");
+                document.getElementById("LastName").focus();
+                return false;
+            }
+
+            if (lastName.length > 25) {
+                alert("Maximum 25 characters are allowed for Last Name!");
+                document.getElementById("LastName").focus();
+                return false;
+            }
+        }
+
+        @*// Email Id verificaton
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if ()*@
+
+        // Access Level Verification
+        var accLevel = document.getElementById("Accesslevel").value;
+
+        if (accLevel == null || accLevel == "") {
+            alert("Please select Access level!");
+            var accLevel = document.getElementById("Accesslevel").focus();
+            return false;
+        }
+
+        if (accLevel == "ORG") {
+            var accData = document.getElementById("OrgAccessPartialView").value;
+            if (accData == null || accData == "") {
+                alert("Please select atleast one Organization!");
+                return false;
+            }
+        }
+        else if (accLevel == "CUST") {
+            var accData = document.getElementById("CustAccessPartialView").value;
+            if (accData == null || accData == "") {
+                alert("Please select atleast one Customer!");
+                return false;
+            }
+        }
+        else if (accLevel == "DOM") {
+            var accData = document.getElementById("DomAccessPartialView").value;
+            if (accData == null || accData == "") {
+                alert("Please select atleast one Domain!");
+                return false;
+            }
+        }
+        else {
+            alert("Access Level not registered! Please check Access Level Value!");
+            return false;
+        }
+
+        debugger;
+        return true;
+    }
+
+
+</script>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                User Management
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    User List
+                </small>
+            </h1>
+        </div>
+        <div class="page-content">
+            @using (Html.BeginForm())
+            {
+                <div class="row">
+
+                    <table id="UserCreationTable">
+                        <tr style="height:50px">
+                            <td style="width:150px; font-size:15px;"><b>LoginId</b></td>
+                            <td width="160px"><input class="col-sm-1" id="LoginId" name="LoginId" value="" style="width:130px;" /></td>
+                            <td style="width:150px; font-size:15px;"><b>First Name</b></td>
+                            <td width="160px"><input class="col-sm-1" id="FirstName" name="FirstName" value="" style="width:130px;" /></td>
+                            <td style="width:150px; font-size:15px;"><b>Last Name</b></td>
+                            <td width="160px"><input class="col-sm-1" id="LastName" name="LastName" value="" style="width:130px;" /></td>
+                            <td style="width:150px; font-size:15px;"><b>Email Id</b></td>
+                            <td width="160px"><input class="col-sm-1" id="EmailId" name="EmailId" value="" style="width:160px;" /></td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:150px; font-size:15px;"><b>User Type</b></td>
+                            <td>
+                                <select id="UserType" name="UserType">
+                                    <option id="userSelect" value="userSelect">----Select----</option>
+                                    <option id="DEVELOPER_USER" value="Developer_User">Developer User</option>
+                                    <option id="ADMIN_USER" value="Admin_User">Admin User</option>
+                                    <option id="BANK_USER" value="Bank_User">Bank User</option>
+                                </select>
+                            </td>
+                            <td style="width:150px; font-size:15px;"><b>Access Level</b></td>
+                            <td>
+                                <select id="Accesslevel" name="Accesslevel" onchange="AccesslevelOnChange(this.value)">
+                                    <option id="AccSelect" value="AccSelect">----Select----</option>
+                                    <option id="ORG" value="ORG">Organization level</option>
+                                    <option id="CUST" value="CUST">Customer Level</option>
+                                    <option id="DOM" value="DOM">Domain Level</option>
+                                </select>
+                            </td>
+                            <td style="width:150px; font-size:15px;"><b>Role</b></td>
+                            <td>
+                                @Html.DropDownList("RoleList", "-- Select --")
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <br />
+                <div class="row">
+                    <div id="AccessList" class="col-sm-12" hidden>
+
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <input type="submit" id="btnCreateUser" value="Create User" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="return (CreateUser());" />
+                </div>
+            }
+            @*<div class="row">
+
+            <table id="UserCreationTable">
+                <tr style="height:50px">
+                    <td style="width:150px; font-size:15px;"><b>LoginId</b></td>
+                    <td width="160px"><input class="col-sm-1" id="LoginId" name="LoginId" value="" style="width:130px;" /></td>
+                    <td style="width:150px; font-size:15px;"><b>First Name</b></td>
+                    <td width="160px"><input class="col-sm-1" id="FirstName" name="FirstName" value="" style="width:130px;" /></td>
+                    <td style="width:150px; font-size:15px;"><b>Last Name</b></td>
+                    <td width="160px"><input class="col-sm-1" id="LastName" name="LastName" value="" style="width:130px;" /></td>
+                    <td style="width:150px; font-size:15px;"><b>Email Id</b></td>
+                    <td width="160px"><input class="col-sm-1" id="EmailId" name="EmailId" value="" style="width:160px;" /></td>
+                </tr>
+
+                <tr>
+                    <td style="width:150px; font-size:15px;"><b>User Type</b></td>
+                    <td>
+                        <select id="UserType">
+                            <option id="userSelect" value="userSelect">----Select----</option>
+                            <option id="DEVELOPER_USER" value="Developer_User">Developer User</option>
+                            <option id="ADMIN_USER" value="Admin_User">Admin User</option>
+                            <option id="BANK_USER" value="Bank_User">Bank User</option>
+                        </select>
+                    </td>
+                    <td style="width:150px; font-size:15px;"><b>Access Level</b></td>
+                    <td>
+                        <select id="Accesslevel" onchange="AccesslevelOnChange(this.value)">
+                            <option id="AccSelect" value="AccSelect">----Select----</option>
+                            <option id="ORG" value="ORG">Organization level</option>
+                            <option id="CUST" value="CUST">Customer Level</option>
+                            <option id="DOM" value="DOM">Domain Level</option>
+                        </select>
+                    </td>
+                    <td style="width:150px; font-size:15px;"><b>Role</b></td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div class="row">
+            <div id="AccessList" class="col-sm-12" hidden>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <input type="button" id="btnCreateUser" value="Create User" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="CreateUser();" />
+        </div>*@
+
+            @*<div class="row">
+            <label class="col-sm-1"><b>First Name</b></label>
+            <input class="col-sm-1" id="FirstName" name="FirstName" value="" />
+
+            <label class="col-sm-1"><b>Last Name</b></label>
+            <input class="col-sm-1" id="LastName" name="LastName" value="" />
+        </div>
+
+        <br />
+
+        <div class="row">
+            <label class="col-sm-1"><b>User Type</b></label>
+            <div class="col-sm-1" id="UserTypeDiv">
+                @Html.DropDownList("UserType", "-- Select --")
+            </div>
+
+            <label class="col-sm-1"><b>Access Level</b></label>
+            <div class="col-sm-1" id="AccessLevelDiv">
+                @Html.DropDownList("Accesslevel", "-- Select --")
+            </div>
+        </div>*@
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,151 @@
+﻿@model IEnumerable<iBAS.Models.ApiSetting_Master>
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<style>
+    /* Custom CSS for adjusting column widths */
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+        table th:nth-child(1),
+        table td:nth-child(1) {
+            width: 15%;
+        }
+
+        table th:nth-child(2),
+        table td:nth-child(2) {
+            width: 30%;
+        }
+
+        table th:nth-child(3),
+        table td:nth-child(3) {
+            width: 35%;
+        }
+</style>
+
+<div class="container">
+    <div class="row col-12 mb-3 mt-1">
+        <form class="d-flex align-items-center" action="#">
+            <div class="row">
+                <h3 class="mb-0 text-primary position-relative">
+                    <span class="bg-200 dark__bg-1100 pe-3">API Setting Master</span>
+                </h3>
+            </div>
+            @*<div class="row">
+                    <div class="d-grid gap-2 d-md-block">
+                        <div class="btn btn-sm btn-primary ml-2">
+                            <i class="fas fa-plus-circle text-white"></i>&nbsp;&nbsp;
+                            @Html.ActionLink("Add Reason", "Create", "Api_Setting_MasterController", null, new { style = "color:white" })
+                        </div>
+                    </div>
+                </div>*@
+        </form>
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <p class="error-message"><font color="red" size="+1">@ViewBag.ErrorMessage</font></p>
+    }
+    else if (Model == null)
+    {
+        <p><font color="red" size="+1"><strong>No Data Found!</strong></font></p>
+    }
+    else
+    {
+        <div id="div_rolelist" class="col">
+            <div class="card overflow-hidden">
+                <div class="card-body py-0">
+                    <div class="table-responsive scrollbar">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Api_Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Api_Value)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Discription)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.BankCode)
+                                    </th>
+                                    @*<th>
+                                            @Html.DisplayNameFor(model => model.Updated_By)
+                                        </th>*@
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Api_Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Api_Value)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Discription)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.BankCode)
+                                        </td>
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.Updated_By)
+                                            </td>*@
+
+                                        <td>
+                                            <a href="@Url.Action("Edit","ApiSettingMaster",new {id = item.ID})" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                <i class="fas fa-edit text-white"></i>
+                                            </a>
+                                            @*<a href="@Url.Action("Details","Api_Setting_MasterController")" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
+                                                    <i class="fas fa-eye text-white"></i>
+                                                </a>
+                                                <a href="@Url.Action("Delete", "Api_Setting_MasterController", new {reasoncode = item.ID})" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                    <i class="fas fa-trash-alt text-white"></i>
+                                                </a>*@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+
+
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+    });
+
+</script>
+

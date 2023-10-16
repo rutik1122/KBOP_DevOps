@@ -1,0 +1,112 @@
+﻿<script src="~/Scripts/RtgsList.js"></script>
+
+@{
+    ViewBag.Title = "RtgsList";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" hidden/>
+<input id="BankCode" name="BankCode" value="@Session["BankCode"]" hidden />
+
+
+<div class="row col-12 mb-3 my-0">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <h3 class="mb-0 text-primary position-relative">
+                <span id="spam_header" class="bg-200 dark__bg-1100 pe-3">
+                    RTGS / Neft Form
+                </span>
+            </h3>
+        </div>
+    </form>
+</div>
+
+<div class="row col-12 mb-3 my-0">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <div class="col-sm-8" style="text-align: center;">
+                @Html.DropDownList("Upload_Type", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text = "Manual Upload without Cheque", Value = "01" },
+                    new SelectListItem{ Text = "Machine Scanned without Cheque", Value = "02" },
+                    new SelectListItem{ Text = "Manual Upload with Cheque", Value = "03" },
+                    new SelectListItem{ Text = "Machine Scanned with Cheque", Value = "04" }
+                })
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 d-md-block">
+                <button class="btn btn-sm btn-primary ml-2" type="button" onclick="GetList()"> Get Record </button>
+                @*<button class="btn btn-sm btn-primary mx-2" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" onclick="getSignDetails();">
+                    Reload Status
+                </button>*@
+                <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#resetmodal">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div id="div_form_list" class="col">
+    <div class="card overflow-hidden">
+        <div class="card-header bg-light py-2">
+            <h5 id="h5_name" class="mb-0 text-center"></h5>
+        </div>
+        <div class="card-body py-0">
+            <div class="table-responsive scrollbar">
+                <table id="tbl_rtgs" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="text-align: center;">Data Id</th>
+                            <th scope="col" style="text-align: center;">Insert Time Stamp</th>
+                            <th scope="col" style="text-align: center;">Data Entry</th>
+                            <th scope="col" style="text-align: center;">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var rooturl = '@Url.Content("~/")';
+
+    var userId = "";
+    var BankCode = "";
+    var uploadtype = "";
+
+    $("#div_form_list").hide();
+    $("#ProcessingBar").hide();
+
+    $(document).ready(function () {
+
+        userId = document.getElementById("tellerDetails").value;
+        BankCode = document.getElementById("BankCode").value;
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+
+
+    });
+
+</script>

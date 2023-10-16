@@ -1,0 +1,697 @@
+﻿
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+<div class="">
+    <div class="row col-12 mb-2 mt-1">
+        <form class="d-flex align-items-center" action="#">
+            <div class="row">
+                <h3 class="mb-0 text-primary position-relative">
+                    <span class="bg-200 dark__bg-1100 pe-3">Search Menu</span>
+                </h3>
+            </div>
+            <div class="row">
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-sm btn-primary ml-2 "> Export Excel </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row col-12 mb-3">
+        <div class="card ms-3 py-1">
+            <form class="mb-2" action="#">
+                <div class="row g-3">
+                    <div class="col-lg-2">
+                        @*<label class="form-label">Search By</label>
+                            <select id="searchBy" class="form-select form-select-sm">
+                                <option selected value="CURRENCY">Currency</option>
+                                <option value="CHEQUE">Cheque</option>
+                            </select>*@
+                        @*User04 --starts 2023/07/07*@
+                        <label class="form-label">Search By</label>
+                        <select id="searchBy" class="form-select form-select-sm" onchange="SearchByData()">
+                            <option value="0">--select--</option>
+                            <option value="1">Currency</option>
+                            <option value="2">Cheque</option>
+                        </select>
+                        @*User04 --ends*@
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Search Period</label>
+                        <input id="fromDate" type="date" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label text-white">to</label>
+                        <input id="toDate" type="date" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-md-block mt-4">
+                            <button class="btn btn-sm btn-primary ml-2 " onclick="return getDate('Day')"> Day </button>
+                            <button class="btn btn-sm btn-primary ml-2 " onclick="return getDate('Week')"> Week </button>
+                            <button class="btn btn-sm btn-primary ml-2 " onclick="return getDate('Month')"> Month </button>
+                        </div>
+                    </div>
+                    <di@*v class="col-lg-3">
+                        <label class="form-label">Count</label>
+                        <span class="form-control form-control-sm">4543</span>
+                    </d*@iv>
+                </div>
+                <hr>
+                @*User04 --starts 2023/07/07*@
+                <div id="Currency_1" class="row g-3">
+                    <div class="col-lg-2">
+                        <label class="form-label">Machine Serial No</label>
+                        <input id="currency_machine" type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Teller ID</label>
+                        <input id="currency_teller" type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Trans Ref No</label>
+                        <input id="currency_transRefNo" type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Note Serial No</label>
+                        <input id="currency_noteSerialNo" type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Branch</label>
+                        <input id="currency_branch" type="text" class="form-control form-control-sm">
+                    </div>
+                    @*<div class="col-lg-4">
+                            <div class="d-md-block mt-4">
+                                <button id="searchButton1" onclick="return SearchNote()" class="btn btn-sm btn-primary ml-2 "> Search </button>
+                            </div>
+                        </div>*@
+                </div>
+                <div id="Cheque_1" class="row g-3">
+                    <div class="col-lg-2">
+                        <label class="form-label">Machine Serial No</label>
+                        <input id="cheque_machine" type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Teller ID</label>
+                        <input id="cheque_teller" type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Trans Ref No</label>
+                        <input id="cheque_transRefNo" type="text" class="form-control form-control-sm">
+                    </div>
+                    @*<div class="col-lg-2">
+                            <label class="form-label">Note Serial No</label>
+                            <input id="noteSerialNo" type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="form-label">Branch</label>
+                            <input id="branch" type="text" class="form-control form-control-sm">
+                        </div>*@
+                    <div class="col-lg-2">
+                        <label class="form-label">Cheque No</label>
+                        <input id="cheque_ChequeNo_2" type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Amount</label>
+                        <input id="cheque_Amount_2" type="text" class="form-control form-control-sm">
+                    </div>
+                    </br>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label class="form-label">Debit Acc No</label>
+                            <input id="cheque_DebitAccNo_2" type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="form-label">Credit Acc No</label>
+                            <input id="cheque_CreditAccNo_2" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    @*<div class="col-lg-4">
+                            <div class="d-md-block mt-4">
+                                <button id="searchButton2" onclick="return SearchNote()" class="btn btn-sm btn-primary ml-2 "> Search </button>
+                            </div>
+                        </div>*@
+                </div>
+                <div class="col-lg-4">
+                    <div class="d-md-block mt-4">
+                        <button id="searchButton" onclick="return SearchNote()" class="btn btn-sm btn-primary ml-2 "> Search </button>
+                    </div>
+                </div>
+                @*User04 --ends*@
+            </form>
+        </div>
+    </div>
+    <div id="all_data" class="row">
+        <div class="col">
+            <div class="card overflow-hidden">
+                <div class="card-header bg-light py-2">
+                    <h5 class="mb-0 text-center">All Data</h5>
+                    <!-- <div class="dropdown font-sans-serif btn-reveal-trigger">
+                      <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="dropdown-transaction-summary" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
+                      <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-transaction-summary"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                        <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                      </div>s
+                    </div> -->
+                </div>
+                <div id="CurrencyData" class="card-body py-0">
+                    <div class="table-responsive scrollbar">
+                        <table id="tbl_Currency" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date / Time</th>
+                                    <th scope="col">Machine SN</th>
+                                    <th scope="col">Branch</th>
+                                    <th scope="col">Teller</th>
+                                    <th scope="col">Note Serial No</th>
+                                    <th scope="col">SN Image</th>
+                                    <th scope="col">Date Type</th>
+                                    <th scope="col">Trans Type</th>
+                                    <th scope="col">Denom</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Reject Reason Code</th>
+                                    <th scope="col">Trans Ref No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="ChequeData" class="card-body py-0">
+                    <div class="table-responsive scrollbar">
+                        <table id="tbl_Cheque" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Machine SN</th>
+                                    <th>Branch</th>
+                                    <th>Teller</th>
+                                    <th>DebitAccNo</th>
+                                    <th>CreditAccNo</th>
+                                    @*<th>PayeeName</th>*@
+                                    <th>Amount</th>
+                                    <th>@*<label id="label_data_2" />*@ChequeNo</th>
+                                    <th>SN Image</th>
+                                    <th>DocType</th>
+                                    <th>Trans Type</th>
+                                    <th>Denom</th>
+                                    <th>Status</th>
+                                    <th>Reject_Reason </th>
+                                    <th>TransRefNo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @*<div class="card-footer bg-light py-2">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 0 !important;">
+                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </nav>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //User04 --starts 2023/07/07
+    $("#Currency_1").hide();
+    $('#Cheque_1').hide();
+   // $('#all_data').hide();
+
+
+   // $(document).ready(function () {
+   //     $("#ProcessingBar").hide();
+
+   // });
+    //User04 --ends
+
+    $(document).ready(function () {
+        // Hide the currency and cheque sections initially
+        $("#all_data").hide();
+        $("#CurrencyData").hide();
+        $("#ChequeData").hide();
+        $("#ProcessingBar").hide();
+        // Function to handle search button click
+        $("#searchButton").click(function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Hide all data sections
+            $("#CurrencyData").hide();
+            $("#ChequeData").hide();
+
+            // Show the respective data section based on the selected option
+            var searchBy = $("#searchBy").val();
+            debugger;
+            if (searchBy === "1") {
+                $("#all_data").show();
+                //$("#CurrencyData").show();
+            } else if (searchBy === "2") {
+                $("#all_data").show();
+                //$("#ChequeData").show();
+            }
+        });
+
+        // Function to handle search by dropdown change
+        $("#searchBy").change(function () {
+            var selectedOption = $(this).val();
+            debugger;
+            // Hide all data sections
+            $("#CurrencyData").hide();
+            $("#ChequeData").hide();
+
+            // Clear the search inputs
+            $(".search-input").val("");
+
+            // Show the selected data section
+            if (selectedOption !== "0") {
+                $("#" + selectedOption).show();
+            }
+            //else if (selectedOption == 1) {
+            //    $("#all_data").show();
+            //    $("#CurrencyData").show();
+            //}
+            //else if (selectedOption == 2) {
+            //    $("#all_data").show();
+            //    $("#ChequeData").show();
+            //}
+        });
+    });
+
+
+    function SearchNote() {
+
+
+
+        var x = '@ViewBag.URL';
+        var authHeaders = {};
+
+
+
+
+        var val = document.getElementById("searchBy").value;
+
+        if (val == "1") {
+            $("#tbl_Currency tbody").empty();
+
+            var MachineNo, TellerId, TransRefNo, SerialNo, Branch, SearchBy, ChequeNo, Amount, DebitAccNo, CreditAccNo;
+
+            MachineNo = $("#currency_machine").val();
+            TellerId = $("#currency_teller").val();
+            TransRefNo = $("#currency_transRefNo").val();
+            SerialNo = $("#currency_noteSerialNo").val(); //"IF602GS533"
+            Branch = $("#currency_branch").val();
+            SearchBy = $("#searchBy").val();
+
+            var FromDate = $("#fromDate").val().replaceAll('-', '/'); // "2023/02/04";//
+            var ToDate = $("#toDate").val().replaceAll('-', '/'); // "2023/02/04";
+
+            if (FromDate == null || FromDate == "") {
+                alert("From Date is mandatory!");
+                return false;
+            }
+
+            if (ToDate == null || ToDate == "") {
+                alert("To Date is required!");
+                return false;
+            }
+
+            var validate = false;
+
+            if (MachineNo != "" || TellerId != "" || TransRefNo != "" || SerialNo != "" || Branch != "")
+                validate = true;
+            debugger;
+            if (validate == false) {
+                alert("Minimum 1 addition data is required!");
+                return false;
+            }
+
+            $.ajax({
+                url: x + 'getnotedetails',
+                headers: authHeaders,
+                type: 'POST',
+                data: {
+                    'SearchBy': 'CURRENCY', 'TellerID': TellerId, 'fromdate': FromDate, 'todate': ToDate, 'branch': Branch, 'MachineSerialNo': MachineNo, 'TransRefNo': TransRefNo, 'serialno': SerialNo
+                },
+                success: function (result) {
+
+                    SearchMapDetails(result);
+
+                    if (result.length > 0) {
+                        $("#CurrencyData").show();
+                    } else {
+                        $("#CurrencyData").hide();
+                    }
+
+                    // Hide the ChequeData section
+                    $("#ChequeData").hide();
+                },
+
+                error: getError
+            });
+        }
+
+        else if (val == "2") {
+            $("#tbl_Cheque tbody").empty();
+
+            var MachineNo, TellerId, TransRefNo, SerialNo, Branch, SearchBy, ChequeNo, Amount, DebitAccNo, CreditAccNo;
+            debugger;
+            MachineNo = $("#cheque_machine").val();
+            TellerId = $("#cheque_teller").val();
+            TransRefNo = $("#cheque_transRefNo").val();
+            //SerialNo = $("#cheque_noteSerialNo").val(); //"IF602GS533"
+            //Branch = $("#cheque_branch").val();
+            SearchBy = $("#searchBy").val();
+            ChequeNo = $("#cheque_ChequeNo_2").val();
+            Amount = $("#cheque_Amount_2").val();
+            DebitAccNo = $("#cheque_DebitAccNo_2").val();
+            CreditAccNo = $("#cheque_CreditAccNo_2").val();
+
+            var FromDate = $("#fromDate").val().replaceAll('-', '/'); // "2023/02/04";//
+            var ToDate = $("#toDate").val().replaceAll('-', '/'); // "2023/02/04";
+
+            if (FromDate == null || FromDate == "") {
+                alert("From Date is mandatory!");
+                return false;
+            }
+
+            if (ToDate == null || ToDate == "") {
+                alert("To Date is required!");
+                return false;
+            }
+
+            var validate = false;
+
+            if (MachineNo != "" || TellerId != "" || TransRefNo != "" || ChequeNo != "" || Amount != "" || DebitAccNo != "" || CreditAccNo != "")
+                validate = true;
+            debugger;
+            if (validate == false) {
+                alert("Minimum 1 addition data is required!");
+                return false;
+            }
+
+            $.ajax({
+                url: x + 'getnotedetails',
+                headers: authHeaders,
+                type: 'POST',
+                //data: {
+                //    'SearchBy': 'CURRENCY', 'TellerID': TellerId, 'fromdate': FromDate, 'todate': ToDate, 'branch': Branch, 'MachineSerialNo': MachineNo, 'TransRefNo': TransRefNo
+                //},
+                data: {
+                    'chequeno': ChequeNo, 'TellerID': TellerId, 'fromdate': FromDate, 'todate': ToDate, 'MachineSerialNo': MachineNo, 'TransRefNo': TransRefNo,
+                    'DebitAccNo': DebitAccNo, 'CreditAccNo': CreditAccNo, 'sakAmount': Amount,
+                    'SearchBy': 'CHEQUE'
+                },
+                success: function (result) {
+
+                    SearchMapDetails(result);
+                    if (result.length > 0) {
+                        $("#ChequeData").show();
+                    } else {
+                        $("#ChequeData").hide();
+                    }
+
+                    // Hide the CurrencyData section
+                    $("#CurrencyData").hide();
+                },
+                error: getError
+            });
+
+        }
+
+        return false;
+    }
+
+    function SearchMapDetails(result) {
+        // Iterate over the collection of data
+        //$("#tbl_Currency tbody").empty();
+        $.each(result, function (index, search) {
+            // Add a row to the Product table
+            AddRow(search);
+        });
+
+        //$("#ChequeData").show();
+    }
+
+    function AddRow(search) {
+        // Check if <tbody> tag exists, add one if not
+        var RequestType1 = document.getElementById("searchBy").value;
+
+        if (RequestType1 == "1") {
+
+            if ($("#tbl_Currency tbody").length == 0) {
+                $("#tbl_Currency").append("<tbody></tbody>");
+            }
+            // Append row to <table>
+            $("#tbl_Currency tbody").append(
+                TableRow(search));
+        }
+        else if (RequestType1 == "2") {
+
+            if ($("#tbl_Cheque tbody").length == 0) {
+                $("#tbl_Cheque").append("<tbody></tbody>");
+            }
+            // Append row to <table>
+            $("#tbl_Cheque tbody").append(
+                TableRow(search));
+        }
+
+    }
+    function TableRow(print) {
+        debugger;
+
+        var RequestType = document.getElementById("searchBy").value;
+
+        if (RequestType == "1") {
+        var ret =
+            "<tr>" +
+                '<td class="text-wrap">'+
+            '<span class="">' + print.capturetimestamp +'</span>'+
+                '</td>'+
+                '<td class="text-wrap">'+
+            '<span class="">' + print.MachineSerialNo+'</span>'+
+                '</td>'+
+                '<td class="text-wrap">'+
+            '<span class="">' + print.branch+'</span>'+
+                '</td>'+
+                '<td class="text-wrap">'+
+            '<span class="">' + print.TellerID+'</span>'+
+                '</td>'+
+                '<td class="text-wrap">'+
+            '<span class="">' + print.serialno+'</span>'+
+                '</td>' +
+                '<td class="">' +
+            '<img src="' + print.sn_imagepath+'" class="img-fluid">' +
+                '</td>' +
+                '<td class="text-wrap">' +
+            '<span class="">' + print.scanneddoctype+'</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+            '<span class="">' + print.currncy_version+'</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+            '<span class="">' + print.currncy_denom+'</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.output_pocket+'</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+            '<span class="">' + print.error_code+'</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+            '<span class="">' + print.TransRefNo+'</span>' +
+                '</td>' +
+
+            "</tr>";
+            return ret;
+        }
+        else if(RequestType == "2") {
+            var ret =
+                "<tr>" +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.capturetimestamp + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.MachineSerialNo + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.branch + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.TellerID + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.DebitAccNo + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.CreditAccNo + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.sakAmount + '</span>' +
+                '</td>' +
+                '<td class="">' +
+                '<span class="">' + print.chequeno + '</span>' +
+                '</td>' +
+                '<td class="">' +
+                '<img src="' + print.sn_imagepath + '" class="img-fluid">' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.scanneddoctype + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.currncy_version + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.currncy_denom + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.output_pocket + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.error_code + '</span>' +
+                '</td>' +
+                '<td class="text-wrap">' +
+                '<span class="">' + print.TransRefNo + '</span>' +
+                '</td>' +
+
+                "</tr>";
+            return ret;
+
+        }
+    }
+
+    function getDate(data) {
+        debugger;
+        var date = new Date();
+        if (data == 'Day') {
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1;
+            var yyyy = date.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var Todaysdate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("fromDate").value = Todaysdate;
+
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1;
+            var yyyy = date.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+
+            var Todaysdate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("toDate").value = Todaysdate;
+
+        }
+        if (data == 'Week') {
+            var day = date.getDay();
+            var firstDayOfWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (day == 0 ? -6 : 1) - day);
+            var dd = firstDayOfWeek.getDate();
+            var mm = firstDayOfWeek.getMonth() + 1;
+            var yyyy = firstDayOfWeek.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var firstDayOfWeek = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("fromDate").value = firstDayOfWeek;
+
+            var lastDayOfWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (day == 0 ? 0 : 7) - day);
+            var dd = lastDayOfWeek.getDate();
+            var mm = lastDayOfWeek.getMonth() + 1;
+            var yyyy = lastDayOfWeek.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var lastDayOfWeek = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("toDate").value = lastDayOfWeek;
+        }
+        if (data == 'Month') {
+            var firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
+            var dd = firstDayOfMonth.getDate();
+            var mm = firstDayOfMonth.getMonth() + 1;
+            var yyyy = firstDayOfMonth.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var firstDayOfMonth = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("fromDate").value = firstDayOfMonth;
+
+            var lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            var dd = lastDayOfMonth.getDate();
+            var mm = lastDayOfMonth.getMonth() + 1;
+            var yyyy = lastDayOfMonth.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var lastDayOfMonth = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("toDate").value = lastDayOfMonth;
+
+        }
+        return false;
+    }
+
+    function getError(result) {
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/LoginiBAS";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+
+
+    //User04 --starts 2023/07/07
+    function SearchByData() {
+        //debugger;
+        var val = document.getElementById("searchBy").value;
+
+        $("#Currency_1").hide();
+        $('#Cheque_1').hide();
+        //$('#Cheque_2').hide();
+        //$("#DataSubmit").hide();
+
+
+        if (val != "0") {
+            if (val == "1")
+                $("#Currency_1").show();
+            else if (val == "2")
+                $('#Cheque_1').show();
+
+           // $("#DataSubmit").show();
+        }
+        else {
+
+        }//User04 --ends
+    }
+</script>

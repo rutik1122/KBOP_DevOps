@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<body>
+    <input type="button" value="Upload" name="Upload" style="width:100px;" onclick="Upload()">
+</body>
+
+<script type="text/javascript">
+
+    var Rooturl = '@Url.Content("~/")';
+
+    function Upload() {
+        //var Scandata = {};
+        //var SupportingData = [];
+        //var CaptureData = [];
+        var SorterData = [];
+
+        //SorterData.MICR = "nm",
+        //SorterData.InstrumentType = "S",
+        //SorterData.DocType = "B",
+        //SorterData.transCodeMICR = "16",
+        //SorterData.IQAString = "220222222222222222022222222222222202222222222222",
+        //SorterData.SlipNo = "1",
+        //SorterData.IQAFlag = "0",
+        //SorterData.SanMICR = "000356",
+        //SorterData.SortCode ="125002056",
+        //SorterData.DocNo = 1,
+        //SorterData.ChequeNoMICR = "706533",
+        //SorterData.ClearingType = "01",
+        //SorterData.FrontGray = "http://KORESWEBSERVERAPP//ikloudProImages//20201029//4//8880//1_015//1_Front.jpg",
+        //SorterData.BackGray = "http://KORESWEBSERVERAPP//ikloudProImages//20201029//4//8880//1_015//1_Back.jpg",
+        //SorterData.FrontTiff = "http://KORESAPPSERVER:19443//ProOwImageServer_NG//20200201//4//169//1_0260//1_Front.tif",
+        //SorterData.BackTiff ="http://KORESAPPSERVER:19443//ProOwImageServer_NG//20200201//4//169//1_0260//1_Back.tif",
+
+        SorterData.push({
+            MICR : "nm",
+            InstrumentType : "S",
+            DocType : "B",
+            transCodeMICR : "16",
+            IQAString : "220222222222222222022222222222222202222222222222",
+            SlipNo : "1",
+            IQAFlag : "0",
+            SanMICR : "000356",
+            SortCode : "125002056",
+            DocNo : 1,
+            ChequeNoMICR : "706533",
+            ClearingType : "01",
+            FrontGray : "http://KORESWEBSERVERAPP//ikloudProImages//20201029//4//8880//1_015//1_Front.jpg",
+            BackGray : "http://KORESWEBSERVERAPP//ikloudProImages//20201029//4//8880//1_015//1_Back.jpg",
+            FrontTiff : "http://KORESAPPSERVER:19443//ProOwImageServer_NG//20200201//4//169//1_0260//1_Front.tif",
+            BackTiff : "http://KORESAPPSERVER:19443//ProOwImageServer_NG//20200201//4//169//1_0260//1_Back.tif",
+        });
+        SorterData.push({
+            MICR: "nm",
+            InstrumentType: "S",
+            DocType: "B",
+            transCodeMICR: "16",
+            IQAString: "220222222222222222022222222222222202222222222222",
+            SlipNo: "1",
+            IQAFlag: "0",
+            SanMICR: "000356",
+            SortCode: "125002056",
+            DocNo: 1,
+            ChequeNoMICR: "706533",
+            ClearingType: "01",
+            FrontGray: "http://KORESWEBSERVERAPP//ikloudProImages//20201029//4//8880//1_015//1_Front.jpg",
+            BackGray: "http://KORESWEBSERVERAPP//ikloudProImages//20201029//4//8880//1_015//1_Back.jpg",
+            FrontTiff: "http://KORESAPPSERVER:19443//ProOwImageServer_NG//20200201//4//169//1_0260//1_Front.tif",
+            BackTiff: "http://KORESAPPSERVER:19443//ProOwImageServer_NG//20200201//4//169//1_0260//1_Back.tif",
+        });
+       // var dt = "success";
+        $.ajax({
+            type: 'POST',
+            //url: "/Scanner/Test5",
+            url: "http://localhost:59917/Scanner/Test5",
+            //url: "http://localhost:2202/api/Scanner/insertScanData",
+            //crossDomain: true,
+            data: JSON.stringify(SorterData),
+            datatype: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                alert("ok");
+
+            }
+        });
+    }
+
+</script>

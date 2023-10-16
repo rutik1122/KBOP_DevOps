@@ -1,0 +1,168 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@*@model IEnumerable<iBAS.Models.UserMaster>*@
+@model IPagedList<iBAS.Models.UserMaster>
+
+@{
+    ViewBag.Title = "UserList";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+
+        try {
+            debugger;
+            var searchBy = Request.QueryString["SearchBy"];
+            debugger;
+            var data = Request.QueryString["data"];
+        }
+        catch {
+            debugger;
+        }
+    });
+
+
+    function ResetFilter() {
+        var rooturl = '@Url.Content("~/")';
+
+        window.open(rooturl + "UserManagement/UserList", "_self");
+    }
+
+
+    function CreateUserPage() {
+        var rooturl = '@Url.Content("~/")';
+
+        window.open(rooturl + "UserManagement/CreateUser", "_self");
+    }
+
+
+    function SearchBy() {
+        debugger;
+        var sBy = document.getElementById("SearchBy").value;
+        var sVal = document.getElementById("SearchByVal").value;
+
+        if (sBy == "SearchBySelect") {
+            alert("Select Filter By!");
+            return false;
+        }
+        else if (sVal == null || sVal == "") {
+            alert("Enter Value to search by!");
+            document.getElementById("SearchByVal").focus();
+            return false;
+        }
+
+        var rooturl = '@Url.Content("~/")';
+
+        window.open(rooturl + "UserManagement/UserList?SearchBy=" + sBy + "&data=" + sVal, "_self");
+    }
+
+
+</script>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                User Management
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    User List
+                </small>
+            </h1>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-sm-1">
+                    <label><b>Filter</b></label>
+                </div>
+                <div class="col-sm-1">
+                    <select id="SearchBy" >
+                        <option id="SearchBySelect" value="SearchBySelect">----Select----</option>
+                        <option id="loginid" value="loginid">Login Id</option>
+                        <option id="firstname" value="firstname">First Name</option>
+                        <option id="lastname" value="lastname">Last Name</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <input id="SearchByVal" name="SearchByVal" />
+                </div>
+                <div class="col-sm-1">
+                    <input type="button" id="btnSearchBy" value="Search" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 75px;" onclick="SearchBy();" />
+                </div>
+                <div class="col-sm-1">
+                    <input type="button" id="btnResetFilter" value="Reset" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 75px;" onclick="ResetFilter();" />
+                </div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-2">
+                    <input type="button" id="btnCreateUser" value="Create User" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="CreateUserPage();" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().LoginId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().UserType)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().AccessLevel)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().Status)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LoginId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AccessLevel)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+                @Html.PagedListPager(Model, page => Url.Action("UserList", new { page, SearchBy = Request.QueryString["SearchBy"], data = Request.QueryString["data"] }))
+
+            </div>
+        </div>
+    </div>
+</div>

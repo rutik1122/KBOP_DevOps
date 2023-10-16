@@ -1,0 +1,512 @@
+D:\WebApi\iBAS\bin\iBAS.dll.config
+D:\WebApi\iBAS\bin\iBAS.dll
+D:\WebApi\iBAS\bin\iBAS.pdb
+D:\WebApi\iBAS\bin\Antlr3.Runtime.dll
+D:\WebApi\iBAS\bin\EntityFramework.dll
+D:\WebApi\iBAS\bin\EntityFramework.SqlServer.dll
+D:\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.dll
+D:\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.dll
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.dll
+D:\WebApi\iBAS\bin\Microsoft.Web.Infrastructure.dll
+D:\WebApi\iBAS\bin\Newtonsoft.Json.dll
+D:\WebApi\iBAS\bin\Owin.dll
+D:\WebApi\iBAS\bin\System.Web.Helpers.dll
+D:\WebApi\iBAS\bin\System.Web.Mvc.dll
+D:\WebApi\iBAS\bin\System.Web.Optimization.dll
+D:\WebApi\iBAS\bin\System.Web.Razor.dll
+D:\WebApi\iBAS\bin\System.Web.WebPages.Deployment.dll
+D:\WebApi\iBAS\bin\System.Web.WebPages.dll
+D:\WebApi\iBAS\bin\System.Web.WebPages.Razor.dll
+D:\WebApi\iBAS\bin\WebGrease.dll
+D:\WebApi\iBAS\bin\System.Web.Helpers.xml
+D:\WebApi\iBAS\bin\System.Web.Mvc.xml
+D:\WebApi\iBAS\bin\System.Web.Optimization.xml
+D:\WebApi\iBAS\bin\System.Web.Razor.xml
+D:\WebApi\iBAS\bin\System.Web.WebPages.xml
+D:\WebApi\iBAS\bin\System.Web.WebPages.Deployment.xml
+D:\WebApi\iBAS\bin\System.Web.WebPages.Razor.xml
+D:\WebApi\iBAS\bin\Antlr3.Runtime.pdb
+D:\WebApi\iBAS\bin\Newtonsoft.Json.xml
+D:\WebApi\iBAS\bin\EntityFramework.xml
+D:\WebApi\iBAS\bin\EntityFramework.SqlServer.xml
+D:\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.xml
+D:\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.xml
+D:\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\WebApi\iBAS\obj\Debug\iBAS.dll
+D:\WebApi\iBAS\obj\Debug\iBAS.pdb
+D:\WebApi\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+C:\NI\Running Project\WebApi\iBAS\bin\iBAS.dll.config
+C:\NI\Running Project\WebApi\iBAS\bin\iBAS.dll
+C:\NI\Running Project\WebApi\iBAS\bin\iBAS.pdb
+C:\NI\Running Project\WebApi\iBAS\bin\Antlr3.Runtime.dll
+C:\NI\Running Project\WebApi\iBAS\bin\EntityFramework.dll
+C:\NI\Running Project\WebApi\iBAS\bin\EntityFramework.SqlServer.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Newtonsoft.Json.dll
+C:\NI\Running Project\WebApi\iBAS\bin\Owin.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Helpers.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Mvc.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Optimization.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Razor.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.WebPages.Deployment.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.WebPages.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.WebPages.Razor.dll
+C:\NI\Running Project\WebApi\iBAS\bin\WebGrease.dll
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Helpers.xml
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Mvc.xml
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Optimization.xml
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.Razor.xml
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.WebPages.xml
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.WebPages.Deployment.xml
+C:\NI\Running Project\WebApi\iBAS\bin\System.Web.WebPages.Razor.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Antlr3.Runtime.pdb
+C:\NI\Running Project\WebApi\iBAS\bin\Newtonsoft.Json.xml
+C:\NI\Running Project\WebApi\iBAS\bin\EntityFramework.xml
+C:\NI\Running Project\WebApi\iBAS\bin\EntityFramework.SqlServer.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.xml
+C:\NI\Running Project\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\NI\Running Project\WebApi\iBAS\obj\Debug\iBAS.dll
+C:\NI\Running Project\WebApi\iBAS\obj\Debug\iBAS.pdb
+D:\new WebApi\WebApi\iBAS\bin\iBAS.dll.config
+D:\new WebApi\WebApi\iBAS\bin\iBAS.dll
+D:\new WebApi\WebApi\iBAS\bin\iBAS.pdb
+D:\new WebApi\WebApi\iBAS\bin\Antlr3.Runtime.dll
+D:\new WebApi\WebApi\iBAS\bin\EntityFramework.dll
+D:\new WebApi\WebApi\iBAS\bin\EntityFramework.SqlServer.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.dll
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Web.Infrastructure.dll
+D:\new WebApi\WebApi\iBAS\bin\Newtonsoft.Json.dll
+D:\new WebApi\WebApi\iBAS\bin\Owin.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Helpers.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Mvc.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Optimization.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Razor.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.WebPages.Deployment.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.WebPages.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.WebPages.Razor.dll
+D:\new WebApi\WebApi\iBAS\bin\WebGrease.dll
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Helpers.xml
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Mvc.xml
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Optimization.xml
+D:\new WebApi\WebApi\iBAS\bin\System.Web.Razor.xml
+D:\new WebApi\WebApi\iBAS\bin\System.Web.WebPages.xml
+D:\new WebApi\WebApi\iBAS\bin\System.Web.WebPages.Deployment.xml
+D:\new WebApi\WebApi\iBAS\bin\System.Web.WebPages.Razor.xml
+D:\new WebApi\WebApi\iBAS\bin\Antlr3.Runtime.pdb
+D:\new WebApi\WebApi\iBAS\bin\Newtonsoft.Json.xml
+D:\new WebApi\WebApi\iBAS\bin\EntityFramework.xml
+D:\new WebApi\WebApi\iBAS\bin\EntityFramework.SqlServer.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.xml
+D:\new WebApi\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\new WebApi\WebApi\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+D:\new WebApi\WebApi\iBAS\obj\Debug\iBAS.dll
+D:\new WebApi\WebApi\iBAS\obj\Debug\iBAS.pdb
+C:\NI\Running Project\WebApi\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+D:\MINAZ\WebApi\iBAS\bin\iBAS.dll.config
+D:\MINAZ\WebApi\iBAS\bin\iBAS.dll
+D:\MINAZ\WebApi\iBAS\bin\iBAS.pdb
+D:\MINAZ\WebApi\iBAS\bin\Antlr3.Runtime.dll
+D:\MINAZ\WebApi\iBAS\bin\EntityFramework.dll
+D:\MINAZ\WebApi\iBAS\bin\EntityFramework.SqlServer.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.dll
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Web.Infrastructure.dll
+D:\MINAZ\WebApi\iBAS\bin\Newtonsoft.Json.dll
+D:\MINAZ\WebApi\iBAS\bin\Owin.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Helpers.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Mvc.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Optimization.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Razor.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.WebPages.Deployment.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.WebPages.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.WebPages.Razor.dll
+D:\MINAZ\WebApi\iBAS\bin\WebGrease.dll
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Helpers.xml
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Mvc.xml
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Optimization.xml
+D:\MINAZ\WebApi\iBAS\bin\System.Web.Razor.xml
+D:\MINAZ\WebApi\iBAS\bin\System.Web.WebPages.xml
+D:\MINAZ\WebApi\iBAS\bin\System.Web.WebPages.Deployment.xml
+D:\MINAZ\WebApi\iBAS\bin\System.Web.WebPages.Razor.xml
+D:\MINAZ\WebApi\iBAS\bin\Antlr3.Runtime.pdb
+D:\MINAZ\WebApi\iBAS\bin\Newtonsoft.Json.xml
+D:\MINAZ\WebApi\iBAS\bin\EntityFramework.xml
+D:\MINAZ\WebApi\iBAS\bin\EntityFramework.SqlServer.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.xml
+D:\MINAZ\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\MINAZ\WebApi\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+D:\MINAZ\WebApi\iBAS\obj\Debug\iBAS.dll
+D:\MINAZ\WebApi\iBAS\obj\Debug\iBAS.pdb
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\iBAS.dll.config
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\iBAS.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\iBAS.pdb
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Antlr3.Runtime.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\EntityFramework.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\EntityFramework.SqlServer.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Newtonsoft.Json.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Owin.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Net.Http.Formatting.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Cors.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Helpers.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Http.Cors.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Http.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Mvc.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Optimization.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Razor.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.WebPages.Deployment.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.WebPages.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.WebPages.Razor.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\WebGrease.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Newtonsoft.Json.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Net.Http.Formatting.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Http.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Http.Cors.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Helpers.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Mvc.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Optimization.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.Razor.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.WebPages.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.WebPages.Deployment.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\System.Web.WebPages.Razor.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Antlr3.Runtime.pdb
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\EntityFramework.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\EntityFramework.SqlServer.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Core.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Facebook.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Cookies.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.OAuth.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Google.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.Twitter.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\obj\Debug\iBAS.dll
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\obj\Debug\iBAS.pdb
+C:\NI\Running Project\Repo\iBAS\WebApi\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+D:\GitHubRepository\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\Submit(Code review)\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\UATPraveen\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\iBASUATCode\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+C:\Users\saching.KORES-INDIA\Desktop\NewDesigniBAS\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+C:\Users\meraj\Downloads\iBASUAT (1)\iBASUAT\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll.config
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\iBAS.pdb
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\EPPlus.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.pdb
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.pdb
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\ExcelDataReader.DataSet.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.IO.RecyclableMemoryStream.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Newtonsoft.Json.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Npgsql.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Net.Http.Formatting.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\System.Threading.Tasks.Extensions.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\bin\Microsoft.Web.Infrastructure.xml
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.csprojResolveAssemblyReference.cache
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.dll
+D:\NI\Running Project\Repo\iBAS\iBAS-Web-Application-iBAS-Master\iBAS\obj\Debug\iBAS.pdb

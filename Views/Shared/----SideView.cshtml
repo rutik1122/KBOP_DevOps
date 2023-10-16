@@ -1,0 +1,162 @@
+﻿
+<script src="~/Scripts/Data.js"></script>
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var popup = "";
+    var recipt = "no";
+    var Submit = "";
+    var flag = "";
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    //var gusername = "MERAJ";
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    function getSubmit() {
+        debugger;
+        var TypeTran = localStorage.getItem("typeOfTran");
+        if (TypeTran == "Deposit") {
+            Submit = "DepositVoucher";
+        }
+        if (TypeTran == "WithDraw") {
+            Submit = "WithVoucher";
+        }
+        if (TypeTran == "CTS") {
+            Submit = "ChequeVoucher";
+        }
+        if (TypeTran == "TC") {
+            Submit = "TransferCheque";
+        }
+        if (Submit == "DepositVoucher" || Submit == "WithVoucher" || Submit == "ChequeVoucher" || Submit == "TransferCheque") {
+            if (Submit == "DepositVoucher") {
+                var ProcessType = "Voucher";
+                flag = "Cash";
+            }
+            if (Submit == "WithVoucher") {
+                var ProcessType = "cheque";
+                flag = "With";
+            }
+            if (Submit == "ChequeVoucher") {
+                var ProcessType = "cheque";
+                flag = "Cheque";
+            }
+            if (Submit == "TransferCheque") {
+                var ProcessType = "cheque";
+                flag = "TranCheque";
+            }
+            var y = "getvoucherdetails";
+            $.ajax({
+            // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+                url: x + y ,
+               // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+                headers: authHeaders,
+                type: 'POST',
+                data: { 'pType': ProcessType, 'Intellerid': gusername },
+                success: getSuccessVoucher,
+                error: getError
+            });
+        }
+
+    }
+
+    //added by me
+    //function goBackk() {
+    //    var url = rooturl + "Home/Index";
+    //    window.location.href = url;
+    //}
+
+
+   
+</script>
+
+<div class="row" style="font-size:small;">
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-sm-5">
+            <label>
+                Account Number:
+            </label>
+        </div>
+        <div class="col-sm-7">
+            <input id="AccountNo" style="width:130px; height: 25px;" maxlength="16" />
+            <button class="btn-sm" style="background-color:black;color:white;font-size: x-small;margin-left: -5px;padding: 4px 10px 2px 11px;" onclick="GetPayeee(AccountNo.value,'C');">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 10px">
+        <div class="col-sm-3">
+            @*by anandi*@
+            @*<input type="button" id="btnback" value="home" class="btn" style="background-color:black;color:white;font-size: x-small;" onclick="goback();" />*@ 
+            @*<input type="button" id="btnGoBack" value="home" class="btn-sm" style="background-color:black;color:white;font-size: x-small;" onclick="goBackk();" />*@
+        </div>
+        <div class="col-sm-3">
+            @*<input type="checkbox" id="returncash" >
+            <label for="vehicle1" id="returncash1"> out</label>*@
+            <input type="button" id="btnReset" value="Reset" class="btn" style="background-color:black;color:white;font-size: x-small;" onclick="getReset();" />
+        </div>
+        <div class="col-sm-4">
+            <input type="button" id="btnGetVoucher" value="Get Voucher Details" style="background-color:black;color:white;font-size: x-small;" class="btn" onclick="getSubmit('WithVoucher');" />
+            @*anandi*@
+            <input type="button" id="btngetvault" value="Get Cash Details" style="background-color:black;color:white;font-size: x-small;" class="btn" onclick="getSubmit('WithVoucher');" />
+        </div>       
+    </div>
+    <div id="Payeeee" class="col-sm-12" style="padding-top: 10px">
+        <select id="PayeeName" style="width: 300px;"></select>
+    </div>
+    <div class="col-sm-12" style="padding-top: 10px">
+        <div class="col-sm-12" style="background-color: rgb(242, 242, 242); height:250px">
+            <div class="col-sm-12">
+                Name:<label id="FinName"></label>
+            </div>
+            <div class="col-sm-12">
+                Scheme Code:<label id="FinScheme"></label>
+            </div>
+            <div class="col-sm-12">
+                Freeze Code:<label id="FinFreeze"></label>
+            </div>
+            <div class="col-sm-12">
+                Mode Of Operation:<label id="FinMOP"></label>
+            </div>
+            <div class="col-sm-12">
+                Account Status:<label id="FinAccountStatus"></label>
+            </div>
+            <div class="col-sm-12">
+                NRE Flag:<label id="FinNRE"></label>
+            </div>
+            <div class="col-sm-12">
+                Scheme Type:<label id="FinSchemeType"></label>
+            </div>
+            <div class="col-sm-12">
+                Account Ownership:<label id="FinAccOwner"></label>
+            </div>
+            <div class="col-sm-12">
+                Amount:<label id="FinAmount"></label>
+            </div>
+            <div class="col-sm-12">
+                Mobile Number:<label id="FinMobNo"></label>
+            </div>
+            <div class="col-sm-12">
+                PAN No:<label id="FinPAN"></label>
+            </div>
+            <div class="col-sm-12">
+                Date:<label id="FinDate"></label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" style="padding-top: 10px;padding-bottom:10px">
+        @*<button class="btn" style="background-color:black;color:white;font-size: x-small;">
+            OK
+        </button>*@
+        @*<button class="btn" style="background-color:black;color:white;font-size: x-small;">
+            Close
+        </button>*@
+        <input type="button" id="btnSubmit" value="Submit" class="btn" style="background-color:black;color:white;font-size: x-small;"  onclick="SubmitData();" />
+        <input type="button" id="btnValid" value="Get Cash" class="btn " style="background-color:black;color:white;font-size: x-small; display:none" onclick="getCash();" />
+        
+    </div>
+</div>

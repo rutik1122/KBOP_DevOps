@@ -1,0 +1,471 @@
+﻿
+@model iBAS.Models.Branch_Master
+
+
+@{
+    ViewBag.Title = "DeleteWithReject";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/BranchMaster.js"></script>
+
+<input id="KVal" value="@Session["KVal"]" hidden />
+<input id="uid" value="@Session["uid"]" hidden />
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" id="selectedBranchValue" value="@ViewBag.selectedDomainId" />
+    <input type="hidden" id="EncryptedData" name="EncryptedData" />
+
+    @Html.AntiForgeryToken()
+    <div class="container">
+
+        <div class="row mb-3">
+            <div class="col">
+                <div class="card overflow-hidden">
+                    <div class="card-header bg-light py-2">
+                        <h5 class="mb-0 text-center">Delete Branch</h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+
+                        <div class="row mb-4 mt-4">
+                            @Html.HiddenFor(model => model.CreatedBy)
+                        </div>
+                        <div class="row mb-4 mt-4">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+                                @*<div class="col-md-9">*@
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                @*</div>*@
+                            </div>
+
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.Address1, htmlAttributes: new { @class = "control-label col-md-3" })
+
+                                @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                        <div class="row mb-4 mt-2">
+
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "control-label col-md-3" })
+
+                                @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.IfscCode, htmlAttributes: new { @class = "control-label col-md-3" })
+
+                                @Html.EditorFor(model => model.IfscCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.IfscCode, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.MicrCode, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                @Html.EditorFor(model => model.MicrCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.MicrCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row mb-4 mt-2">
+
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.DomId, "Domain", htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                @*@Html.DropDownList("Branch", (List<SelectListItem>)ViewBag.Branch, new { @class = "form-control" })*@
+                                @Html.DropDownList("Branch", new SelectList((List<SelectListItem>)ViewBag.Branch, "Value", "Text"), new { @class = "form-control", @disabled = "disabled" })
+
+                                @*@Html.DropDownList("Branch",
+                                    new SelectList((List<SelectListItem>)ViewBag.Branch, "Value", "Text",
+                                    ((List<SelectListItem>)ViewBag.Branch).FirstOrDefault(x => x.Text == ViewBag.selectedDomain).Value),
+                                    new { @class = "form-control" })*@
+                                @*@Html.EditorFor(model => model.DomId, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DomId, "", new { @class = "text-danger" })*@
+
+                            </div>
+
+                            <div class="col-lg-4">
+                                @Html.LabelFor(model => model.Scan_cutoffTime, "CutOff Time", htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                @Html.EditorFor(model => model.Scan_cutoffTime, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Scan_cutoffTime, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="row mb-1 mt-6">
+                                <div class="d-grid gap-2 d-md-block text-center mb-3">
+
+                                    <input type="button" value="Accept" class="btn btn-success btn-sm px-4" href="#authenticationmodal" data-bs-toggle="modal" onclick="ValidateData()" />
+
+                                    <input type="button" value="Reject" class="btn btn-danger btn-sm px-4" href="#authenticationReject" data-bs-toggle="modal" onclick="Reject()" />
+
+                                    @Html.ActionLink("Back", "BranchListChecker", null, new { @class = "btn btn-secondary btn-sm px-4", style = "color:white" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+                <div class="modal-content border-0">
+                    <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                        <div class="position-relative z-1" data-bs-theme="light">
+                            <h4 class="mb-0 text-white" id="authentication-modal-label">Message Box</h4>
+                        </div>
+                        @*<button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                            aria-label="Close"></button>*@
+                    </div>
+                    <div class="modal-body py-2 px-1">
+                        <div id="div_create_question" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                            <h5 class="text-center">
+                                <strong class="me-auto">Do you want to Accept this Branch?</strong>
+                            </h5>
+                        </div>
+                        <table id="tbl_verf_fail" class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th class="text-wrap">Error Msg</th>
+                                    <td class="text-wrap">
+                                        <span id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table id="tbl_verf_result" class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th class="text-wrap">Response</th>
+                                    <td class="text-wrap">
+                                        @*@if (ViewBag.Message != null)
+                                            {*@
+                                        <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;">
+                                            @*<b>@ViewBag.Message</b>*@
+                                        </lable>
+                                        @*}*@
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                            @*<div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="PushData()">Create</a></div>*@
+                            <div class="col-sm-6">
+                                <input type="submit" value="Yes" onclick="EncryptAndSubmit()" class="btn btn-primary btn-sm d-block w-100" id="SuccessData" />
+                            </div>
+                            @*<input type="submit" value="Create" class="btn btn-primary btn-sm px-4 me-2" />*@
+
+                            <div class="col-sm-6">
+                                <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                                   aria-label="Close">NO</a>
+                            </div>
+                        </div>
+                        <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                            <label class="col-sm-10"></label>
+                            <div id="btn_postdata" class="col-sm-2">
+                                <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                            </div>
+                        </div>
+                        <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                            <label class="col-sm-10"></label>
+                            <div id="btn_postdata" class="col-sm-2">
+                                <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="reloadpage()">OK</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="authenticationReject" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+                <div class="modal-content border-0">
+                    <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                        <div class="position-relative z-1" data-bs-theme="light">
+                            <h4 class="mb-0 text-white" id="authentication-modal-label">Message Box</h4>
+                        </div>
+                        @*<button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                            aria-label="Close"></button>*@
+                    </div>
+                    <div class="modal-body py-2 px-1">
+                        <div id="div_create_question" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                            <h5 class="text-center">
+                                <strong class="me-auto">Do you want to Reject this Request?</strong>
+                            </h5>
+                        </div>
+
+                        <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                            @*<div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="PushData()">Create</a></div>*@
+
+                            <div class="col-sm-6">
+                                <a href="@Url.Action("Delete","BranchMaster",new { id = Model.Id,status=Model.Status })">
+                                    <input type="button" value="Yes" class="btn btn-primary btn-sm d-block w-100" data-bs-toggle="modal" />
+                                    @*<input type="submit" value="Yes" class="btn btn-primary btn-sm d-block w-100" id="SuccessData" />*@
+                                    @*<div class="col-sm-6" hidden>
+                                            <input type="submit" value="Yes" class="btn btn-primary btn-sm d-block w-100" id="SuccessData" />
+                                        </div>*@
+
+                                </a>
+                                @*<input type="submit" value="Yes" onclick="EncryptAndSubmitReject()" class="btn btn-primary btn-sm d-block w-100" id="SuccessData" />*@
+                            </div>
+
+                            @*<div class="col-sm-6" hidden>
+                                    <input type="submit" value="Yes" class="btn btn-primary btn-sm d-block w-100" id="SuccessData" />
+                                </div>*@
+                            @*<input type="submit" value="Create" class="btn btn-primary btn-sm px-4 me-2" />*@
+
+                            <div class="col-sm-6">
+                                <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                                   aria-label="Close">NO</a>
+                            </div>
+                        </div>
+
+                        <!--<div id="div_submit_pass" class="row g-2 mt-2 mx-4">-->
+                        @*<div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="PushData()">Create</a></div>*@
+                        <!--<div class="col-sm-6">
+                            <input type="submit" value="Yes" class="btn btn-primary btn-sm d-block w-100" id="SuccessData" />
+                        </div>-->
+                        @*<input type="submit" value="Create" class="btn btn-primary btn-sm px-4 me-2" />*@
+
+                        <!--<div class="col-sm-6">
+                                <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                                   aria-label="Close">NO</a>
+                            </div>
+                        </div>-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+@{
+    var message = TempData["success"] ?? string.Empty;
+}
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+
+    var x = '@ViewBag.URL';
+    var message = '@message';
+    if (message)
+       alert(message);
+
+    $(document).ready(function () {
+        debugger;
+        var branchSelectedValue = document.getElementById('selectedBranchValue').value;
+        document.getElementById('Branch').selectedIndex = branchSelectedValue;
+
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+    function EncryptAndSubmit() {
+
+        debugger;
+        $("#ProcessingBar").hide();
+
+        //$("#tbl_verf_fail").show();
+        $("#tbl_verf_fail").show();
+        $("#tbl_verf_result").hide();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").show();
+        $("#div_response_success").hide();
+        $("#div_create_question").hide();
+
+
+
+        // Get the form data
+        debugger;
+        const id = document.getElementById("Id").value;
+        const code = document.getElementById("Code").value;
+        const name = document.getElementById("Name").value;
+        const address1 = document.getElementById("Address1").value;
+        const address2 = document.getElementById("Address2").value;
+        const ifscCode = document.getElementById("IfscCode").value;
+        const micrCode = document.getElementById("MicrCode").value;
+        const DomIdElement = document.getElementById("Branch").value;
+        const createdBy = document.getElementById("uid").value;
+        const modifiedBY = document.getElementById("uid").value;
+        const approvedBy = document.getElementById("uid").value;
+        const scan_cutoffTime = document.getElementById("Scan_cutoffTime").value;
+        // Add other form field values as needed
+
+        // Create a JSON object with the form data
+        const formData = {
+            asdrf: "1234",
+            Id: id,
+            Code: code,
+            Name: name,
+            Address1: address1,
+            Address2: address2,
+            IfscCode: ifscCode,
+            MicrCode: micrCode,
+            DomId: DomIdElement,
+            CreatedBy: createdBy,
+            ModifiedBY: modifiedBY,
+            ApprovedBY: approvedBy,
+            Scan_cutoffTime: scan_cutoffTime,
+
+        };
+
+        document.getElementById("Id").value = "";
+        document.getElementById("Code").value = "";
+        document.getElementById("Name").value = "";
+        document.getElementById("Address1").value = "";
+        document.getElementById("Address2").value = "";
+        document.getElementById("IfscCode").value = "";
+        document.getElementById("MicrCode").value = "";
+        //document.getElementById("DomId").value = "";
+        document.getElementById("Scan_cutoffTime").value = "";
+
+
+
+
+
+        var kVal = document.getElementById("KVal").value;
+        var key = CryptoJS.enc.Utf8.parse(kVal);
+        var iv = CryptoJS.enc.Utf8.parse(kVal);
+
+        // Convert the JSON data to a string
+        const formDataString = JSON.stringify(formData);
+
+        var encrypted_data = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(formDataString), key, { keySize: 128 / 8, iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString();
+        //const encryptedData = CryptoJS.AES.encrypt(formDataString, secretKey).toString();
+
+        // Set the encrypted data in the hidden input field
+        document.getElementById("EncryptedData").value = encrypted_data;
+
+        // Submit the form
+        document.forms[0].submit();
+
+        $("#tbl_verf_fail").hide();
+        $("#tbl_verf_result").show();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").hide();
+        $("#div_response_success").hide();
+        $("#div_create_question").hide();
+        document.getElementById("successMsg").innerHTML = "Processing Request...";
+    }
+
+
+    function EncryptAndSubmitReject() {
+
+        debugger;
+        $("#ProcessingBar").hide();
+
+        //$("#tbl_verf_fail").show();
+        $("#tbl_verf_fail").show();
+        $("#tbl_verf_result").hide();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").show();
+        $("#div_response_success").hide();
+        $("#div_create_question").hide();
+
+
+
+         var id = @Model.Id;
+        var status = "@Model.Status";
+
+        const formData = {
+            asdrf: "1234",
+            Id: id,
+            Status:status
+        };
+
+        document.getElementById("Id").value = "";
+        document.getElementById("Code").value = "";
+        document.getElementById("Name").value = "";
+        document.getElementById("Address1").value = "";
+        document.getElementById("Address2").value = "";
+        document.getElementById("IfscCode").value = "";
+        document.getElementById("MicrCode").value = "";
+        //document.getElementById("DomId").value = "";
+        document.getElementById("Scan_cutoffTime").value = "";
+
+
+
+
+
+        var kVal = document.getElementById("KVal").value;
+        var key = CryptoJS.enc.Utf8.parse(kVal);
+        var iv = CryptoJS.enc.Utf8.parse(kVal);
+
+        // Convert the JSON data to a string
+        const formDataString = JSON.stringify(formData);
+
+        var encrypted_data = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(formDataString), key, { keySize: 128 / 8, iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString();
+        //const encryptedData = CryptoJS.AES.encrypt(formDataString, secretKey).toString();
+
+        // Set the encrypted data in the hidden input field
+        //document.getElementById("EncryptedData").value = encrypted_data;
+
+
+        //document.forms[0].action = "/Delete/BranchMaster"
+
+        //// Submit the form
+        //document.forms[0].submit();
+
+        var y = "DeleteBranch";
+
+        debugger;
+
+        $.ajax({
+            type: "POST",
+            url: x + y,
+            data: { Request_Data: encrypted_data },
+            success: RejectSuccess,
+            error: ErrorApiMessage
+        });
+
+    }
+
+    function RejectSuccess() {
+        $("#tbl_verf_fail").hide();
+        $("#tbl_verf_result").show();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").hide();
+        $("#div_response_success").hide();
+        $("#div_create_question").hide();
+        document.getElementById("successMsg").innerHTML = "Processing Request...";
+    }
+
+    function ErrorApiMessage() {
+
+    }
+</script>
+
+
+
+
+

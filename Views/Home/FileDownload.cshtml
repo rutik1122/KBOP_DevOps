@@ -1,0 +1,343 @@
+﻿
+@{
+    ViewBag.Title = "CheckerWithdrawList";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+
+@*<script src="~/Scripts/Data.js"></script>*@
+
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    function goBack() {
+        var url = rooturl + "Home/Index";
+        window.location.href = url;
+    }
+
+    function fileDownload() {
+        //var url = rooturl + "Home/Index";
+        //window.location.href = url;
+        debugger;
+        //var y = "XmlFileRequest";
+
+        var y = "XmlFileRequest_AU";
+        var id = document.getElementById("uid").value;
+        //User04 --starts 2023/06/22
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: { tellerid: id },
+            success: getSuccessDownload,
+            error: getError
+        });
+        //User04 --ends
+
+        //$.ajax({
+
+        //    //url: "http://localhost:8198/api/Scanner/" + y,
+        //    url: x + y,
+        //    //headers: authHeaders,
+        //    type: 'POST',
+        //    //data: {},
+        //    success: function (data) {
+        //        debugger;
+        //        //console.log(data);
+        //        //var xmlDocument = $($.parseXML('<?xml version="1.0" encoding="utf-8" ?><roots><item>1</item><item>2</item></roots>'));
+        //        var xmlDocument = $($.parseXML(data));
+        //        var $downloadAnchor = $("<a/>", {
+        //            href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument[0]),
+        //            download: "MyXML.xml"
+
+        //        });
+
+        //        $downloadAnchor.text("Click me to download XML");
+        //        //$("body").append($downloadAnchor);
+        //        $("downloadLink").append($downloadAnchor);
+        //    },
+        //    error: getError
+        //});
+        //href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument.context),
+
+
+        //e.preventDefault();
+    }
+
+    //User04 --starts 2023/06/22
+    function getSuccessDownload(result)
+    {
+        debugger;
+        alert(result);
+    }
+    //User04 -end
+
+    function getError(result) {
+        debugger;
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+
+
+        }
+    }
+
+
+    //------------------added by me--------------------------------------------------
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- by me----------------------------------------------------------
+</script>
+
+
+
+@{
+    ViewBag.Title = "CheckerWithdrawList";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Scripts/Data.js"></script>
+
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    function goBack() {
+        var url = rooturl + "Home/Index";
+        window.location.href = url;
+    }
+
+    function fileDownload() {
+
+        //var url = rooturl + "Home/Index";
+        //window.location.href = url;
+        debugger;
+        //var y = "XmlFileRequest";
+        if (confirm("Do you want to download the file?")) {
+            var y = "XmlFileRequest_AU";
+            var id = document.getElementById("uid").value;
+            //User04 --starts 2023/06/22
+            $.ajax({
+                url: x + y,
+                //headers: authHeaders,
+                type: 'POST',
+                data: { tellerid: id },
+                success: getSuccessDownload,
+                error: getError
+            });
+        }
+        //User04 --ends
+
+        //$.ajax({
+
+        //    //url: "http://localhost:8198/api/Scanner/" + y,
+        //    url: x + y,
+        //    //headers: authHeaders,
+        //    type: 'POST',
+        //    //data: {},
+        //    success: function (data) {
+        //        debugger;
+        //        //console.log(data);
+        //        //var xmlDocument = $($.parseXML('<?xml version="1.0" encoding="utf-8" ?><roots><item>1</item><item>2</item></roots>'));
+        //        var xmlDocument = $($.parseXML(data));
+        //        var $downloadAnchor = $("<a/>", {
+        //            href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument[0]),
+        //            download: "MyXML.xml"
+
+        //        });
+
+        //        $downloadAnchor.text("Click me to download XML");
+        //        //$("body").append($downloadAnchor);
+        //        $("downloadLink").append($downloadAnchor);
+        //    },
+        //    error: getError
+        //});
+        //href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument.context),
+
+
+        //e.preventDefault();
+    }
+
+    //User04 --starts 2023/06/22
+    function getSuccessDownload(result)
+    {
+        debugger;
+        alert(result);
+    }
+    //User04 -end
+
+    function getError(result) {
+        debugger;
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+
+
+        }
+    }
+
+
+    //------------------added by me--------------------------------------------------
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- by me----------------------------------------------------------
+</script>
+
+@*<div class="main-content-inner">
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    CTS File Download
+                </h1>
+            </div>
+
+            <div class="page-content">
+                <div class="row" style="margin-left: .5%;">
+                    <label class="col-sm-1" style="font-size:15px"><b>File Type</b></label>
+                    <div class="col-sm-1">
+                        @Html.DropDownList("Download_Type", new List<SelectListItem>
+                        {
+                            new SelectListItem{ Text = "XML", Value = "01" },
+                            new SelectListItem{ Text = "TEXT", Value = "02" },
+                            new SelectListItem{ Text = "CSV", Value = "03" },
+                        })
+                    </div>
+                    <dib class="col-sm-1">
+                        <input type="button" id="btnFileDownload" value="Download" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="fileDownload();" />
+                    </dib>
+                </div>
+                <br />
+                <div class="row" style="padding:10px;">
+                    <span id="downloadLink"></span>
+                    <label id="loader" style="display:none"> <span style="color:red">  Loading...</span><img src="~/Content/images/progressss.gif" /></label>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@*<div class="row col-12 mb-3 my-0">
+        <div class="text-center">
+            <h3 class="mb-0 text-primary ">
+                <span class="bg-200 dark__bg-1100">CTS File Download</span>
+            </h3>
+        </div>
+    </div>*@
+
+@*<div class="row justify-content-center mb-3">
+        <div class="row justify-content-center mb-3">
+                <div class="col-xxl-4 col-lg-5 col-md-12 col-sm-12">
+                    <div class="card px-3 py-2">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div class="col-sm-12" style="text-align: center;">
+                                    <label style="font-size:15px;"><b>File Type</b></label>
+                                </div>
+                                <div class="col-sm-12" style="text-align: center;">
+                                    @Html.DropDownList("Download_Type", new List<SelectListItem>
+                                   {
+                                    new SelectListItem{ Text = "XML", Value = "01" },
+                                    new SelectListItem{ Text = "TEXT", Value = "02" },
+                                    new SelectListItem{ Text = "CSV", Value = "03" },
+                                   })
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="row justify-content-center">
+                                <div class="col-sm-4 text-center">
+                                    <input type="button" id="btnFileDownload" value="Download" class="btn btn-primary" style="font-size: 13px; width: 95px;" onclick="fileDownload();" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+
+
+    </div>*@
+<input id="uid" value="@Session["Login_Page_Id"]" hidden />
+<div class="row mb-3">
+    <div class="col">
+        <div class="card bg-100 shadow-none border">
+            <div class="row gx-0 flex-between-center">
+                <div class="col-sm-auto d-flex align-items-center">
+                    <img class="ms-n2" src="~/assets/images/crm-bar-chart.png" alt="" width="90" />
+                    <div>
+                        <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
+                        <h4 class="text-primary fw-bold mb-0">CTS<span class="text-info fw-medium"> File Download</span></h4>
+                    </div><img class="ms-n4 d-md-none d-lg-block" src="~/assets/images/crm-line-chart.png" alt="" width="150" />
+                </div>
+                <div class="col-md-auto p-3">
+                    <form class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <h5 class="text-700 mb-0">File Type</h5>
+                        </div>
+                        <div class="col-md-auto position-relative">
+                            @Html.DropDownList("Download_Type", new List<SelectListItem>
+                               {
+                                new SelectListItem{ Text = "XML", Value = "01" },
+                                new SelectListItem{ Text = "TEXT", Value = "02" },
+                                new SelectListItem{ Text = "CSV", Value = "03" },
+                               })
+                            <button type="button" class="btn btn-primary" onclick="fileDownload()">Download</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

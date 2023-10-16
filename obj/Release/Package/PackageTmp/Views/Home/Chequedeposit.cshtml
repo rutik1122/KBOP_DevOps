@@ -1,0 +1,72 @@
+﻿<div class="row text-center" style="padding-bottom:20px">
+    <h1 style="text-align:center">CHEQUE DEPOSIT</h1>
+</div>
+<div class="row" style="padding-bottom:20px">
+    <div class="col-sm-2">
+        <input type="button" id="btnBack" value="BACK" class="btn  btn-block btncolor" onclick="goBack();" />
+    </div>
+    <div class="col-sm-2">
+        <input type="button" id="btnReset" value="Reset" class="btn  btn-block btncolor" onclick="getReset();" />
+    </div>
+    <div class="col-sm-2">
+        <input type="button" id="btnGetVoucher" value="Get Voucher Details" class="btn  btn-block btncolor" onclick="getSubmit('ChequeVoucher');" />
+    </div>
+  
+    <div class="col-sm-2">
+        <input type="button" id="btnSubmit" value="Submit" class="btn  btn-block btncolor" onclick="getSubmit('SubmitCheque');" />
+    </div>
+</div>
+<div class="row text-center" style="padding-bottom:20px">
+    <label style="color:red;font:100" id="status"></label>
+</div>
+<div class="row text-center" style="padding-bottom:20px">
+    <label id="getresult"></label>
+</div>
+<div class="row text-center" style="padding-bottom:20px;padding-left:20px">
+    <table>
+        <tr>
+            <td>
+                <img style="display:none" height='350' width='700' id="FG" />
+            </td>
+            <td>
+                <table id="DenomDeatils" cellpadding="2" cellspacing="2" border="1" width="400px"></table>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="showresult" class="row text-center" style="padding-bottom:20px;padding-left:20px">
+    <table id="VoucherDetails" cellpadding="2" cellspacing="2" border="1" width="400px" style="overflow-y:scroll"></table>
+</div>
+<div class="row text-center" style="padding-bottom:55px;padding-left:20px">
+        <table id="CashDetails" cellpadding="2" cellspacing="2" border="1" width="400px">
+         </table>
+</div>
+
+
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';   
+
+    //------------------added by Anandi--------------------------------------------------
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- END----------------------------------------------------------
+
+</script>

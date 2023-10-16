@@ -1,0 +1,66 @@
+﻿<script src="~/Scripts/jquery-3.6.0.js"></script>
+@*<link href="~/Content/font-awsome-min.css" rel="stylesheet" />*@
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jqueryui.js")"></script>
+<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.datetimepicker.full.min.js")"></script>
+<script src="@Url.Content("~/Scripts/font.js")"></script>
+<script src="@Url.Content("~/Scripts/pdfmake.min.js")"></script>
+<script src="@Url.Content("~/Scripts/html2canvas.min.js")"></script>*@
+<script src="@Url.Content("~/Scripts/jquery.table2excel.min.js")"></script>
+<script src="@Url.Content("~/Scripts/JsPDF.js")"></script>
+@*<script src="~/Scripts/Data.js"></script>*@
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Search_Currency</title>
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-2">Select Date Range</div>
+        <div class="col-sm-2">From Date: </div>
+        <div class="col-sm-2">To Date: </div>
+    </div>
+    <div class="row">
+        <table id="datatable">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Img</th>
+            </tr>
+            <tr>
+                <td>qwerty</td>
+                <td>qwerty1</td>
+                <td>qwerty2</td>
+            </tr>
+            <tr>
+                <td>qwerty</td>
+                <td>qwerty1</td>
+                <td>qwerty2</td>
+            </tr>
+        </table>
+    </div>
+    <br /><br />
+    <div class="row">
+        <input type="button" id="btnExcel" value="Excel" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px; width: 69px;" onclick="exportExcel();" />
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    function exportExcel() {
+        debugger;
+        $("#datatable").table2excel({
+            filename: "Table.xls"
+        });
+    }
+</script>

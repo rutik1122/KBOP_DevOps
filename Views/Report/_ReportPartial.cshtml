@@ -1,0 +1,112 @@
+﻿
+@model IEnumerable<iBAS.Models.Transaction_CTSwise_Presentation>
+@{
+    // ViewBag.Title = "ListOfReports";
+    //  Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+<div class="card ms-3 py-1" id="partialViewContainer">
+
+
+    <table class="table">
+
+        <tr>
+
+            <th>
+                Sr. No.
+            </th>
+            <th>
+                UDK
+            </th>
+            <th style="width:200px;">
+                Process Date
+            </th>
+            <th>
+                Branch Code
+            </th>
+
+            <th>
+                Scan Node Id
+            </th>
+            <th>
+                Batch No
+            </th>
+            <th>
+                Batch_Seq No
+            </th>
+            <th>
+                Cheque No
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Sort Code
+            </th>
+            <th>
+                Trans Ref No
+            </th>
+            <th>
+                Account Number
+            </th>
+
+
+        </tr>
+
+        @{
+
+            int rowNumber = 1; // Initialize row number
+
+
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @rowNumber
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.sni_id)
+                    </td>
+
+                    <td style="width:200px;">
+                        @Html.DisplayFor(modelItem => item.input_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.branch_code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.machineserialno)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.count_id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.note_index)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.cheqno)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.chqamount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.sortcode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.transcode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.account_no)
+                    </td>
+
+                </tr>
+
+
+                rowNumber++; // Increment row number for the next row
+
+
+            }
+        }
+    </table>
+
+</div>

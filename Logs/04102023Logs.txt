@@ -1,0 +1,8 @@
+3:24 PM: Exception: LoginiBAS
+3:24 PM: StackTrace: CommonSettings data read
+3:24 PM: Exception: LoginiBAS
+3:24 PM: StackTrace: Role Mapping started
+3:24 PM: Exception: LoginiBAS
+3:24 PM: StackTrace: Data from Role Master table
+3:24 PM: Exception: LoginiBAS
+3:24 PM: StackTrace: Role Mapping completed

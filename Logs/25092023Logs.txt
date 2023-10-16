@@ -1,0 +1,22 @@
+3:04 PM: Exception: LoginiBAS
+3:04 PM: StackTrace: CommonSettings data read
+3:04 PM: Exception: LoginiBAS
+3:04 PM: StackTrace: Role Mapping started
+3:04 PM: Exception: LoginiBAS
+3:04 PM: StackTrace: Data from Role Master table
+3:04 PM: Exception: LoginiBAS
+3:04 PM: StackTrace: Role Mapping completed
+3:04 PM: Exception: ValidateSession
+3:04 PM: StackTrace: ----- started -----
+3:04 PM: Exception: ValidateSession
+3:04 PM: StackTrace: reading ds value
+3:04 PM: Exception: ValidateSession userid
+3:04 PM: StackTrace: uid:103
+3:04 PM: Exception: Validate Session Log
+3:04 PM: StackTrace: ---- result ----
+3:04 PM: Exception: DB session
+3:04 PM: StackTrace: Session ID: YvtQxEq4oIu0U6vShNoBMClU
+3:04 PM: Exception: Local session
+3:04 PM: StackTrace: Session ID: YvtQxEq4oIu0U6vShNoBMClU
+3:04 PM: Exception: Validate Session Log
+3:04 PM: StackTrace: ---- return true ----

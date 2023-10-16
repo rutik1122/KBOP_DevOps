@@ -1,0 +1,267 @@
+﻿@model iBAS.Models.Appsecpolicy_master
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+<script src="~/Scripts/AppSecMaster.js"></script>
+
+<input id="KVal" value="@Session["KVal"]" hidden />
+<input id="uid" value="@Session["uid"]" hidden />
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" id="EncryptedData" name="EncryptedData" />
+
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <form>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card overflow-hidden">
+                        <div class="card-header bg-light py-2">
+                            <h5 class="mb-0 text-center">Edit AppSecPolicy Master</h5>
+                        </div>
+
+                        <div class="card-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ID)
+                            <div class="row mb-4 mt-4">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Pwdexpirydays, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Pwdexpirydays, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Pwdexpirydays, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Minpwdlenghth, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Minpwdlenghth, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Minpwdlenghth, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Maxpwdlenghth, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Maxpwdlenghth, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Maxpwdlenghth, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Invalidattemtsallowed, htmlAttributes: new { @class = "control-label col-md-5" })
+
+                                    @Html.EditorFor(model => model.Invalidattemtsallowed, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Invalidattemtsallowed, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Deactivationdays, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Deactivationdays, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Deactivationdays, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                @*<div class="col-lg-4">
+                                        @Html.LabelFor(model => model.Updated_By, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                        @Html.EditorFor(model => model.Updated_By, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Updated_By, "", new { @class = "text-danger" })
+
+                                    </div>*@
+
+                                <div class="row mb-1 mt-6">
+                                    <div class="d-grid gap-2 d-md-block text-center mb-3">
+                                        <input type="button" value="Save" class="btn btn-primary btn-sm px-4 me-2" href="#authenticationmodal" data-bs-toggle="modal" onclick="ValidateAppsecData()" />
+                                        @Html.ActionLink("Back", "List", null, new { @class = "btn btn-secondary btn-sm px-4", style = "color:white" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+                    <div class="modal-content border-0">
+                        <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                            <div class="position-relative z-1" data-bs-theme="light">
+                                <h4 class="mb-0 text-white" id="authentication-modal-label">Message Box</h4>
+                            </div>
+                            @*<button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                                aria-label="Close"></button>*@
+                        </div>
+                        <div class="modal-body py-2 px-1">
+                            <div id="div_create_question" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                                <h5 class="text-center">
+                                    <strong class="me-auto">Do you want to Edit?</strong>
+                                </h5>
+                            </div>
+                            <table id="tbl_verf_fail" class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-wrap">Error Msg</th>
+                                        <td class="text-wrap">
+                                            <span id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table id="tbl_verf_result" class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-wrap">Response</th>
+                                        <td class="text-wrap">
+                                            <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;">@ViewBag.message</lable>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                                @*<div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="PushData()">Edit</a></div>*@
+                                <div class="col-sm-6">
+                                    <input type="submit" value="Edit" class="btn btn-primary btn-sm d-block w-100" onclick="EncryptAndSubmit()" />
+                                </div>
+                                @*<input type="submit" value="Create" class="btn btn-primary btn-sm px-4 me-2" />*@
+
+                                <div class="col-sm-6">
+                                    <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                                       aria-label="Close">Cancel</a>
+                                </div>
+                            </div>
+                            <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                                <label class="col-sm-10"></label>
+                                <div id="btn_postdata" class="col-sm-2">
+                                    <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                                </div>
+                            </div>
+                            <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                                <label class="col-sm-10"></label>
+                                <div id="btn_postdata" class="col-sm-2">
+                                    <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="reloadpage()">OK</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+}
+
+
+
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+    function EncryptAndSubmit() {
+
+        debugger;
+        $("#ProcessingBar").hide();
+
+        //$("#tbl_verf_fail").show();
+        $("#tbl_verf_fail").show();
+        $("#tbl_verf_result").hide();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").show();
+        $("#div_response_success").hide();
+        $("#div_create_question").hide();
+
+
+
+        // Get the form data
+        debugger;
+        const id = document.getElementById("ID").value;
+        const name = document.getElementById("Name").value;
+        const pwdexpirydays = document.getElementById("Pwdexpirydays").value;
+        const minpwdlenghth = document.getElementById("Minpwdlenghth").value;
+        const maxpwdlenghth = document.getElementById("Maxpwdlenghth").value;
+        const invalidattemtsallowed = document.getElementById("Invalidattemtsallowed").value;
+        const deactivationdays = document.getElementById("Deactivationdays").value;
+        var updatedby = document.getElementById("uid").value;
+
+        // Add other form field values as needed
+
+        // Create a JSON object with the form data
+        const formData = {
+            asdrf: "1234",
+            ID: id,
+            Name: name,
+            Pwdexpirydays: pwdexpirydays,
+            Minpwdlenghth: minpwdlenghth,
+            Maxpwdlenghth: maxpwdlenghth,
+            Invalidattemtsallowed: invalidattemtsallowed,
+            Deactivationdays: deactivationdays,
+            uid: updatedby,
+
+        };
+
+        document.getElementById("ID").value = "";
+        document.getElementById("Name").value = "";
+        document.getElementById("Pwdexpirydays").value = "";
+        document.getElementById("Minpwdlenghth").value = "";
+        document.getElementById("Maxpwdlenghth").value = "";
+        document.getElementById("Invalidattemtsallowed").value = "";
+        document.getElementById("Deactivationdays").value = "";
+        document.getElementById("uid").value = "";
+
+
+        var kVal = document.getElementById("KVal").value;
+        var key = CryptoJS.enc.Utf8.parse(kVal);
+        var iv = CryptoJS.enc.Utf8.parse(kVal);
+
+        // Convert the JSON data to a string
+        const formDataString = JSON.stringify(formData);
+
+        var encrypted_data = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(formDataString), key, { keySize: 128 / 8, iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString();
+        //const encryptedData = CryptoJS.AES.encrypt(formDataString, secretKey).toString();
+
+        // Set the encrypted data in the hidden input field
+        document.getElementById("EncryptedData").value = encrypted_data;
+
+        // Submit the form
+        document.forms[0].submit();
+
+        $("#tbl_verf_fail").hide();
+        $("#tbl_verf_result").show();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").hide();
+        $("#div_response_success").hide();
+        $("#div_create_question").hide();
+        document.getElementById("successMsg").innerHTML = "Processing Request...";
+    }
+
+</script>

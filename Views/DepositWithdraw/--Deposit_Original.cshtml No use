@@ -1,0 +1,1403 @@
+﻿@*<script src="~/Scripts/Data.js"></script>*@
+
+<script src="~/Scripts/CashDeposit.js"></script>
+<script src="~/Scripts/CommonValidation.js"></script>
+<script src="~/Scripts/SignPopUp.js"></script>
+
+@{
+    ViewBag.Title = "Deposit";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+<input id="L3StartLimit" value="@Session["l3startlimit"]" hidden />
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="VoucherCheck" name="VoucherCheck" value="false" hidden />
+<input id="CheckerModule" name="CheckerModule" value="@Session["CheckerModule"]" hidden />
+<input id="pageType" name="pageType" value="deposit" hidden />
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h1>
+                        Cash Deposit
+                    </h1>
+                </div>
+                <div class="col-sm-7" id="ProcessingBar" hidden>
+                    <label style="color:red; font-size:15px;"><b>Processing Request...</b></label>
+                </div>
+            </div>
+        </div>
+
+        <div id="dialog_img" style="display: none; font-size: large; height: 450px; width: 900px; " align="center" class="form-popup">
+            <img style="height:450px; width:900px; cursor: zoom-out;" id="FullImg" onclick="zoomOut();" />
+        </div>
+
+        <div class="row" style="background-color: lightblue;padding-bottom:5px;padding-top:10px;border-radius: 10px;font-size:small;">
+            <input type="text" value="" id="TransMode" name="TransMode" hidden />
+            <div class="col-sm-12">
+                <div class="col-sm-3">
+                    @{
+                        Html.RenderPartial("SideView");
+                    }
+                </div>
+                <div class="col-sm-5">
+                    @*<div class="row text-center">
+                            <label style="color:red;font:100" id="status"></label>
+                        </div>*@
+                    <div class="row text-center">
+                        <label id="getresult"></label>
+                    </div>
+                    <div class="row text-center" style="padding-bottom:20px;padding-left:15px">
+                        <table>
+                            <tr>
+                                <td id="imageid">
+                                    @*<img style="display:none" height='250' width='500' id="FG" />*@
+                                    @*<img style="display: none; cursor: zoom-in" height='250' width='500' id="FG" onclick="fullImage();" />*@
+                                    @*<img style="display: none; cursor: zoom-in" height='250' width='500' id="FG" onclick="ChqSlipPopUp();" />*@
+                                    <img style="display: none; cursor: zoom-in" height='285' width='570' id="FG" onclick="ChqSlipPopUp();" />
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="row" id="MICRImg">
+                        <div class="col-sm-6" id="micrtxt">
+                            MICR: <input type="text" id="micr" style="width: 200px;" readonly="readonly" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input id="ItemId" style="display:none" />
+                            <input type="button" id="frontGimg" value="Front" style="background-color:black;color:white;width: 50px;font-size: x-small;" class="btn" onclick="switchimage('frontGimg', 'FG', 'BOT_RGB')" />
+                            <input type="button" id="backGimg" value="Back" style="background-color:black;color:white;width: 50px;font-size: x-small;" class="btn" onclick="switchimage('backGimg', 'FG', 'TOP_RGB')" />
+                            <input type="button" id="frontIRimg" value="IR" style="background-color:black;color:white;width: 50px;font-size: x-small;" class="btn" onclick="switchimage('frontIRimg', 'FG', 'BOT_IRR')" />
+                            <input type="button" id="waterMark" value="WM" style="background-color:black;color:white;width: 50px;font-size: x-small;" class="btn" onclick="switchimage('waterMark', 'FG', 'TOP_QIR')" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" id="Additional_fields">
+                        <div class="row">
+                            <label class="col-sm-2">Transaction Particular</label>
+                            <input class="col-sm-4" id="id_transaction_particular" value="" />
+                            <label class="col-sm-2">Report Code</label>
+                            <input class="col-sm-4" id="id_report_code" value="" />
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2">Remark 1</label>
+                            <input class="col-sm-4" id="id_remark_1" value="" />
+                            <label class="col-sm-2">Remark 2</label>
+                            <input class="col-sm-4" id="id_remark_2" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row" style="padding-top:10px;font-size:12px;">
+                        <div id="TranAmnt" class="col-sm-7"> <label>Transaction Amount: </label></div>
+                        <div id="SlipAmnt" class="col-sm-7"> <label>Slip Amount: </label></div>
+                        <div class="col-sm-5">
+                            <div id="SlipCheque" class="row">
+                                <div class="col-sm-4">
+                                    <input id="HalfSlipAmount" style="width: 55px;" onfocusout="txttogrid()" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <input id="DivSlipAmount" value="/" style="width: 20px;text-align: center;" />
+                                </div>
+                                <div class="col-sm-5">
+                                    <input id="SlipAmountForCheque" style="width: 55px;margin-left: -11px" @*readonly="readonly"*@ />
+                                </div>
+                            </div>
+                            <input id="SlipAmount" type="number" style="width:155px;" />
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:2px;font-size:12px;">
+                        <div id="DenomAmnt" class="col-sm-7"><label>Denomination Amount:</label> </div>
+                        <div id="ChequeAmnt" class="col-sm-7"><label>Cheque Amount:</label> </div>
+                        <div class="col-sm-5">
+                            <div id="ChequeSlip" class="row">
+                                <div class="col-sm-4">
+                                    <input id="HalfChequeAmount" style="width: 55px;" onfocusout="txttogrid()" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <input id="DivChequeAmount" value="/" style="width: 20px;text-align: center;" />
+                                </div>
+                                <div class="col-sm-5">
+                                    <input id="DenomAmountForCheque" style="width: 55px;margin-left:-11px;" @*readonly="readonly"*@ />
+                                </div>
+                            </div>
+                            <input id="DenomAmount" disabled />
+                        </div>
+                    </div>
+                    <div id="ChequeDate" class="row" style="padding-top:2px;font-size:12px;" hidden>
+                        <div class="col-sm-7"><label>Cheque Date: (dd-MM-yyyy)</label> </div>
+                        <div class="col-sm-5">
+                            <input id="ChequeDateTxt" style="width: 135px;" onfocusout="txttogrid()" placeholder="dd-mm-yyy" />
+                        </div>
+                    </div>
+                    <div id="ShowToAcc" class="col-sm-12" style="padding-top:20px;">
+                        <div class="col-sm-12" style="background-color: rgb(242, 242, 242); height: 350px;padding-top:10px;">
+                            <div class="row">
+                                <div class="col-sm-5"><label>To Account:</label> </div>
+                                <div class="col-sm-7">
+                                    <input id="ToAccount" style="width: 135px;" maxlength="16" />
+                                    <button class="btn-sm" style="background-color:black;color:white;font-size: x-small;margin-left: -5px;padding: 4px 10px 2px 11px;" onclick="GetPayeee(ToAccount.value,'S');">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="SlipFinPay" class="col-sm-12" style="padding-top: 10px">
+                                <select id="SlipFinPayeeName" style="width: 230px;"></select>
+                            </div>
+                            <div class="col-sm-12">
+                                Name:<label id="SlipFinName">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Scheme Code:<label id="SlipFinScheme">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Freeze Code:<label id="SlipFinFreeze">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Mode Of Operation:<label id="SlipFinMOP"></label>
+                            </div>
+                            <div class="col-sm-12">
+                                Account Status:<label id="SlipFinAccountStatus"></label>
+                            </div>
+                            <div class="col-sm-12">
+                                NRE Flag:<label id="SlipFinNRE">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Scheme Type:<label id="SlipFinSchemeType">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Account Ownership:<label id="SlipFinAccOwner">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Amount:<label id="SlipFinAmount">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Mobile Number:<label id="SlipFinMobNo">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                PAN No:<label id="SlipFinPANNo">
+                                </label>
+                            </div>
+                            <div class="col-sm-12">
+                                Date:<label id="SlipFinDate">
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="CashData" class="col-sm-12" style="padding-top:20px;">
+                        <div class="row" style="background-color: rgb(242, 242, 242);width: 407px;">
+                            <table id="tblDenomination" style="cursor:pointer;overflow-x:auto;border:1px solid black; font-size:smaller">
+                                <thead style="border:1px solid black;background-color: #438EB9;color:white;">
+                                    <tr>
+                                        @*<th>                 </th>
+                                            <th>                    </th>
+                                            <th style="text-align:center">        DENOMINATIONS            </th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>*@
+                                        <th colspan="6" style="text-align:center">DENOMINATIONS</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center;width:100px">DENOMINATION</th>
+                                        <th></th>
+                                        <th style="text-align:center;width:80px">CASH IN </th>
+                                        <th style="text-align:center;width:80px">CASH OUT    </th>
+                                        <th style="text-align:center;width:80px">DENOM VALUE</th>
+                                        <th style="text-align:center;width:70px" id="Entry">Entry    </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div align="right">
+                                @*<input type="text" id="denomcount" class="btn" style="background-color:black;color:white;font-size: x-small;" readonly />*@
+                                <label id="abc">Denom Count:</label>
+                                <input id="denomcount" readonly="readonly" />
+
+                                <input type="button" id="btnPost" value="InsertCash" style="background-color:black;font-size:15px; color:white;" onclick="ManualDataEntry()" />
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="smoke" style="display:none;position:absolute;top:-30px;left:-30px;opacity:0.3;background-color:black;z-index:9998">...</div>
+            <div id="popup" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move "><b>Signature</b><span id="btn_close" onclick="closeButton()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="signTable">
+                    <thead style="border: 1px solid black; background-color: cadetblue; color: white;">
+                        <tr style="background-color: #438EB9">
+                            <th style="text-align:center">Name</th>
+                            <th style="text-align:center">Sign Img</th>
+                            <th style="text-align:center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="popup1" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar1" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move "><b>Chq/Slip</b><span id="btn_close" onclick="closeButton1()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="chqSlipTable" style="width:800px;">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="ChequeData" class="row" style="height:400px;overflow-x: auto;padding: 5px 0px 35px 0px;overflow-y:auto;">
+                <div class="col-sm-12">
+                    <table id="tblChequeData" style="cursor:pointer;overflow-x:auto;width:100%;border:1px solid black;text-align: center">
+                        <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                            <tr>
+
+                                <th style="text-align:center">Account No</th>
+                                <th style="text-align:center">Slip Amount </th>
+                                <th style="text-align:center">Cheque Amount</th>
+                                <th style="text-align:center">Cheque Date</th>
+                                <th style="text-align:center">OCR1</th>
+                                <th style="text-align:center">OCR2</th>
+                                <th style="text-align:center">Instrument Type</th>
+                                <th style="text-align:center">Mark as Cheque or Slip</th>
+                                <th style="text-align:center;display:none">ImageFront</th>
+                                <th style="text-align:center;display:none">SlipNo</th>
+                                <th style="display:none">Front Gray</th>
+                                <th style="display:none">Rear Gray</th>
+                                <th style="display:none">Doc No</th>
+                                <th style="display:none">Cheque No</th>
+                                <th style="display:none">Document Type</th>
+                                <th style="display:none">Sort Code</th>
+                                <th style="display:none">Trans Code</th>
+                                <th style="display:none">SAN</th>
+                                <th style="display:none">Ignore IQA</th>
+                                <th style="display:none">IQA_Flag</th>
+                                <th style="display:none">IQA_String</th>
+                                <th style="text-align:center">Delete</th>
+
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div id="dialog" style="display: none;font-size:large;background-color:aliceblue;padding-left:300px;padding-right:300px;padding-top:150px;padding-bottom:150px;" align="center" class="form-popup">
+
+                <table style="padding-top: 20px;width: 700px;">
+                    <tr>
+                        <td class="bb" style="font-size:large;text-align:center;background-color:black;color:white" colspan="2">
+                            <b>DEPOSIT/PAY IN SLIP </b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:large;text-align:center"><b>Axis Bank Ltd.</b></td>
+
+                    </tr>
+
+                </table>
+                <table style="padding-top:20px;width: 700px;">
+                    <tr>
+                        <td>
+                            <label class="control-label"> Branch Name :</label>
+                        </td>
+                        <td><label id="Branch" class="control-label"></label></td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <label class="control-label"> Date :</label>
+                        </td>
+                        <td><label id="pdate" class="control-label">--</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label">------------------------------------</label>
+                        </td>
+                        <td><label class="control-label">----------------------------------------------------------------------------</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Receipt No :</label>
+                        </td>
+                        <td><label id="Receipt" class="control-label">--</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Name :</label>
+                        </td>
+                        <td>
+                            <label id="Name" class="control-label">--</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Account :</label>
+                        </td>
+                        <td><label id="Account" class="control-label">--</label></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label class="control-label"> Amount :</label>
+                        </td>
+                        <td>
+                            <label id="Amount" class="control-label">--</label>
+                        </td>
+                    </tr>
+                    @*<tr>
+                            <td>
+                                <label class="control-label"> Rupees in words :</label>
+                            </td>
+                            <td>
+                                <label id="Rupees" class="control-label">--------------</label>
+                            </td>
+                        </tr>*@
+                    <tr>
+                        <td>
+                            <label class="control-label">------------------------------------</label>
+                        </td>
+                        <td><label class="control-label">----------------------------------------------------------------------------</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label"> Office/Cashier/SWO :</label>
+                        </td>
+                        <td>
+                            <label id="Cashier" class="control-label">--</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="button" id="DepositOk" value="OK" style="background-color:black;color:white;font-size: x-small;" class="btn" onclick="closeDialog_New('no');" />
+                            <input type="button" id="PrintOk" value="Print" style="background-color:black;color:white;font-size: x-small;" class="btn" onclick="closeDialog_New('yes');" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <script type="text/javascript">
+
+
+                var rooturl = '@Url.Content("~/")';
+                //------------------added by me--------------------------------------------------
+
+                $(document).ready(function () {
+                    debugger;
+                    var typeTrans = urlParams.get('Name');
+                    document.getElementById("TransMode").value = typeTrans;
+
+                    var checker = document.getElementById("CheckerModule").value;
+                    if (checker == "Y")
+                        $("#btngetvault").hide();
+
+                    var pt = document.getElementById("TransMode").value;
+                    if (pt == "Deposit" || pt == "WithDraw")
+                        document.getElementById("AccountNo").focus();
+
+                    $.ajax({
+                        type: "POST",
+                        url: rooturl + "Home/ValidateSession",
+                        data: {},
+                        datatype: "json",
+                        success: function (data) {
+                            if (data == "False") {
+                                window.location = rooturl + "Home/LoginiBAS?cond=1";
+                            }
+                        }
+                    });
+                });
+
+
+                //------------------------------- by me----------------------------------------------------------
+
+                var x = '@ViewBag.URL';
+                var WebImageURL = '@ViewBag.WebImageURL';
+                var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+                var popup = "";
+                var recipt = "no";
+
+                var popup = document.getElementById("popup");
+                var popup_bar = document.getElementById("popup_bar");
+                var btn_close = document.getElementById("btn_close");
+                var smoke = document.getElementById("smoke");
+
+                $("#tblDenomination").hide();
+                $("#MICRImg").hide();
+                $("#ShowToAcc").hide();
+                $("#ChequeData").hide();
+                //$("#SignData").hide();
+                $("#CashData").hide();
+                $("#TranAmnt").hide();
+                $("#SlipAmnt").hide();
+                $("#DenomAmnt").hide();
+                $("#ChequeAmnt").hide();
+                //$("#ChequeDate").hide();
+                $("#HalfChequeAmount").hide();
+                $("#DivChequeAmount").hide();
+                $("#HalfSlipAmount").hide();
+                $("#DivSlipAmount").hide();
+                $("#ChequeSlip").hide();
+                $("#SlipCheque").hide();
+                //$("#btnPost").hide();// anandi
+                // $("#btnValid").hide();
+                $("#btngetvault").hide();
+
+                var instruType = "";
+                var dArray = [];
+                var dCount = [];
+                var ImageArray = [];
+                var SlipToAccount = 0;
+                var SlipCount = 0;
+                var batchNo = 0;
+                var intSlipNo = 0;
+                var batchCntAfterDelete = 0;
+                var batchCnt = 0;
+                var GlobalRowNo = " ";
+                var DenomDataToadd = 0;
+                var totalAmtToAdd = 0;
+                var transRefNo = null;
+                var d = new Date();
+                strDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + "  " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+                var ValidationPassed = false;
+                var ManualInsert = false;
+
+                var urlParams = new URLSearchParams(window.location.search);
+                var ddd = new Date();
+                var RegNo = ddd.getDate() + "" + (ddd.getMonth() + 1) + "" + ddd.getFullYear() + "" + ddd.getHours() + "" + ddd.getMinutes() + "" + ddd.getSeconds();
+                var typeOfTran = urlParams.get('Name');
+
+                if (typeOfTran == "Deposit") {
+                    $("TransMode").val = "Deposit";
+                    $("#TranAmnt").show();
+                    $("#DenomAmnt").show();
+                    $("#CashT").show();
+                    $("#btnPost").show();// anandi 2202
+                    //$("#btnGetVoucher").hide();               -- Commented by Aniket - 2022-05-06
+                    $("#btngetvault").show();
+
+                    //$("#frontGimg").hide();
+                    //$("#backGimg").hide();
+                    //$("#frontIRimg").hide();
+                    //$("#waterMark").hide();
+                    //$("#micr").hide();
+                    //$("#micrtxt").hide();
+                    //$("#imageid").hide();     -- Commented by Aniket 2022-05-10
+
+                    //$("#sidebar").show();
+                    $("#returncash").show();
+                    $("#returncash1").show();
+
+                    //07032022
+                    $("#denomcount").show();
+                    $("#abc").show();
+
+
+
+
+
+                //if (typeOfTran == "Deposit") {
+                //    $("#TranAmnt").show();
+                //    $("#DenomAmnt").show();
+                //    $("#CashT").show();
+                //    $("#btnGetVoucher").hide();
+                //    $("#btngetvault").show();
+                //    $("#imageid").hide();
+                //    $("#micrtxt").hide();
+                //    $("#imgbtns").hide();
+
+                }
+
+
+                localStorage.setItem("typeOfTran", typeOfTran)
+                var tableChequeData = document.getElementById('tblChequeData');
+                var tableDenom = document.getElementById("tblDenomination");
+
+                $(function () {
+                    debugger;
+                    popup = $("#dialog").dialog({
+                        modal: true,
+                        autoOpen: false,
+                        width: 750,
+                        height: 500,
+                        title: "Deposite Receipt",
+                        buttons: {
+                            OK: function () {
+                                recipt = "no";
+                                closeDialog();
+                            },
+                            Print: function () {
+                                recipt = "yes";
+                                closeDialog();
+                            }
+                        }
+
+                    });
+                });
+                function Showmodal() {
+                    debugger;
+                    ////$(popup).dialog("open");
+
+                    document.getElementById("dialog").style.display = "block";
+                    //document.getElementById("dialog").hidden = false;
+
+                    ////document.getElementById("SlipAmount").disable = true;
+                }
+
+
+                function printDiv(divName) {
+                    debugger;
+                    closeDialog();
+                    var printContents = document.getElementById(divName).innerHTML;
+                    var originalContents = document.body.innerHTML;
+                    document.body.innerHTML = printContents;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+                }
+                $("#tblChequeData").on('click', 'td', function () {
+                    debugger;
+                    var rowNumber = this.parentNode.rowIndex;
+                    var SeqNo = 0;
+                    var x = this.cellIndex;
+                    GlobalRowNo = rowNumber;
+
+                    if (x == 7) {
+                        if (document.getElementById("chkboxCheque").checked == true) {
+                            chequeBox = true;
+                        }
+                        if (document.getElementById("chkboxSlip").checked == true) {
+                            slipBox = true;
+                        }
+                    }
+                    if (x == 21) {
+                        var result = confirm("Are you sure you want to delete this item..?");
+
+                        if (result) {
+                            if (document.getElementById("tblChequeData").getElementsByTagName('tr')[rowNumber].cells[9].innerHTML == 1) {
+                                intSlipNo = intSlipNo - 1;
+                            }
+                            batchCnt = tableChequeData.rows.length;
+                            batchCntAfterDelete = batchCnt - 1;
+                            if (batchCntAfterDelete > 0) {
+                                batchCnt = batchCntAfterDelete;
+                            }
+                            document.getElementById("tblChequeData").deleteRow(rowNumber);
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                    else {
+                        var myTab = document.getElementById("tblChequeData");
+                        for (i = 1; i < myTab.rows.length; i++) {
+                            if (rowNumber == i) {
+                                var objCells = myTab.rows.item(i).cells;
+                                document.getElementById('micr').value = objCells[4].innerText;
+                                if (objCells[6].innerHTML == "S") {
+                                    SlipToAccount = objCells[0].innerHTML;
+                                    SlipCount = objCells[9].innerHTML;
+                                    document.getElementById('ToAccount').value = SlipToAccount;
+                                    document.getElementById('ChequeDateTxt').value = objCells[3].innerHTML;
+                                    document.getElementById('FG').src = objCells[8].innerHTML;
+                                    SlipRowNo = rowNumber + 1;
+                                    if (myTab.rows.item(SlipRowNo) != null) {
+                                        var RowobjCells = myTab.rows.item(SlipRowNo).cells;
+                                        document.getElementById('AccountNo').value = RowobjCells[0].innerHTML;
+                                        if (RowobjCells[0].innerHTML == "") {
+                                            alert("Account Number is blank for Cheque..!");
+                                        }
+                                        else {
+                                            GetPayeee(RowobjCells[0].innerHTML, "C");
+                                        }
+                                    }
+                                    else {
+                                        document.getElementById('AccountNo').value = "";
+                                    }
+                                    if (objCells[0].innerHTML == "") {
+                                        if (objCells[6].innerHTML == "C") {
+                                            alert("Account Number is blank for Cheque..!");
+                                        }
+                                        else {
+                                            alert("Account Number is blank for Slip..!");
+                                        }
+                                    }
+                                    else {
+                                        var delayInMilliseconds = 10000; //10 second
+                                        setTimeout(function () {
+                                            GetPayeee(objCells[0].innerHTML, objCells[6].innerHTML);
+                                        }, delayInMilliseconds);
+                                    }
+                                    document.getElementById('HalfSlipAmount').value = objCells[1].innerHTML;
+                                    document.getElementById('HalfChequeAmount').value = objCells[2].innerHTML;
+                                }
+                                else {
+                                    SlipCntToChk = objCells[9].innerHTML;
+                                    if (SlipCntToChk != 0) {
+                                        for (k = 1; k < myTab.rows.length; k++) {
+                                            var kobjCells = myTab.rows.item(k).cells;
+                                            for (var l = 0; l < kobjCells.length; l++) {
+                                                if (SlipCntToChk == kobjCells[9].innerHTML) {
+                                                    SlipToAccount = kobjCells[0].innerHTML;
+                                                    document.getElementById('ToAccount').value = SlipToAccount;
+                                                    document.getElementById('ChequeDateTxt').value = objCells[3].innerHTML;
+                                                    document.getElementById('FG').src = objCells[8].innerHTML;
+                                                    document.getElementById('AccountNo').value = objCells[0].innerHTML;
+                                                    document.getElementById('HalfChequeAmount').value = objCells[2].innerHTML;
+                                                    document.getElementById('HalfSlipAmount').value = objCells[1].innerHTML;
+                                                    if (objCells[0].innerHTML == "") {
+                                                        if (objCells[6].innerHTML == "C") {
+                                                            alert("Account Number is blank for Cheque..!");
+                                                        }
+                                                        else {
+                                                            alert("Account Number is blank for Slip..!");
+                                                        }
+                                                    }
+                                                    else {
+                                                        GetPayeee(objCells[0].innerHTML, objCells[6].innerHTML);
+                                                    }
+                                                    if (SlipToAccount == "") {
+                                                        alert("Account Number is blank for Slip..!");
+                                                    }
+                                                    else {
+                                                        var delayInMilliseconds = 10000; //1 second
+                                                        setTimeout(function () {
+                                                            GetPayeee(SlipToAccount, "S");
+                                                        }, delayInMilliseconds);
+                                                    }
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        document.getElementById('ToAccount').value = " ";
+                                        document.getElementById('ChequeDateTxt').value = objCells[3].innerHTML;
+                                        document.getElementById('FG').src = objCells[8].innerHTML;
+                                        document.getElementById('AccountNo').value = objCells[0].innerHTML;
+                                        document.getElementById('HalfChequeAmount').value = objCells[2].innerHTML;
+                                        document.getElementById('HalfSlipAmount').value = objCells[1].innerHTML;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                $("#tblDenomination").on('change', 'td', function () {
+                    //debugger;
+                    var RowNo = this.parentNode.rowIndex;
+                    var PageType = document.getElementById("TransMode").value;
+                    var x = this.cellIndex;
+                    debugger;
+                    if (PageType == "Deposit") {
+                        //debugger;
+                        if (x == 2) {
+                            var RestDemon = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[2].innerHTML;
+                            var rowdata = [];
+                            rowdata = RestDemon.split(" ");
+                            var idVal = [];
+                            idVal = rowdata[3].split("=\"");
+                            var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+                            if (document.getElementById(DenomDataToaddss).value != "") {
+                                DenomDataToadd = parseInt(document.getElementById(DenomDataToaddss).value);
+                                totalAmtToAdd = document.getElementById("DenomAmount").value;
+                                document.getElementById("DenomAmount").value = parseInt(totalAmtToAdd) + DenomDataToadd;
+                                document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = DenomDataToadd;
+                            }
+                            else {
+                                DenomDataToadd = 0;
+
+                                for (var cell4Val = 0; cell4Val < 8; cell4Val++) {
+                                    //debugger;
+                                    var denom2 = "denomId_" + cell4Val.toString();
+                                    var denom2Count = document.getElementById(denom2).innerHTML;
+                                    if (denom2Count != "") {
+                                        if (denom2 == "denomId_0")
+                                            DenomDataToadd = DenomDataToadd + (2000 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_1")
+                                            DenomDataToadd = DenomDataToadd + (500 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_2")
+                                            DenomDataToadd = DenomDataToadd + (200 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_3")
+                                            DenomDataToadd = DenomDataToadd + (100 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_4")
+                                            DenomDataToadd = DenomDataToadd + (50 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_5")
+                                            DenomDataToadd = DenomDataToadd + (20 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_6")
+                                            DenomDataToadd = DenomDataToadd + (10 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_7")
+                                            DenomDataToadd = DenomDataToadd + (5 * parseInt(denom2Count));
+                                    }
+                                }
+
+                                //debugger;
+                                for (var cell4Val = 0; cell4Val < 8; cell4Val++) {
+                                    //debugger;
+                                    var denom2 = "denomId5_" + cell4Val.toString();
+                                    var denom2Count = document.getElementById(denom2).value;
+                                    if (denom2Count != "") {
+                                        if (denom2 == "denomId5_0")
+                                            DenomDataToadd = DenomDataToadd + (2000 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_1")
+                                            DenomDataToadd = DenomDataToadd + (500 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_2")
+                                            DenomDataToadd = DenomDataToadd + (200 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_3")
+                                            DenomDataToadd = DenomDataToadd + (100 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_4")
+                                            DenomDataToadd = DenomDataToadd + (50 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_5")
+                                            DenomDataToadd = DenomDataToadd + (20 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_6")
+                                            DenomDataToadd = DenomDataToadd + (10 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_7")
+                                            DenomDataToadd = DenomDataToadd + (5 * parseInt(denom2Count));
+                                    }
+                                }
+
+                                //debugger;
+                                var inCoinCount = document.getElementById("denomId").value;
+                                if (inCoinCount != "")
+                                    DenomDataToadd = DenomDataToadd + parseInt(inCoinCount);
+
+                                for (var cell4Val = 0; cell4Val < 8; cell4Val++) {
+                                    //debugger;
+                                    var denom2 = "denomId2_" + cell4Val.toString();
+                                    var denom2Count = document.getElementById(denom2).innerHTML;
+                                    if (denom2Count != "") {
+                                        if (denom2 == "denomId2_0")
+                                            DenomDataToadd = DenomDataToadd - (2000 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_1")
+                                            DenomDataToadd = DenomDataToadd - (500 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_2")
+                                            DenomDataToadd = DenomDataToadd - (200 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_3")
+                                            DenomDataToadd = DenomDataToadd - (100 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_4")
+                                            DenomDataToadd = DenomDataToadd - (50 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_5")
+                                            DenomDataToadd = DenomDataToadd - (20 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_6")
+                                            DenomDataToadd = DenomDataToadd - (10 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_7")
+                                            DenomDataToadd = DenomDataToadd - (5 * parseInt(denom2Count));
+                                    }
+                                }
+
+                                debugger;
+                                var outCoinCount = document.getElementById("denomId2").value;
+                                if (outCoinCount != "")
+                                    DenomDataToadd = DenomDataToadd - parseInt(outCoinCount);
+
+                                if (inCoinCount != "" && outCoinCount != "") {
+                                    var coint_Count = parseInt(inCoinCount) - parseInt(outCoinCount);
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = coint_Count.toString();
+                                }
+                                else if (inCoinCount != "" && outCoinCount == "") {
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = inCoinCount;
+                                }
+                                else if (inCoinCount == "" && outCoinCount != "") {
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = "-" + outCoinCount;
+                                }
+                                else {
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = "0";
+                                }
+
+
+                                document.getElementById("DenomAmount").value = DenomDataToadd.toString();
+                            }
+                            //totalAmtToAdd = document.getElementById("DenomAmount").value;
+                            //document.getElementById("DenomAmount").value = parseInt(totalAmtToAdd) + DenomDataToadd;
+                            //document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = DenomDataToadd;
+                            DenomDataToadd = 0;
+                        }
+                        else if (x == 3) {
+                            var RestDemon = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[3].innerHTML;
+                            var rowdata = [];
+                            rowdata = RestDemon.split(" ");
+                            var idVal = [];
+                            idVal = rowdata[3].split("=\"");
+                            var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+                            if (document.getElementById(DenomDataToaddss).value != "") {
+                                DenomDataToadd = parseInt(document.getElementById(DenomDataToaddss).value);
+                                totalAmtToAdd = document.getElementById("DenomAmount").value;
+                                document.getElementById("DenomAmount").value = parseInt(totalAmtToAdd) - DenomDataToadd;
+                                document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = DenomDataToadd;
+                            }
+                            else {
+                                DenomDataToadd = 0;
+
+                                for (var cell4Val = 0; cell4Val < 8; cell4Val++) {
+                                    //debugger;
+                                    var denom2 = "denomId_" + cell4Val.toString();
+                                    var denom2Count = document.getElementById(denom2).innerHTML;
+                                    if (denom2Count != "") {
+                                        if (denom2 == "denomId_0")
+                                            DenomDataToadd = DenomDataToadd + (2000 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_1")
+                                            DenomDataToadd = DenomDataToadd + (500 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_2")
+                                            DenomDataToadd = DenomDataToadd + (200 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_3")
+                                            DenomDataToadd = DenomDataToadd + (100 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_4")
+                                            DenomDataToadd = DenomDataToadd + (50 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_5")
+                                            DenomDataToadd = DenomDataToadd + (20 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_6")
+                                            DenomDataToadd = DenomDataToadd + (10 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId_7")
+                                            DenomDataToadd = DenomDataToadd + (5 * parseInt(denom2Count));
+                                    }
+                                }
+
+                                //debugger;
+                                for (var cell4Val = 0; cell4Val < 8; cell4Val++) {
+                                    //debugger;
+                                    var denom2 = "denomId5_" + cell4Val.toString();
+                                    var denom2Count = document.getElementById(denom2).value;
+                                    if (denom2Count != "") {
+                                        if (denom2 == "denomId5_0")
+                                            DenomDataToadd = DenomDataToadd + (2000 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_1")
+                                            DenomDataToadd = DenomDataToadd + (500 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_2")
+                                            DenomDataToadd = DenomDataToadd + (200 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_3")
+                                            DenomDataToadd = DenomDataToadd + (100 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_4")
+                                            DenomDataToadd = DenomDataToadd + (50 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_5")
+                                            DenomDataToadd = DenomDataToadd + (20 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_6")
+                                            DenomDataToadd = DenomDataToadd + (10 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId5_7")
+                                            DenomDataToadd = DenomDataToadd + (5 * parseInt(denom2Count));
+                                    }
+                                }
+
+                                //debugger;
+                                var inCoinCount = document.getElementById("denomId").value;
+                                if (inCoinCount != "")
+                                    DenomDataToadd = DenomDataToadd + parseInt(inCoinCount);
+
+                                for (var cell4Val = 0; cell4Val < 8; cell4Val++) {
+                                    //debugger;
+                                    var denom2 = "denomId2_" + cell4Val.toString();
+                                    var denom2Count = document.getElementById(denom2).innerHTML;
+                                    if (denom2Count != "") {
+                                        if (denom2 == "denomId2_0")
+                                            DenomDataToadd = DenomDataToadd - (2000 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_1")
+                                            DenomDataToadd = DenomDataToadd - (500 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_2")
+                                            DenomDataToadd = DenomDataToadd - (200 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_3")
+                                            DenomDataToadd = DenomDataToadd - (100 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_4")
+                                            DenomDataToadd = DenomDataToadd - (50 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_5")
+                                            DenomDataToadd = DenomDataToadd - (20 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_6")
+                                            DenomDataToadd = DenomDataToadd - (10 * parseInt(denom2Count));
+                                        else if (denom2 == "denomId2_7")
+                                            DenomDataToadd = DenomDataToadd - (5 * parseInt(denom2Count));
+                                    }
+                                }
+
+                                //debugger;
+                                var outCoinCount = document.getElementById("denomId2").value;
+                                if (outCoinCount != "")
+                                    DenomDataToadd = DenomDataToadd - parseInt(outCoinCount);
+
+                                //var coint_Count = parseInt(inCoinCount) - parseInt(outCoinCount);
+                                //document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = coint_Count.toString();
+                                debugger;
+                                if (inCoinCount != "" && outCoinCount != "") {
+                                    var coint_Count = parseInt(inCoinCount) - parseInt(outCoinCount);
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = coint_Count.toString();
+                                }
+                                else if (inCoinCount != "" && outCoinCount == "") {
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = inCoinCount;
+                                }
+                                else if (inCoinCount == "" && outCoinCount != "") {
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = "-" + outCoinCount;
+                                }
+                                else {
+                                    document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = "0";
+                                }
+
+                                document.getElementById("DenomAmount").value = DenomDataToadd.toString();
+                            }
+                            DenomDataToadd = 0;
+                        }
+                        if (x == 5) {
+
+                            //--------------
+                            debugger;
+                            var inputData = 0;
+                            for (var v = 0; v < 10; v++) {
+                                var cell5Id = "denomId5_" + v.toString();
+                                var cell5Val = document.getElementById(cell5Id).value;
+                                if (cell5Val != "")
+                                    inputData = inputData + parseInt(cell5Val);
+                            }
+                            document.getElementById("denomId5_C").innerHTML = inputData.toString();
+                            //--------------
+
+                            var dnamt = "";
+                            var Demon = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[5].innerHTML;
+                            var rowdata = [];
+                            rowdata = Demon.split(" ");
+                            var idVal = [];
+                            idVal = rowdata[3].split("=\"");
+                            var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+
+                            if (document.getElementById(DenomDataToaddss).value != "") {
+                                dnamt = parseInt(document.getElementById(DenomDataToaddss).value);
+                            }
+                            else {
+                                dnamt = 0;
+                            }
+
+                            debugger;
+                            var dvLen = DenomDataToaddss.length;
+                            var dv = DenomDataToaddss.substring(dvLen, dvLen - 1);
+                            var inId = 'denomId_' + dv;
+                            var inVal = document.getElementById(inId).textContent;
+                            var dnamt2 = "";
+                            if (inVal != "") {
+                                var inValInt = parseInt(inVal);
+                                dnamt2 = inValInt
+                            }
+                            else
+                                dnamt2 = 0;
+
+                            //----------------- Added on 2022-03-16 ----------- Aniket Begin
+
+                            var inId2 = 'denomId2_' + dv;
+                            var inVal2 = document.getElementById(inId2).textContent;
+                            var dnamt3 = "";
+                            if (inVal2 != "") {
+                                var inValInt2 = parseInt(inVal2);
+                                dnamt3 = inValInt2
+                            }
+                            else
+                                dnamt3 = 0;
+
+                            //----------------- Added on 2022-03-16 ----------- Aniket End
+
+                            debugger;
+                            var totalamt = dnamt + dnamt2;
+                            var Demon3 = 0;
+                            if (document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML == "COINS") {
+                                Demon3 = 1;
+                            }
+                            else {
+                                Demon3 = parseInt(document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML);
+                            }
+                            var dnmtotal = Demon3 * totalamt;
+                            var negValue = Demon3 * dnamt3;
+                            var final_amt = dnmtotal - negValue;
+
+                            document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = final_amt;
+
+                            var tbldenom = document.getElementById("tblDenomination");
+                            var Denomination = 0;
+                            for (var i = 2; i < tblDenomination.rows.length; i++) {
+                                var DemonT = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[4].innerHTML;
+                                DemonT = DemonT.replace('<label>', '');
+                                DemonT = parseInt(DemonT.replace('</label>', ''));
+
+                                Denomination = parseInt(Denomination + DemonT);
+                            }
+                            document.getElementById("DenomAmount").value = Denomination;
+
+                            debugger;
+                            var TotalCountDenom = 0;
+                            //for (var i = 2; i < tblDenomination.rows.length; i++) {
+                            for (var i = 2; i < 12; i++) {
+                                //debugger;
+                                var Ddnamt = "";
+                                var DDemon = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[5].innerHTML;
+                                var Drowdata = [];
+                                Drowdata = DDemon.split(" ");
+                                var DidVal = [];
+                                DidVal = Drowdata[3].split("=\"");
+                                var DDenomDataToaddss = DidVal[1].replace(/['"]+/g, '');
+
+                                if (document.getElementById(DDenomDataToaddss).value != "") {
+                                    Ddnamt = parseInt(document.getElementById(DDenomDataToaddss).value);
+                                }
+                                else {
+                                    Ddnamt = 0;
+                                }
+
+                                //---------- Added on 2022-03-19 --------- By Aniketadit --------- Begin
+                                var cell_2 = DDenomDataToaddss.length;
+                                var dv_2 = DDenomDataToaddss.substring(cell_2, cell_2 - 1);
+                                var inId_2 = 'denomId_' + dv_2;
+                                var inVal_2 = document.getElementById(inId_2).textContent;
+                                var Ddnamt2 = "";
+                                if (inVal_2 != "") {
+                                    var inValInt_2 = parseInt(inVal_2);
+                                    Ddnamt2 = inValInt_2
+                                }
+                                else
+                                    Ddnamt2 = 0;
+                                //---------- Added on 2022-03-19 --------- By Aniketadit --------- End
+
+                                TotalCountDenom = TotalCountDenom + Ddnamt + Ddnamt2;
+                            }
+                            debugger;
+                            document.getElementById("denomcount").value = TotalCountDenom;
+                        }
+                    }
+                    else if (PageType == "WithDraw") {
+                        debugger;
+                        var inputData = 0;
+                        for (var v = 0; v < 10; v++) {
+                            var cell5Id = "denomId5_" + v.toString();
+                            var cell5Val = document.getElementById(cell5Id).value;
+                            if (cell5Val != "")
+                                inputData = inputData + parseInt(cell5Val);
+                        }
+                        //debugger;
+                        document.getElementById("denomId5_C").innerHTML = inputData.toString();
+                        //--------------
+
+                        var dnamt = "";
+                        var Demon = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[5].innerHTML;
+                        var rowdata = [];
+                        rowdata = Demon.split(" ");
+                        var idVal = [];
+                        idVal = rowdata[3].split("=\"");
+                        var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+
+                        if (document.getElementById(DenomDataToaddss).value != "") {
+                            dnamt = parseInt(document.getElementById(DenomDataToaddss).value);
+                        }
+                        else {
+                            dnamt = 0;
+                        }
+
+                        //debugger;
+                        var dvLen = DenomDataToaddss.length;
+                        var dv = DenomDataToaddss.substring(dvLen, dvLen - 1);
+
+                        var inId2 = 'denomId2_' + dv;
+                        var inVal2 = document.getElementById(inId2).textContent;
+                        var dnamt3 = "";
+                        if (inVal2 != "") {
+                            var inValInt2 = parseInt(inVal2);
+                            dnamt3 = inValInt2
+                        }
+                        else
+                            dnamt3 = 0;
+
+                        //debugger;
+                        var totalamt = dnamt + dnamt3;
+                        var Demon3 = 0;
+                        if (document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML == "COINS") {
+                            Demon3 = 1;
+                        }
+                        else {
+                            Demon3 = parseInt(document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML);
+                        }
+                        var dnmtotal = Demon3 * totalamt;
+                        //var negValue = Demon3 * dnamt3;
+                        //var final_amt = dnmtotal + negValue;
+                        var final_amt = dnmtotal;
+
+                        document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = final_amt;
+                        debugger;
+                        var tbldenom = document.getElementById("tblDenomination");
+                        var Denomination = 0;
+                        for (var i = 2; i < tblDenomination.rows.length; i++) {
+                            var DemonT = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[4].innerHTML;
+                            DemonT = DemonT.replace('<label>', '');
+                            DemonT = parseInt(DemonT.replace('</label>', ''));
+
+                            Denomination = parseInt(Denomination + DemonT);
+                        }
+                        document.getElementById("DenomAmount").value = Denomination;
+
+                        debugger;
+                        var TotalCountDenom = 0;
+                        //for (var i = 2; i < tblDenomination.rows.length; i++) {
+                        for (var i = 2; i < 12; i++) {
+                            //debugger;
+                            var Ddnamt = "";
+                            var DDemon = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[5].innerHTML;
+                            var Drowdata = [];
+                            Drowdata = DDemon.split(" ");
+                            var DidVal = [];
+                            DidVal = Drowdata[3].split("=\"");
+                            var DDenomDataToaddss = DidVal[1].replace(/['"]+/g, '');
+
+                            if (document.getElementById(DDenomDataToaddss).value != "") {
+                                Ddnamt = parseInt(document.getElementById(DDenomDataToaddss).value);
+                            }
+                            else {
+                                Ddnamt = 0;
+                            }
+
+                            //---------- Added on 2022-03-19 --------- By Aniketadit --------- Begin
+                            var cell_2 = DDenomDataToaddss.length;
+                            var dv_2 = DDenomDataToaddss.substring(cell_2, cell_2 - 1);
+                            var inId_2 = 'denomId2_' + dv_2;
+                            var inVal_2 = document.getElementById(inId_2).textContent;
+                            var Ddnamt2 = "";
+                            if (inVal_2 != "") {
+                                var inValInt_2 = parseInt(inVal_2);
+                                Ddnamt2 = inValInt_2
+                            }
+                            else
+                                Ddnamt2 = 0;
+                            //---------- Added on 2022-03-19 --------- By Aniketadit --------- End
+
+                            TotalCountDenom = TotalCountDenom + Ddnamt + Ddnamt2;
+                        }
+                        debugger;
+                        document.getElementById("denomcount").value = TotalCountDenom;
+                    }
+                    else {
+                        if (x == 2) {
+                            var RestDemon = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[2].innerHTML;
+                            var rowdata = [];
+                            rowdata = RestDemon.split(" ");
+                            var idVal = [];
+                            idVal = rowdata[3].split("=\"");
+                            var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+                            if (document.getElementById(DenomDataToaddss).value != "") {
+                                DenomDataToadd = parseInt(document.getElementById(DenomDataToaddss).value);
+                            }
+                            else {
+                                DenomDataToadd = 0;
+                            }
+                            document.getElementById("DenomAmount").value = totalAmtToAdd + DenomDataToadd;
+                            document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = DenomDataToadd;
+                            DenomDataToadd = 0;
+                        }
+                        if (x == 5) {
+                            var dnamt = "";
+                            var Demon = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[5].innerHTML;
+                            var rowdata = [];
+                            rowdata = Demon.split(" ");
+                            var idVal = [];
+                            idVal = rowdata[3].split("=\"");
+                            var DenomDataToaddss = idVal[1].replace(/['"]+/g, '');
+
+                            if (document.getElementById(DenomDataToaddss).value != "") {
+                                dnamt = parseInt(document.getElementById(DenomDataToaddss).value);
+                            }
+                            else {
+                                dnamt = 0;
+                            }
+
+                            var Demon2 = document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[2].innerHTML;
+                            var rowdata2 = [];
+                            rowdata2 = Demon2.split(" ");
+                            var idVal2 = [];
+                            idVal2 = rowdata2[3].split("=\"");
+                            var DenomDataToaddss2 = idVal2[1].replace(/['"]+/g, '');
+                            var dnamt2 = "";
+                            if (document.getElementById(DenomDataToaddss2).value != "") {
+                                dnamt2 = parseInt(document.getElementById(DenomDataToaddss2).value);
+                            }
+                            else {
+                                dnamt2 = 0;
+                            }
+
+                            var totalamt = dnamt + dnamt2;
+                            var Demon3 = 0;
+                            if (document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML == "COINS") {
+                                Demon3 = 1;
+
+                            }
+                            else {
+                                Demon3 = parseInt(document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[0].innerHTML);
+                            }
+                            var dnmtotal = Demon3 * totalamt;
+                            document.getElementById("tblDenomination").getElementsByTagName('tr')[RowNo].cells[4].innerHTML = dnmtotal;
+
+                            var tbldenom = document.getElementById("tblDenomination");
+                            var Denomination = 0;
+                            for (var i = 2; i < tblDenomination.rows.length; i++) {
+
+                                var DemonT = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[4].innerHTML;
+                                DemonT = DemonT.replace('<label>', '');
+                                DemonT = parseInt(DemonT.replace('</label>', ''));
+                                //var rowdataT = [];
+                                //rowdataT = DemonT.split(" ");
+                                //var idValT = [];
+                                //idValT = rowdataT[3].split("=\"");
+                                //var DenomDataToaddssT = idValT[1].replace(/['"]+/g, '');
+                                //var dnamtT = "";
+                                //if (document.getElementById(DenomDataToaddssT).value != "") {
+                                //    dnamtT = parseInt(document.getElementById(DenomDataToaddssT).value);
+                                //}
+                                //else {
+                                //    dnamtT = 0;
+                                //}
+                                Denomination = parseInt(Denomination + DemonT);
+                            }
+                            document.getElementById("DenomAmount").value = Denomination;
+
+                            var TotalCountDenom = 0;
+                            for (var i = 2; i < tblDenomination.rows.length; i++) {
+                            //for (var i = 1; i < 8; i++) {
+                                var Ddnamt = "";
+                                var DDemon = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[5].innerHTML;
+                                var Drowdata = [];
+                                Drowdata = DDemon.split(" ");
+                                var DidVal = [];
+                                DidVal = Drowdata[3].split("=\"");
+                                var DDenomDataToaddss = DidVal[1].replace(/['"]+/g, '');
+                                debugger;
+                                if (document.getElementById(DDenomDataToaddss).value != "") {
+                                    Ddnamt = parseInt(document.getElementById(DDenomDataToaddss).value);
+                                }
+                                else {
+                                    Ddnamt = 0;
+                                }
+
+
+                                var Ddnamt2 = "";
+                                var DDemon2 = document.getElementById("tblDenomination").getElementsByTagName('tr')[i].cells[2].innerHTML;
+                                var Drowdata2 = [];
+                                Drowdata2 = DDemon2.split(" ");
+                                var DidVal2 = [];
+                                DidVal2 = Drowdata2[3].split("=\"");
+                                var DDenomDataToaddss2 = DidVal2[1].replace(/['"]+/g, '');
+                                debugger;
+                                if (document.getElementById(DDenomDataToaddss2).value != "") {
+                                    Ddnamt2 = parseInt(document.getElementById(DDenomDataToaddss2).value);
+                                }
+                                else {
+                                    Ddnamt2 = 0;
+                                }
+
+                                TotalCountDenom = TotalCountDenom + Ddnamt + Ddnamt2;
+                            }
+                            debugger;
+                            document.getElementById("denomcount").value = TotalCountDenom;
+
+                        }
+                    }
+                });
+
+
+                function ManualDataEntry() {
+        debugger;
+
+        //------------ Added on 2022-03-24 ----------- By Aniketadit Jamuar ----------- Begin
+        var dArray_insert = [];
+        var dCount_insert = [];
+        for (var j = 0; j < 10; j++) {
+            var cell5Id = "denomId5_" + j.toString();
+            var cell5Val = document.getElementById(cell5Id).value;
+            if (cell5Val != "") {
+                if (cell5Id == "denomId5_0")
+                    dArray_insert.push("2000");
+                else if (cell5Id == "denomId5_1")
+                    dArray_insert.push("500");
+                else if (cell5Id == "denomId5_2")
+                    dArray_insert.push("200");
+                else if (cell5Id == "denomId5_3")
+                    dArray_insert.push("100");
+                else if (cell5Id == "denomId5_4")
+                    dArray_insert.push("50");
+                else if (cell5Id == "denomId5_5")
+                    dArray_insert.push("20");
+                else if (cell5Id == "denomId5_6")
+                    dArray_insert.push("10");
+                else if (cell5Id == "denomId5_7")
+                    dArray_insert.push("5");
+                else if (cell5Id == "denomId5_8")
+                    dArray_insert.push("2");
+                else if (cell5Id == "denomId5_9")
+                    dArray_insert.push("1");
+
+
+                dCount_insert.push(parseInt(cell5Val));
+            }
+        }
+        debugger;
+        //------------ Added on 2022-03-24 ----------- By Aniketadit Jamuar ----------- End
+
+        var count = 1;
+        var INR = 'INR';
+        var y = "ManualDataEntry";
+
+        //new
+
+        var cashinout = ""; //m
+        var page_type = document.getElementById('TransMode').value;
+        debugger;
+        if (page_type == "WithDraw") {
+            cashinout = 'out';
+        }
+        else {
+            if ($('#returncash').is(":checked")) {
+                cashinout = 'out';
+            }
+            else {
+                //alert("false");
+                cashinout = 'in';
+
+            }
+        }
+
+        //new
+        debugger;
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: { Tellerid: gusername, Denoms: dArray_insert, DenomCount: dCount_insert, maip: machineserialno, count_id: sni_countid, local: INR,cashinout: cashinout },
+            success: getSuccessReset,
+            error: getError
+        });
+    }
+
+
+            </script>
+
+            <style type="text/css">
+                .tableClass {
+                    width: 50px;
+                }
+
+                .tableBack {
+                    background-color: cadetblue;
+                    color: white;
+                    text-align: center;
+                }
+
+                .rowalign {
+                    text-align: center;
+                }
+            </style>
+
+        </div>
+    </div>
+</div>

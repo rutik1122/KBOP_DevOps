@@ -1,0 +1,266 @@
+﻿<script src="~/Scripts/xlsx.full.min.js"></script>
+@*<script src="~/Scripts/jquery.tableToExcel.js"></script>*@
+@*<script src="@Url.Content("~/Scripts/jquery.table2excel.min.js")"></script>*@
+@*<script src="~/Scripts/xlsx.min.js"></script>*@
+<script src="~/Scripts/Search.js"></script>
+<script src="@Url.Content("~/Scripts/jquery.table2excel.min.js")"></script>
+<script src="@Url.Content("~/Scripts/JsPDF.js")"></script>
+
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+<style>
+    th {
+        color: white;
+        text-align: center;
+    }
+
+    td {
+        border-color: black;
+    }
+</style>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h1>
+                        Search Menu
+                    </h1>
+                </div>
+                <div class="col-sm-7" id="ProcessingBar" hidden>
+                    <label style="color:red; font-size:15px;"><b>Processing Request...</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-sm-1">
+                    <label style="padding-top:6px;"><b>Search By: </b></label>
+                </div>
+                <div class="col-sm-3">
+                    @Html.DropDownList("SearchBy", new List<SelectListItem>
+                    {
+                        new SelectListItem{ Text = "--- Select ---", Value = "0" },
+                        new SelectListItem{ Text = "Currency", Value = "1" },
+                        new SelectListItem{ Text = "Cheque", Value = "2" }
+                    },
+                    new
+                    {
+                        onchange = @"SearchByData();"
+                    })
+                </div>
+                <div class="col-sm-7"></div>
+                <div class="col-sm-1" id="ViewCount" hidden>
+                    <label><b>Count: </b></label>
+                    <label id="DataCount"></label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-1"><label style="padding-top:6px;"><b>Search Period: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="FromDate" type="date" style="width:105px" class="hasDatepicker" />
+                </div>
+                <div class="col-sm-1">
+                    <input id="ToDate" type="date" style="width:105px" class="hasDatepicker" />
+                </div>
+                <div class="col-sm-3">
+                    <input type="button" id="btnDay" value="Day" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px; width: 69px;" onclick="getDate('Day');" />
+                    <input type="button" id="btnWeek" value="Week" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px; width: 69px;" onclick="getDate('Week');" />
+                    <input type="button" id="btnMonth" value="Month" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px; width: 69px;" onclick="getDate('Month');" />
+                </div>
+            </div>
+            <br />
+            <div id="Currency_1" class="row" hidden>
+                <div class="col-sm-1"><label><b>Machine Serial No: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="MachineSerialNo_1" style="width:105px;" />
+                </div>
+                <div class="col-sm-1"><label><b>Teller Id: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="TellerId_1" style="width:105px;" />
+                </div>
+                <div class="col-sm-1"><label><b>Trans Ref No: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="TransRefNo_1" style="width:105px;" />
+                </div>
+                <div class="col-sm-1"><label><b>Note Serial No: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="NoteSerialNo_1" style="width:105px;" />
+                </div>
+                @*<div class="col-sm-1"><label><b>Branch Name: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="Branch_1" style="width:105px;" />
+                </div>*@
+            </div>
+            <div id="Cheque_1" class="row" hidden>
+                <div class="row">
+                    <div class="col-sm-1"><label><b>Machine Serial No: </b></label></div>
+                    <div class="col-sm-1">
+                        <input id="MachineSerialNo_2" style="width:105px;" />
+                    </div>
+                    <div class="col-sm-1"><label><b>Teller Id: </b></label></div>
+                    <div class="col-sm-1">
+                        <input id="TellerId_2" style="width:105px;" />
+                    </div>
+                    <div class="col-sm-1"><label><b>Trans Ref No: </b></label></div>
+                    <div class="col-sm-1">
+                        <input id="TransRefNo_2" style="width:105px;" />
+                    </div>
+                    <div class="col-sm-1"><label><b>Cheque No: </b></label></div>
+                    <div class="col-sm-1">
+                        <input id="ChequeNo_2" style="width:105px;" />
+                    </div>
+                    <div class="col-sm-1"><label><b>Amount: </b></label></div>
+                    <div class="col-sm-1">
+                        <input id="Amount_2" style="width:105px;" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-1"><label><b>Debit Acc No: </b></label></div>
+                    <div class="col-sm-1">
+                        <input id="DebitAccNo_2" style="width:105px;" />
+                    </div>
+                    <div class="col-sm-1"><label><b>Credit Acc No: </b></label></div>
+                    <div class="col-sm-1">
+                        <input id="CreditAccNo_2" style="width:105px;" />
+                    </div>
+                </div>
+                @*<div class="col-sm-1"><label><b>Machine Serial No: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="MachineSerialNo_2" style="width:105px;" />
+                </div>
+                <div class="col-sm-1"><label><b>Teller Id: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="TellerId_2" style="width:105px;" />
+                </div>
+                <div class="col-sm-1"><label><b>Trans Ref No: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="TransRefNo_2" style="width:105px;" />
+                </div>
+                <div class="col-sm-1"><label><b>Cheque No: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="ChequeNo_2" style="width:105px;" />
+                </div>
+                <div class="col-sm-1"><label><b>Amount: </b></label></div>
+                <div class="col-sm-1">
+                    <input id="Amount_2" style="width:105px;" />
+                </div>*@
+            </div>
+            <br />
+            <div id="DataSubmit" class="row" hidden>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-1">
+                    <input type="button" id="btnDay" value="Search" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px; width: 69px;" onclick="SubmitData();" />
+                </div>
+                <div class="col-sm-7"></div>
+                <div class="col-sm-1" id="lbl_generate" hidden><label style="padding-top:6px;"><b>Generate: </b></label></div>
+                <div class="col-sm-2" id="btn_report" hidden>
+                    <input type="button" id="btnExcel" value="Excel" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px; width: 69px;" onclick="exportExcel();" />
+                </div>
+
+            </div>
+            <br />
+            <div id="CurrencyData" class="row" hidden>
+                <div class="col-sm-12">
+                    <table id="tbl_Currency" style="cursor:pointer;overflow-x:auto;width:100%;border:1px solid black;text-align: center;">
+                        <thread style="background-color: cadetblue; color: white;">
+                            <tr style="background-color: #438EB9">
+                                <th>Date/Time</th>
+                                <th>Machine SN</th>
+                                <th>Branch</th>
+                                <th>Teller</th>
+                                <th><label id="label_data_1" /></th>
+                                <th>SN Image</th>
+                                <th>DocType</th>
+                                <th>Trans Type</th>
+                                <th>Denom</th>
+                                <th>Status</th>
+                                <th>Reject_Reason </th>
+                                <th>TransRefNo</th>
+                            </tr>
+                        </thread>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="ChequeData" class="row" hidden>
+                <div class="col-sm-12">
+                    <table id="tbl_Cheque" style="cursor:pointer;overflow-x:auto;width:100%;border:1px solid black;text-align: center;">
+                        <thread style="border: 1px solid black; background-color: cadetblue; color: white;">
+                            <tr style="background-color: #438EB9">
+                                <th>Date/Time</th>
+                                <th>Machine SN</th>
+                                <th>Branch</th>
+                                <th>Teller</th>
+                                <th>DebitAccNo</th>
+                                <th>CreditAccNo</th>
+                                <th>PayeeName</th>
+                                <th>Amount</th>
+                                <th><label id="label_data_2" />ChequeNo</th>
+                                <th>SN Image</th>
+                                <th>DocType</th>
+                                <th>Trans Type</th>
+                                <th>Denom</th>
+                                <th>Status</th>
+                                <th>Reject_Reason </th>
+                                <th>TransRefNo</th>
+                            </tr>
+                        </thread>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+
+
+    $(document).ready(function () {
+        var rooturl = '@Url.Content("~/")';
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+
+    //function exportExcel() {
+    //    debugger;
+    //    $("#tbl_Currency").Table2Excel({
+    //        filename: "Table.xls"
+    //    });
+    //}
+
+    function exportExcel() {
+        debugger;
+        let data = document.getElementById("tbl_Currency");
+        // File pointer
+        var fp = XLSX.utils.table_to_book(data, { sheet: 'DataExport' });
+        XLSX.write(fp, {
+            bookType: 'xlsx',
+            type: 'base64'
+        });
+        XLSX.writeFile(fp, 'dataTest.xlsx');
+    }
+
+</script>

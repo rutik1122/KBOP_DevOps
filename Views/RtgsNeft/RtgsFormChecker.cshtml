@@ -1,0 +1,669 @@
+﻿
+@{
+    ViewBag.Title = "RtgsForm";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<input id="RecordId" value="@ViewBag.RecordId" hidden />
+<input id="ChqId" value="@ViewBag.chqId" hidden />
+<input id="sni_id" value="" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+<input id="verfLevel" name="verfLevel" value="@ViewBag.VerfLevel" hidden />
+
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+<input id="L3StartLimit" value="@Session["l3startlimit"]" hidden />
+<input id="CheckerModule" value="@Session["CheckerModule"]" hidden />
+
+<script src="~/Scripts/CommonValidation.js"></script>
+<script src="~/Scripts/SignPopUp.js"></script>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Rtgs Form Verification With Cheque
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    @ViewBag.SubTitleName
+                </small>
+            </h1>
+        </div>
+        <div class="page-content">
+
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-1">
+                    <input type="radio" id="rtgs" name="img_type" value="RTGS" onclick="radioFunction('rtgs');" />
+                    <label for="rtgs"><b>RTGS</b></label>
+                </div>
+                <div class="col-sm-1">
+                    <input type="radio" id="cheque" name="img_type" value="CHEQUE" onclick="radioFunction('cheque');" />
+                    <label for="cheque"><b>CHEQUE</b></label>
+                </div>
+            </div>
+            <br />
+
+            <div id="div_rtgs" class="col-sm-12">
+                <div class="col-sm-4" style="border-color:black">
+                    <div class="row">
+                        <label class="col-sm-5"><b>Remittance Type:</b></label>
+                        <input id="remittance_type" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Branch:</b></label>
+                        <input id="branch" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Form Date:</b></label>
+                        <input id="date" placeholder="dd-MM-yyyy" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Debit Acc No:</b></label>
+                        <input id="debitAccNo" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Cheque No:</b></label>
+                        <input id="Chqno" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Amount:</b></label>
+                        <input id="amt" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Amount In Words:</b></label>
+                        @*<textarea class="col-sm-7" id="amtinwords" style="width:100%"></textarea>*@
+                    </div>
+                    @*<br />*@
+                    <div class="row">
+                        <textarea id="amtinwords" style="width:100%"></textarea>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Purpose Code:</b></label>
+                        <input id="PurposeCode" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Acc Type:</b></label>
+                        <input id="BeneficiaryAccType" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Name:</b></label>
+                        <input id="BeneficiaryName" style="width:100%" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Acc No:</b></label>
+                        <input id="BeneficiaryAccNo" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Confirm Beneficiary Acc No:</b></label>
+                        <input id="cBeneficiaryAccNo" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary IFSC:</b></label>
+                        <input id="BeneficiaryIFSCCode" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Bank:</b></label>
+                        <input id="BeneficiaryBank" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Beneficiary Branch:</b></label>
+                        <input id="BeneficiaryBranch" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Name:</b></label>
+                        <input id="Name" />
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <img id="FrontImg" src="" style="width:100%" />
+                </div>
+            </div>
+
+
+
+            <div id="div_chq" class="row">
+                <div class="col-sm-4">
+                    <div class="row">
+                        <label class="col-sm-5"><b>Cheque Date:</b></label>
+                        <input id="rtgs_chq_date" onfocusin="mouseDown('rtgs_chq_date')" onfocusout="mouseup('rtgs_chq_date')" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>IFSC Code:</b></label>
+                        <input id="rtgs_chq_ifscCode" onfocusin="mouseDown('rtgs_chq_ifscCode')" onfocusout="mouseup('rtgs_chq_ifscCode')" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Payee Name:</b></label>
+                        <input id="rtgs_chq_payeeName" onfocusin="mouseDown('rtgs_chq_payeeName')" onfocusout="mouseup('rtgs_chq_payeeName')" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Amount In Words:</b></label>
+                    </div>
+                    <div class="row">
+                        <textarea id="rtgs_chq_amtInWords" style="width:100%" onfocusin="mouseDown('rtgs_chq_amtInWords')" onfocusout="mouseup('rtgs_chq_amtInWords')" ></textarea>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Amount:</b></label>
+                        <input id="rtgs_chq_amount" onfocusin="mouseDown('rtgs_chq_amount')" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-5"><b>Debit Account No:</b></label>
+                        <input id="rtgs_chq_debitAccNo" type="number" onfocusin="mouseDown('rtgs_chq_debitAccNo')" onfocusout="mouseup('rtgs_chq_debitAccNo')" />
+                    </div>
+                    <br />
+                </div>
+                <div class="col-sm-8">
+                    @*<img id="FG" src="" style="width:100%" />*@
+                    <div class="row">
+                        <img id="FG" src="" style="height:100%" hidden />
+                        <canvas id="myCanvas" height="450" width="900"></canvas>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <label class="col-sm-3" style="text-align:center"><b>Cheque No</b></label>
+                        <label class="col-sm-3" style="text-align:center"><b>Sort Code</b></label>
+                        <label class="col-sm-3" style="text-align:center"><b>SAN</b></label>
+                        <label class="col-sm-3" style="text-align:center"><b>TR</b></label>
+                    </div>
+                    <div class="row">
+                        <input type="number" class="col-sm-3" id="chqnoDataEntry" min="0" max="999999" placeholder="Cheque No" style="text-align: center" onfocusin="mouseDown('chqnoDataEntry')" onfocusout="mouseup('chqnoDataEntry')" />
+                        <input type="number" class="col-sm-3" id="sortcodeDataEntry" min="0" max="999999999" placeholder="Sort Code" style="text-align: center" onfocusin="mouseDown('sortcodeDataEntry')" onfocusout="mouseup('sortcodeDataEntry')" />
+                        <input type="number" class="col-sm-3" id="sanDataEntry" min="0" max="999999" placeholder="SAN" style="text-align: center" onfocusin="mouseDown('sanDataEntry')" onfocusout="mouseup('sanDataEntry')" />
+                        <input type="number" class="col-sm-3" id="trDataEntry" min="0" max="999" placeholder="TR" style="text-align: center" onfocusin="mouseDown('trDataEntry')" onfocusout="mouseup('trDataEntry')" />
+                    </div>
+                </div>
+                <br />
+            </div>
+
+            <div class="row">
+                @*<input type="button" id="btnReset" value="Back" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="BackBtn();" />
+                    <input type="button" id="btnReset" value="Reset" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="ResetData();" />*@
+                <div class="col-sm-1"></div>
+                <label class="col-sm-1"><b>Decision: </b></label>
+                <input id="decision" name="decision" value="" maxlength="1" type="text" style="width:30px;" onkeyup="decisionPress()" />
+                <input type="button" id="btnSubmit" value="Submit" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="SubmitData();" />
+            </div>
+            
+            <div class="row" id="rejectDiv" style="padding-top: 10px;padding-bottom:10px" hidden>
+                <div class="col-sm-1"></div>
+                <input id="rejectCode" name="rejectCode" value="" style="width:40px; height:35px;" placeholder="CODE" disabled />
+                <input id="rejectDescription" name="rejectDescription" value="" style="height:35px;" placeholder="DESCRIPTION" disabled />
+            </div>
+
+            <div id="smoke" style="display:none;position:absolute;top:-30px;left:-30px;opacity:0.3;background-color:black;z-index:9998">...</div>
+            <div id="popup" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar" style="width:100%;background-color:#aaff66;position:relative;top:0;border-radius:6px 6px 0 0; text-align:center;height:24px;cursor:move">Signature<span id="btn_close" onclick="closeButton()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="signTable">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                        <tr style="background-color: #438EB9">
+                            <th style="text-align:center">Name</th>
+                            <th style="text-align:center">Sign Img</th>
+                            <th style="text-align:center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="popup2" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar2" style="width: 100%; background-color: #438EB9; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move; font-size: 20px;">Item Return Reason<span id="btn_close" onclick="closeButton()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="itemReasonTable">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                        <tr style="background-color: #438EB9">
+                            <th style="text-align: center; width: 50px; font-size: 20px;">Code</th>
+                            <th style="text-align: center; width: 240px; font-size: 20px;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="popup1" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar1" style="width:100%;background-color:#aaff66;position:relative;top:0;border-radius:6px 6px 0 0; text-align:center;height:24px;cursor:move">Chq/Slip<span id="btn_close" onclick="closeButton1()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="chqSlipTable" style="width:800px;">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    //var canvas = document.getElementById('myCanvas');
+    //var context = canvas.getContext('2d');
+    //var img = document.getElementById('scream');
+
+    var x = document.getElementById("urlVal").value;
+
+    // RTGS - Post Data
+    var remittance_type = null;
+    var branch = null;
+    var date = null;
+    var debitAccNo = null;
+    var Chqno = null;
+    var amt = null;
+    var amtinwords = null;
+    var PurposeCode = null;
+    var BeneficiaryAccType = null;
+    var BeneficiaryName = null;
+    var BeneficiaryAccNo = null;
+    var cBeneficiaryAccNo = null;
+    var BeneficiaryIFSCCode = null;
+    var BeneficiaryBank = null;
+    var BeneficiaryBranch = null;
+    var Name = null;
+
+    // Cheque - Post Data
+    var rtgs_chq_date = null;
+    var rtgs_chq_ifscCode = null;
+    var payeeName = null;
+    var rtgs_chq_amtInWords = null;
+    var rtgs_chq_amount = null;
+    var rtgs_chq_debitAccNo = null;
+
+    var chqnoDataEntry = null;
+    var sortcodeDataEntry = null;
+    var sanDataEntry = null;
+    var trDataEntry = null;
+
+    var verf = document.getElementById("verfLevel").value;
+
+
+    $(document).ready(function () {
+
+        var x = document.getElementById("urlVal").value;
+        var y = "getRtgsFormDataChecker";
+        var userId = document.getElementById("tellerDetails").value;
+        
+
+        var count_id = document.getElementById("RecordId").value;
+
+        debugger;
+
+        var access_token = window.localStorage.getItem('AccessToken');
+        var bearer = window.localStorage.getItem('TokenType');
+        var gusername = window.localStorage.getItem('username');
+        //var gusername = "MERAJ";
+        var authHeaders = {};
+        var ProcessType = "";
+        authHeaders.Authorization = bearer + " " + access_token;
+
+        //var today = new Date();
+        //var dd = String(today.getDate()).padStart(2, '0');
+        //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        //var yyyy = today.getFullYear();
+
+        //today = yyyy + '/' + mm + '/' + dd;
+        var cid = document.getElementById("ChqId").value;
+        
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            //data: { 'pType': 'RTGS', 'INtellerid': userId },
+            data: { count_id: count_id, username: gusername, rtgs_type: "03_04", rtgs_chq_count_id: cid, verfLevel: verf },
+            success: function (result) {
+                RtgsFormData(result);
+            },
+            error: getError
+        });
+    });
+
+    function getError(result) {
+        var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+    function RtgsFormData(result) {
+        debugger;
+
+        $("#div_chq").hide();
+
+        document.getElementById("sni_id").value = result.sni_id;
+
+        // RTGS
+        document.getElementById("FrontImg").src = result.frontgreyimagepath;
+        document.getElementById("remittance_type").value = result.RemittanceType;
+        document.getElementById("branch").value = result.Branch;
+        document.getElementById("date").value = result.Date;
+        document.getElementById("debitAccNo").value = result.DebitAccNo;
+        document.getElementById("Chqno").value = result.ChqNo;
+        document.getElementById("amt").value = result.Amount;
+        document.getElementById("amtinwords").value = result.AmountInWords;
+        document.getElementById("PurposeCode").value = result.PurposeCode;
+        document.getElementById("BeneficiaryAccType").value = result.BeneficiaryAccType;
+        document.getElementById("BeneficiaryName").value = result.BeneficiaryName;
+        document.getElementById("BeneficiaryAccNo").value = result.BeneficiaryAccNo;
+        document.getElementById("cBeneficiaryAccNo").value = result.cBeneficiaryAccNo;
+        document.getElementById("BeneficiaryIFSCCode").value = result.BeneficiaryIFSCCode;
+        document.getElementById("BeneficiaryBank").value = result.BeneficiaryBank;
+        document.getElementById("BeneficiaryBranch").value = result.BeneficiaryBranch;
+        document.getElementById("Name").value = result.DebitName;
+
+        // Cheque Details
+        document.getElementById("FG").src = result.backgreyimagepath;
+        //document.getElementById("scream").src = result.backgreyimagepath;
+        document.getElementById("rtgs_chq_date").value = result.rtgs_chq_date;
+        document.getElementById("rtgs_chq_ifscCode").value = result.rtgs_chq_ifsc;
+        document.getElementById("rtgs_chq_payeeName").value = result.rtgs_chq_beneName;
+        document.getElementById("rtgs_chq_amtInWords").value = result.rtgs_chq_amtInWords;
+        document.getElementById("rtgs_chq_amount").value = result.rtgs_chq_amt;
+        document.getElementById("rtgs_chq_debitAccNo").value = result.rtgs_chq_debitAccNo;
+        document.getElementById("chqnoDataEntry").value = result.rtgs_chq_chqno;
+        document.getElementById("sortcodeDataEntry").value = result.rtgs_chq_sortcode;
+        document.getElementById("sanDataEntry").value = result.rtgs_chq_san;
+        document.getElementById("trDataEntry").value = result.rtgs_chq_transcode;
+
+        //var fg = document.getElementById("FG");
+
+        //// Canvas
+        //debugger;
+        //canvas.width = img.width;
+        //canvas.height = img.height;
+        ////canvas.width = "600";
+        ////canvas.height = "300";
+        //context.drawImage(img, 10, 10);
+    }
+
+    function SubmitData() {
+        debugger;
+
+        var decision = document.getElementById("decision").value.toUpperCase();
+
+        if (decision != "A" && decision != "R") {
+            alert("Enter correct decision!");
+            return false;
+        }
+
+        var code = document.getElementById("rejectCode").value;
+        var desc = document.getElementById("rejectDescription").value;
+
+        debugger;
+
+        if (decision == "R" && (code == null || code == "" || desc == null || desc == "")) {
+            alert("Reject Code and description is mandatory!");
+            return false;
+        }
+
+        let text = "Do you want to Submit the record!";
+        if (confirm(text) != true) {
+            return false;
+        }
+
+        // Kotak rtgs form validation
+        var rtgs_result = kotak_rtgs_validation();
+        if (rtgs_result == false) {
+            $("#div_chq").hide();
+            $("#div_rtgs").show();
+            return false;
+        }
+
+        // Cheque validation
+        var chq_result = kotak_cheque_validation();
+        if (chq_result == false) {
+            $("#div_rtgs").hide();
+            $("#div_chq").show();
+
+            var canvas = document.getElementById('myCanvas');
+            var context = canvas.getContext('2d');
+            var img = document.getElementById('FG');
+
+            context.drawImage(img, 10, 0, 900, 450);
+
+            return false;
+        }
+
+        // Micr Data Validation
+        var micr_result = ChequeDataValidation();
+        if (micr_result == false) {
+            $("#div_rtgs").hide();
+            $("#div_chq").show();
+
+            var canvas = document.getElementById('myCanvas');
+            var context = canvas.getContext('2d');
+            var img = document.getElementById('FG');
+
+            context.drawImage(img, 10, 0, 900, 450);
+
+            return false;
+        }
+
+        // Common fields in rtgs and cheque
+        var common_result = kotak_rtgs_cheque_common();
+        if (common_result == false) {
+            return false;
+        }
+
+        chqnoDataEntry = document.getElementById("chqnoDataEntry").value;
+        sortcodeDataEntry = document.getElementById("sortcodeDataEntry").value;
+        sanDataEntry = document.getElementById("sanDataEntry").value;
+        trDataEntry = document.getElementById("trDataEntry").value;
+
+
+        //return false;
+
+        var x = document.getElementById("urlVal").value;
+        var y = "postRtgsCheckerData";
+
+        var count_id = document.getElementById("RecordId").value;
+        var sni_id = document.getElementById("sni_id").value;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        var hh = String(today.getHours()).padStart(2, '0');
+        var min = String(today.getMinutes()).padStart(2, '0');
+        var ss = String(today.getSeconds()).padStart(2, '0');
+        //var RefNo = "RTGS" + yyyy + mm + dd + hh + min + ss;
+        var RefNo = remittance_type + yyyy + mm + dd + hh + min + ss;
+
+        var bankcode = document.getElementById("bankcode").value;
+
+        var CheckerModule = document.getElementById("CheckerModule").value;
+        var l3start = parseFloat(document.getElementById("L3StartLimit").value);
+        var data_amt = parseFloat(amt);
+
+        var VerfRequired = "";
+
+        if (verf == "L2") {
+            if (data_amt >= parseFloat(l3start))
+                VerfRequired = "Y";
+            else
+                VerfRequired = "N";
+        }
+        else
+            VerfRequired = "N";
+
+        debugger;
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: {
+                'Status': 'SUBMIT',
+                'Decision': decision, 'Code': code, 'Description': desc, 'verfLevel': verf, 'VerfRequired': VerfRequired,
+                'count_id': count_id, 'sni_id': sni_id, 'RefNo': RefNo, 'bankcode': bankcode, 'RemittanceType': remittance_type, 'Branch': branch, 'Date': date,
+                'DebitAccNo': debitAccNo, 'ChqNo': Chqno, 'Amount': amt, 'AmountInWords': amtinwords, 'PurposeCode': PurposeCode,
+                'BeneficiaryAccType': BeneficiaryAccType, 'BeneficiaryName': BeneficiaryName, 'BeneficiaryAccNo': BeneficiaryAccNo, 'cBeneficiaryAccNo': cBeneficiaryAccNo,
+                'BeneficiaryIFSCCode': BeneficiaryIFSCCode, 'BeneficiaryBank': BeneficiaryBank, 'BeneficiaryBranch': BeneficiaryBranch, 'Name': Name,
+                'rtgs_type': '03_04',
+                'rtgs_chq_date': rtgs_chq_date, 'rtgs_chq_ifsc': rtgs_chq_ifscCode, 'rtgs_chq_beneName': payeeName,
+                'rtgs_chq_amtInWords': rtgs_chq_amtInWords, 'rtgs_chq_amt': rtgs_chq_amount, 'rtgs_chq_debitAccNo': rtgs_chq_debitAccNo, 'rtgs_chq_chqno': chqnoDataEntry,
+                'rtgs_chq_sortcode': sortcodeDataEntry, 'rtgs_chq_san': sanDataEntry, 'rtgs_chq_transcode': trDataEntry,
+                'rtgs_chq_count_id': document.getElementById("ChqId").value
+            },
+            success: function (result) {
+                PostRtgsSuccess(result);
+            },
+            error: getError
+        });
+
+    }
+
+    //function ResetData() {
+
+    //    let text = "Do you want to Reset the record!";
+    //    if (confirm(text) != true) {
+    //        return false;
+    //    }
+
+    //    var count_id = document.getElementById("RecordId").value;
+    //    var sni_id = document.getElementById("sni_id").value;
+
+    //    var x = document.getElementById("urlVal").value;
+    //    var y = "postRtgsData";
+
+    //    debugger;
+
+    //    $.ajax({
+    //        url: x + y,
+    //        //headers: authHeaders,
+    //        type: 'POST',
+    //        data: {
+    //            'Status': 'RESET', 'count_id': count_id, 'sni_id': sni_id, 'rtgs_type': '03_04', 'rtgs_chq_count_id': document.getElementById("ChqId").value
+    //        },
+    //        success: function (result) {
+    //            PostRtgsSuccess(result);
+    //        },
+    //        error: getError
+    //    });
+    //}
+
+    function PostRtgsSuccess(result) {
+        alert(result);
+
+        var rooturl = '@Url.Content("~/")';
+
+        window.open(rooturl + "RtgsNeft/RtgsList?checker=true", "_self");
+    }
+
+    @*function BackBtn() {
+        var rooturl = '@Url.Content("~/")';
+
+        window.open(rooturl + "RtgsNeft/RtgsList", "_self");
+    }*@
+
+    function radioFunction(type) {
+        if (type == "rtgs") {
+            $("#div_chq").hide();
+            $("#div_rtgs").show();
+        }
+        else {
+            $("#div_rtgs").hide();
+            $("#div_chq").show();
+
+            var canvas = document.getElementById('myCanvas');
+            var context = canvas.getContext('2d');
+            var img = document.getElementById('FG');
+
+            context.drawImage(img, 10, 0, 900, 450);
+        }
+
+    }
+
+
+
+    function mouseDown(txtid) {
+        //alert("mouse down");
+        //drawshape(txtid);
+
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        var img = document.getElementById('FG');
+
+        //alert(imgh);
+        context.drawImage(img, 10, 0, 900, 450);
+        //context.drawImage(img, 5, 5);
+
+        context.beginPath();
+
+        document.getElementById(txtid).style.background = "yellow";
+
+        if (txtid == "rtgs_chq_date")
+            context.rect(660, 15, 230, 60);   //Chq Date
+        else if (txtid == "rtgs_chq_payeeName")
+            context.rect(40, 80, 850, 50);      //Payee Name
+        else if (txtid == "rtgs_chq_amtInWords")
+            context.rect(40, 120, 850, 90);     //Amount in Word
+        else if (txtid == "rtgs_chq_amount")
+            context.rect(600, 150, 280, 60);    //Amount in figure
+        else if (txtid == "rtgs_chq_debitAccNo")
+            context.rect(40, 220, 300, 50);     //Debit Account
+        else if (txtid == "rtgs_chq_micr" || txtid == "chqnoDataEntry" || txtid == "sortcodeDataEntry" || txtid == "sanDataEntry" || txtid == "trDataEntry")
+            context.rect(200, 380, 500, 60);  //MICR
+
+
+        context.fillStyle = "rgba(255, 255, 255, 0)";
+        context.fill();
+        context.lineWidth = 3;
+        context.strokeStyle = 'red';
+        context.stroke();
+        //context.clearRect(60, 110, 1250, 80);     // removes the portion of the image
+
+    }
+
+
+    function mouseup(txtid) {
+        //alert("mouse up");
+
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        var img = document.getElementById('FG');
+
+        context.drawImage(img, 10, 0, 900, 450);
+
+        ////alert('mouseup');
+        //context.clearRect(0, 0, 2000, 800);
+
+        document.getElementById(txtid).style.backgroundColor = "transparent";
+        //document.getElementById(txtid).style.opacity = "1";
+    }
+
+
+
+</script>
+

@@ -1,0 +1,237 @@
+﻿
+
+<!DOCTYPE html>
+@*@if (ViewBag.userlogin == false)
+{
+    <script type="text/javascript">
+        var RootUrl = '@Url.Content("~/")';
+        var conval = confirm('This user already logged in if you contiue previuos session will expire!!');
+
+        if (conval == false) {
+            window.location = RootUrl + "Login/Logout?user=" + '@Session["user"].ToString()';
+        }
+        else {
+
+            //window.location = "/Home/setSession";
+            $.ajax({
+                url: RootUrl + 'Home/setSession',
+                dataType: 'html',
+                success: function (data) {
+                }
+            });
+        }
+
+    </script>
+}*@
+<html lang="en" dir="ltr">
+<head>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            text-decoration: none;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background: #042331;
+            transition: all .5s ease;
+        }
+
+            .sidebar header {
+                font-size: 22px;
+                color: white;
+                line-height: 70px;
+                text-align: center;
+                background: #063146;
+                user-select: none;
+            }
+
+            .sidebar ul a {
+                display: block;
+                height: 100%;
+                width: 100%;
+                line-height: 65px;
+                font-size: 20px;
+                color: white;
+                padding-left: 40px;
+                box-sizing: border-box;
+                border-bottom: 1px solid black;
+                border-top: 1px solid rgba(255,255,255,.1);
+                transition: .4s;
+            }
+
+        ul li:hover a {
+            padding-left: 50px;
+        }
+
+        .sidebar ul a i {
+            margin-right: 16px;
+        }
+
+        #check {
+            display: none;
+        }
+
+        label #btn, label #cancel {
+            position: absolute;
+            background: #042331;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        label #btn {
+            left: 40px;
+            top: 25px;
+            font-size: 35px;
+            color: white;
+            padding: 6px 12px;
+            transition: all .5s;
+        }
+
+        label #cancel {
+            z-index: 1111;
+            left: -195px;
+            top: 17px;
+            font-size: 30px;
+            color: #0a5275;
+            padding: 4px 9px;
+            transition: all .5s ease;
+        }
+
+        #check:checked ~ .sidebar {
+            left: 0;
+        }
+
+        #check:checked ~ label #btn {
+            left: 250px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #check:checked ~ label #cancel {
+            left: 195px;
+        }
+
+        #check:checked ~ section {
+            margin-left: 250px;
+        }
+
+        section {
+            background: url(bg.jpeg) no-repeat;
+            background-position: center;
+            background-size: cover;
+            height: 100vh;
+            transition: all .5s;
+        }
+    </style>
+    <meta charset="utf-8">
+    <!-- <title>Sider Menu Bar CSS</title> -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+</head>
+
+<body>
+    <input type="checkbox" id="check">
+    <label for="check">
+        <i class="fas fa-bars" id="btn"></i>
+        <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+        <a><img src="~/Icons/Kores%20Logo.png" style="width: 100%;"></a>
+        @*<header>iBAS</header>*@
+        <ul>
+            <li><a href="~/home/Search"><i class="fas fa-sliders-h"></i>Search</a></li>
+
+            <li><a href="~/home/Cashdeposit?Name=WithDraw"><i class="fas fa-sliders-h"></i>Cash WithDraw</a></li>
+            <li><a href="~/home/Cashdeposit?Name=Deposit"><i class="fas fa-sliders-h"></i>Cash Deposit</a></li>
+            <li><a href="~/home/Cashdeposit?Name=CTS"><i class="fas fa-sliders-h"></i>CTS Cheque</a></li>
+            <li><a href="~/home/Cashdeposit?Name=TC"><i class="fas fa-sliders-h"></i>Transfer Cheque</a></li>
+            <li><a href="~/home/PrinterMaster"><i class="far fa-envelope"></i>Printer Mapping</a></li>
+            <li><a href="~/home/UserManagement"><i class="far fa-envelope"></i>User Managment</a></li>
+           
+
+            
+        </ul>
+    </div>
+    <section></section>
+
+
+</body>
+
+</html>
+<script src="~/Scripts/Data.js"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+        window.localStorage.setItem('username', '@Session["user"].ToString()');
+
+        if ('@Session["userlogin"].ToString()' == "False") {
+            var RootUrl = '@Url.Content("~/")';
+            var conval = confirm('This user already logged in if you contiue previuos session will expire!!');
+
+            if (conval == false) {
+                @*window.location = RootUrl + "Login/Logout?user=" + '@Session["user"].ToString()';*@
+                window.location = rooturl + "Home/LoginiBAS";
+                
+            }
+            else {
+
+                //window.location = "/Home/setSession";
+                $.ajax({
+                    url: RootUrl + 'Home/setSession',
+                    dataType: 'html',
+                    success: function (data) {
+                    }
+                });
+            }
+        }
+        if ('@Session["login"].ToString()' == "True") {
+        var tokenurl = '@ViewBag.URL';
+            getToken(tokenurl);
+        }
+
+    });
+
+    function callbackFunction(result) {
+        debugger;
+        window.localStorage.setItem('AccessToken', result.access_token);
+        window.localStorage.setItem('TokenType', result.token_type);
+        window.localStorage.setItem('username', '@Session["user"].ToString()');
+
+    }
+    function errorResponse(result) {
+        debugger;
+        alert(result.responseText);
+        
+
+    }
+   
+    function Search() {
+        var RootUrl = '@Url.Content("~/")';
+        $.ajax({
+            type: "POST",
+            url: Rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "home/LoginiBAS";
+                }
+            }
+        });
+    }
+
+</script>
+
+
+

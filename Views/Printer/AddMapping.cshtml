@@ -1,0 +1,282 @@
+﻿
+@{
+    ViewBag.Title = "AddMapping";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/PrinterMapping.js"></script>
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+
+<div class="">
+    <div class="row col-12 mb-3 mt-1">
+        <form class="d-flex align-items-center" action="#">
+            <div class="row">
+                <h3 class="mb-0 text-primary position-relative">
+                    <span class="bg-200 dark__bg-1100">Printer Mapping (Details)</span>
+                </h3>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card overflow-hidden">
+                <div class="card-header bg-light py-2">
+                    <h5 class="mb-0 text-center">Printer Mapping Master</h5>
+                </div>
+                <div class="card-body py-0">
+                    <form>
+                        <div class="row mb-4 mt-2">
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Branch Code</label>
+                                    @*<input id="branch_code" type="text" class="form-control form-control-sm"
+                                        placeholder="187">*@
+                                    @*User04 --starts 2023/06/25*@
+                                    <select id="branch_code" class="form-select form-select-sm"></select>
+                                    @*User04 --ends*@
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Sorter Serial No</label>
+                                    <select id="drpsorter" class="form-select form-select-sm">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Sorter IP</label>
+                                    <input id="sorter_ip" type="text" class="form-control form-control-sm"
+                                           placeholder="10.140.567.9">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Sorter Port</label>
+                                    <input type="text" id="sorter_port" class="form-control form-control-sm"
+                                           placeholder="448">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Printer IP</label>
+                                    <input id="printer_ip" type="text" class="form-control form-control-sm"
+                                           placeholder="10.56.5.667">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Printer Port</label>
+                                    <input type="text" id="printer_port" class="form-control form-control-sm"
+                                           placeholder="9100">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Select Printer Model</label>
+                                    <select id="printer_model" class="form-select form-select-sm">
+                                        <option selected value="0">Please Select...</option>
+                                        <option value="TP805">TP805</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Receipt Printing</label>
+                                    <select id="receipt_printing" class="form-select form-select-sm">
+                                        <option selected value="0">Please Select...</option>
+                                        <option value="YES">Yes</option>
+                                        <option value="NO">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">BOFD</label>
+                                    <input id="bofd" type="text" class="form-control form-control-sm"
+                                           placeholder="BOFD">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">ifsc code</label>
+                                    <input id="ifsc" type="text" class="form-control form-control-sm"
+                                           placeholder="kkbk235678">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">grid name</label>
+                                    <input id="grid_name" type="text" class="form-control form-control-sm"
+                                           placeholder="xyz">
+                                </div>
+                            </div>
+                            @*User04 --starts 2023/06/23*@
+                            <div class="col-lg-3">
+                                <div class="">
+                                    <label class="form-label">Server IP</label>
+                                    <input id="server_ip" type="text" class="form-control form-control-sm"
+                                           placeholder="10.56.5.667">
+                                </div>
+                            </div>
+                            @*User04 --ends*@
+                        </div>
+                        <div class="d-grid gap-2 d-md-block text-center mb-3">
+                            <button id="btnSave" type="button" class="btn btn-primary btn-sm px-4 me-2"
+                                    href="#authenticationmodal" data-bs-toggle="modal" onclick="VerifyData()">
+                                Save
+                            </button>
+                            <a class="btn btn-secondary btn-sm px-4" href="~/Printer/Index">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-1" data-bs-theme="light">
+                    <h4 class="mb-0 text-white" id="authentication-modal-label">Message Box</h4>
+                </div>
+                <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2 px-1">
+                <div id="div_create_question" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                    <h5 class="text-center">
+                        <strong class="me-auto">Do you want to Register this Printer ?</strong>
+                    </h5>
+                </div>
+                <table id="tbl_verf_fail" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Error Msg</th>
+                            <td class="text-wrap">
+                                <span id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbl_verf_result" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Response</th>
+                            <td class="text-wrap">
+                                <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                    <div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="PushData()">Create</a></div>
+                    <div class="col-sm-6">
+                        <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                           aria-label="Close">Cancel</a>
+                    </div>
+                </div>
+                <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                    </div>
+                </div>
+                <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="reloadpage()">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var RootUrl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+
+    $("#ProcessingBar").hide();
+
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    var branch_code = "";
+    var drpsorter = "";
+    var sorter_ip = "";
+    var sorter_port = "";
+    var printer_ip = "";
+    var printer_port = "";
+    var printer_model = "";
+    var receipt_printing = "";
+
+    //For Serial no DropDown
+    $(document).ready(function () {
+        //var x = '@ViewBag.URL';
+        debugger;
+
+        var y1 = "getsorterdetails";
+        $.ajax({
+            url: x + y1,
+            headers: authHeaders,
+            type: 'POST',
+            success: function (result) {
+
+                var district = "";
+                $("#drpsorter").empty();
+                console.log(result);
+                $("#drpsorter").append(
+                    $('<option></option>').val(0).html("Select Sorter SerialNo"));
+                $.each(result, function (i, drpsorter) {
+                    $("#drpsorter").append(
+                        $('<option></option>').val(drpsorter.inmachineserialno).html(drpsorter.inmachineserialno));
+                });
+
+            },
+            error: getError
+        });
+
+        var y2 = "getbranchcode";
+        $.ajax({
+            url: x + y2,
+            headers: authHeaders,
+            type: 'POST',
+            success: function (result) {
+
+                var district = "";
+                $("#branch_code").empty();
+                console.log(result);
+                $("#branch_code").append(
+                    $('<option></option>').val(0).html("Select Branch Code"));
+                $.each(result, function (i, branch_code) {
+                    $("#branch_code").append(
+                        $('<option></option>').val(branch_code.inbranch_code).html(branch_code.inbranch_code));
+                });
+
+            },
+            error: getError
+        });
+
+
+    });
+
+    @*//User04 --starts 2023/06/25 For Branch code dropdown
+    $(document).ready(function () {
+        //var x = '@ViewBag.URL';
+
+
+    });
+    //User04 --ends*@
+
+</script>

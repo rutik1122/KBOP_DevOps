@@ -1,0 +1,597 @@
+﻿
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var gusername = window.localStorage.getItem('username');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    function goBack() {
+        var url = rooturl + "Home/Index";
+        window.location.href = url;
+    }
+
+    function goBack1() {
+        var url = rooturl + "Home/BranchReconcilation";
+        window.location.href = url;
+    }
+
+
+    function View() {
+        var divretype = document.getElementById('BranchReconcilationSection');
+        divretype.style.visibility = 'hidden';
+
+        var divre = document.getElementById('RecordReconcilationSection');
+        divre.style.visibility = 'visible';
+
+        var BranchCode = $("#branchText").val();
+
+        var ProcessingDate = $("#ProcessingDate").val();
+
+        //if (BranchCode == "" || ProcessingDate == "") {
+        //    alert("Please select Branch code and date !!!");
+        //    return;
+        //}
+
+
+        var ReconsilationType = $("#ReType").val();
+        var ReconsilationType_SerialNoWise = $("#Reconsilation").val(); /*today*/
+
+        if (ReconsilationType == "1") {
+
+            if (BranchCode == "" || ProcessingDate == "") {
+                alert("Please select Branch code and date *!!!");
+                return;
+            }
+
+        }
+        else {
+            if (ProcessingDate == "") {
+                alert("Please select and date !!!");
+                return;
+            }
+        }
+        //$("#myDatatable").clear();
+        //$("#myDatatable").remove();
+        // $("#table_of_items tr").remove();
+
+
+        var y = "RecosilationRecord";
+        $.ajax({
+            // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+            url: x + y,
+            // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+            headers: authHeaders,
+            type: 'POST',
+            data: { 'ProcessingDate': ProcessingDate, 'BranchCode': BranchCode, 'ReconsilationType': ReconsilationType, 'Tellerid': gusername, 'ReconsilationType_SerialNoWise': ReconsilationType_SerialNoWise },
+            success: function (result) {
+
+                RecordReconsilationtable(result);
+
+            },
+            error: getError
+        });
+    }
+
+   
+    function BranchReconsilation() {
+       // alert("hi");
+        let text = "Are you sure you want to generate a Branch Reconsilation Report ?";
+        if (confirm(text) == true) {
+            debugger;
+            var BranchCode = $("#branchText").val();
+            var ProcessingDate = $("#ProcessingDate").val();
+
+            var ReconsilationType = $("#ReType").val();
+            var ReconsilationType_SerialNoWise = $("#Reconsilation").val(); /*today*/
+            if (ReconsilationType == "1") {
+
+                if (BranchCode == "" || ProcessingDate == "") {
+                    alert("Please select Branch code and date !!!!");
+                    return;
+                }
+
+            }
+            else {
+                if ( ProcessingDate == "") {
+                    alert("Please select  and date !!!");
+                    return;
+                }
+            }
+            //$("#myDatatable").clear();
+            //$("#myDatatable").remove();
+           // $("#table_of_items tr").remove();
+
+            debugger;
+            var y = "BranchReconsilation";
+            $.ajax({
+                // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+                url: x + y,
+                // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+                headers: authHeaders,
+                type: 'POST',
+                data: { 'ProcessingDate': ProcessingDate, 'BranchCode': BranchCode, 'ReconsilationType': ReconsilationType, 'Tellerid': gusername ,'ReconsilationType_SerialNoWise' : ReconsilationType_SerialNoWise },
+                success: function (result) {
+                    if (result.length > 0)
+                    {
+                        BranchReconsilationtable(result);
+                    }
+                    else
+                    {
+                        alert("No Records Found!!!")
+                    }
+
+                },
+                error: getError
+            });
+        }
+    }
+
+
+    function BranchReconsilationtable(printer) {
+        // Iterate over the collection of data,below line for removing table data except header
+        $("#myDatatable").find("tr:gt(2)").remove();   
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            AddRow(print);
+        });
+    }
+
+    function RecordReconsilationtable(printer) {
+        // Iterate over the collection of data,below line for removing table data except header
+        $("#myRecordDatatable").find("tr:gt(0)").remove();
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            AddRecordRow(print);
+        });
+    }
+
+
+    function AddRow(print) {
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myDatatable tbody").length == 0) {
+            $("#myDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myDatatable tbody").append(
+          TableRow(print));
+    }
+
+
+    function AddRecordRow(print) {
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myRecordDatatable tbody").length == 0) {
+            $("#myRecordDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myRecordDatatable tbody").append(
+          RecordTableRow(print));
+    }
+
+    function TableRow(print) {
+        //$("#myDatatable tr").remove();
+        //debugger;
+        var ac = print.denom;
+        debugger;
+        if (ac == "") {
+            if (print.denom != null) {
+                //var ret =
+                //    "<tr>" +
+                //    '<td style="border-left:double;border-bottom:double;border-right:double;"><div  id= "denom">' + print.denom + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "vault_Count">' + print.vault_Count + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "vault_Total_Amount">' + print.vault_Total_Amount + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "vault_Count_Manual">' + print.vault_Count_Manual + '</div></td>' +
+                //    '<td style="border-bottom:double;border-right:double;"><div  id= "vault_Total_Amount_Manual">' + print.vault_Total_Amount_Manual + '</div></td>' +
+
+                //    '<td style="border-bottom:double;"><div  id= "cashin_denomCount">' + print.cashin_denomCount + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "cashin_Total_Amount">' + print.cashin_Total_Amount + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "cashin_denomCount_Manual">' + print.cashin_denomCount_Manual + '</div></td>' +
+                //    '<td style="border-bottom:double;border-right:double;"><div  id= "cashin_Total_Amount_Manual">' + print.cashin_Total_Amount_Manual + '</div></td>' +
+
+                //    '<td style="border-bottom:double;"><div  id= "cashout_denomCount">' + print.cashout_denomCount + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "cashout_Total_Amount">' + print.cashout_Total_Amount + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "cashout_denomCount_Manual">' + print.cashout_denomCount_Manual + '</div></td>' +
+                //    '<td style="border-bottom:double;border-right:double;"><div  id= "cashout_Total_Amount_Manual">' + print.cashout_Total_Amount_Manual + '</div></td>' +
+
+                //    '<td style="border-bottom:double;"><div  id= "currency_chest_denomCount">' + print.currency_chest_denomCount + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "currency_chest_Total_Amount">' + print.currency_chest_Total_Amount + '</div></td>' +
+                //    '<td style="border-bottom:double;"><div  id= "currency_chest_denomCount_Manual">' + print.currency_chest_denomCount_Manual + '</div></td>' +
+                //    '<td style="border-bottom:double;border-right:double;"><div  id= "currency_chest_Total_Amount_Manual">' + print.currency_chest_Total_Amount_Manual + '</div></td>' +
+
+                //    '<td style="border-bottom:double;border-right:double;"><div  id= "Cash_Denoms_Available">' + print.Cash_Denoms_Available + '</div></td>' +
+                //    '<td style="border-bottom:double;border-right:double;"><div  id= "Cash_Available">' + print.Final_Cash_Available + '</div></td>' +
+
+                //    "</tr>";
+
+                var cVault = parseInt(print.vault_Count) + parseInt(print.vault_Count_Manual);
+                var aVault = parseInt(print.vault_Total_Amount) + parseInt(print.vault_Total_Amount_Manual);
+
+                var cDeposit = parseInt(print.cashin_denomCount) + parseInt(print.cashin_denomCount_Manual);
+                var aDeposit = parseInt(print.cashin_Total_Amount) + parseInt(print.cashin_Total_Amount_Manual);
+
+                var cWithdrawal = parseInt(print.cashout_denomCount) + parseInt(print.cashout_denomCount_Manual);
+                var aWithdrawal = parseInt(print.cashout_Total_Amount) + parseInt(print.cashout_Total_Amount_Manual);
+
+                var cCurrency = parseInt(print.currency_chest_denomCount) + parseInt(print.currency_chest_denomCount_Manual);
+                var aCurrency = parseInt(print.currency_chest_Total_Amount) + parseInt(print.currency_chest_Total_Amount_Manual);
+
+                var ret =
+                    "<tr>" +
+                    '<td style="border-left:double;border-bottom:double;border-right:double;"><div  id= "denom">' + print.denom + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "vault_Count">' + print.vault_Count + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "vault_Total_Amount">' + print.vault_Total_Amount + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "vault_Count_Manual">' + print.vault_Count_Manual + '</div></td>' +
+                    '<td style="border-bottom:double;border-right:double;"><div  id= "vault_Total_Amount_Manual">' + print.vault_Total_Amount_Manual + '</div></td>' +
+
+                    '<td style="border-bottom:double;"><div  id= "cashin_denomCount">' + print.cashin_denomCount + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "cashin_Total_Amount">' + print.cashin_Total_Amount + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "cashin_denomCount_Manual">' + print.cashin_denomCount_Manual + '</div></td>' +
+                    '<td style="border-bottom:double;border-right:double;"><div  id= "cashin_Total_Amount_Manual">' + print.cashin_Total_Amount_Manual + '</div></td>' +
+
+                    '<td style="border-bottom:double;"><div  id= "cashout_denomCount">' + print.cashout_denomCount + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "cashout_Total_Amount">' + print.cashout_Total_Amount + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "cashout_denomCount_Manual">' + print.cashout_denomCount_Manual + '</div></td>' +
+                    '<td style="border-bottom:double;border-right:double;"><div  id= "cashout_Total_Amount_Manual">' + print.cashout_Total_Amount_Manual + '</div></td>' +
+
+                    '<td style="border-bottom:double;"><div  id= "currency_chest_denomCount">' + print.currency_chest_denomCount + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "currency_chest_Total_Amount">' + print.currency_chest_Total_Amount + '</div></td>' +
+                    '<td style="border-bottom:double;"><div  id= "currency_chest_denomCount_Manual">' + print.currency_chest_denomCount_Manual + '</div></td>' +
+                    '<td style="border-bottom:double;border-right:double;"><div  id= "currency_chest_Total_Amount_Manual">' + print.currency_chest_Total_Amount_Manual + '</div></td>' +
+
+                    '<td colspan="2" style="border-bottom:double;border-right:double;"><div  id= "Cash_Denoms_Available">' + print.Cash_Denoms_Available + '</div></td>' +
+                    '<td colspan="2" style="border-bottom:double;border-right:double;"><div  id= "Cash_Available">' + print.Final_Cash_Available + '</div></td>' +
+
+                    '</tr><tr style="border:double;">' +
+                    '<td style="border-left:double;border-bottom:double;border-right:double;"><b>Total</b></td>' +
+                    '<td><b>Count:</b></td>' +
+                    '<td><div id="">' + cVault.toString() + '</div></td>' +
+                    '<td><b>Amount:</b></td>' +
+                    '<td style="border-right:double;"><div id="">' + aVault.toString() + '</div></td>' +
+                    '<td><b>Count:</b></td>' +
+                    '<td><div id="">' + cDeposit.toString() + '</div></td>' +
+                    '<td><b>Amount:</b></td>' +
+                    '<td style="border-right:double;"><div id="">' + aDeposit.toString() + '</div></td>' +
+                    '<td><b>Count:</b></td>' +
+                    '<td><div id="">' + cWithdrawal.toString() + '</div></td>' +
+                    '<td><b>Amount:</b></td>' +
+                    '<td style="border-right:double;"><div id="">' + aWithdrawal.toString() + '</div></td>' +
+                    '<td><b>Count:</b></td>' +
+                    '<td><div id="">' + cCurrency.toString() + '</div></td>' +
+                    '<td><b>Amount:</b></td>' +
+                    '<td style="border-right:double;"><div id="">' + aCurrency.toString() + '</div></td>' +
+                    '<td><b>Count:</b></td>' +
+                    '<td><div id="">' + print.Cash_Denoms_Available + '</div></td>' +
+                    '<td><b>Amount:</b></td>' +
+                    '<td><div id="">' + print.Final_Cash_Available + '</div></td>' +
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    //"<tr>" +
+                    // '<td <div> No Records Found </div></td>' +
+
+                    //"</tr>";
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        else {
+            if (print.denom != null) {
+                var ret =
+                    "<tr>" +
+                    '<td style="border-left:double;border-right:double;"><div  id= "denom">' + print.denom + '</div></td>' +
+                    '<td ><div  id= "vault_Count">' + print.vault_Count + '</div></td>' +
+                    '<td ><div  id= "vault_Total_Amount">' + print.vault_Total_Amount + '</div></td>' +
+                    '<td ><div  id= "vault_Count_Manual">' + print.vault_Count_Manual + '</div></td>' +
+                    '<td style="border-right:double;"><div  id= "vault_Total_Amount_Manual">' + print.vault_Total_Amount_Manual + '</div></td>' +
+
+                    '<td ><div  id= "cashin_denomCount">' + print.cashin_denomCount + '</div></td>' +
+                    '<td ><div  id= "cashin_Total_Amount">' + print.cashin_Total_Amount + '</div></td>' +
+                    '<td ><div  id= "cashin_denomCount_Manual">' + print.cashin_denomCount_Manual + '</div></td>' +
+                    '<td style="border-right:double;"><div  id= "cashin_Total_Amount_Manual">' + print.cashin_Total_Amount_Manual + '</div></td>' +
+
+                    '<td ><div  id= "cashout_denomCount">' + print.cashout_denomCount + '</div></td>' +
+                    '<td ><div  id= "cashout_Total_Amount">' + print.cashout_Total_Amount + '</div></td>' +
+                    '<td ><div  id= "cashout_denomCount_Manual">' + print.cashout_denomCount_Manual + '</div></td>' +
+                    '<td style="border-right:double;"><div  id= "cashout_Total_Amount_Manual">' + print.cashout_Total_Amount_Manual + '</div></td>' +
+
+                    '<td ><div  id= "currency_chest_denomCount">' + print.currency_chest_denomCount + '</div></td>' +
+                    '<td ><div  id= "currency_chest_Total_Amount">' + print.currency_chest_Total_Amount + '</div></td>' +
+                    '<td ><div  id= "currency_chest_denomCount_Manual">' + print.currency_chest_denomCount_Manual + '</div></td>' +
+                    '<td style="border-right:double;"><div  id= "currency_chest_Total_Amount_Manual">' + print.currency_chest_Total_Amount_Manual + '</div></td>' +
+
+                    '<td colspan="2" style="border-right:double;"><div  id= "Cash_Denoms_Available">' + print.Cash_Denoms_Available + '</div></td>' +
+                    '<td colspan="2" style="border-right:double;"><div  id= "Cash_Available">' + print.Final_Cash_Available + '</div></td>' +
+
+                    "</tr>";
+                return ret;
+            }
+            else {
+                var ret =
+                    //"<tr>" +
+                    // '<td <div> No Records Found </div></td>' +
+
+                    //"</tr>";
+                    alert("No Records Found!!!!!!");
+                return ret;
+            }
+        }
+        
+    }
+
+    function RecordTableRow(print) {
+        //$("#myDatatable tr").remove();
+        if (print.Total_Cash != null) {
+            var ret =
+              "<tr>" +
+               '<td <div  id= "Total_Cash">' + print.Total_Cash + '</div></td>' +
+               '<td <div  id= "Total_Cash_Deposit">' + print.Total_Cash_Deposit + '</div></td>' +
+               '<td <div  id= "Total_Cash_Widthrawal">' + print.Total_Cash_Widthrawal + '</div></td>' +
+               '<td <div  id= "Cash_Reconciled">' + print.Cash_Reconciled + '</div></td>' +
+               '<td <div  id= "Cash_Not_Reconciled">' + print.Cash_Not_Reconciled + '</div></td>' +
+                //'<td <div  id= "Cash_Available">' + print.Cash_Available + '</div></td>' +
+
+
+              "</tr>";
+            return ret;
+        }
+        else {
+            var ret =
+              //"<tr>" +
+              // '<td <div> No Records Found </div></td>' +
+              
+              //"</tr>";
+               alert("No Records Found!!!!!!");
+            return ret;
+        }
+    }
+
+
+    function fileDownload() {
+        //var url = rooturl + "Home/Index";
+        //window.location.href = url;
+        var y = "getXMLFile";
+        $.ajax({
+            // url: "http://localhost:8198/api/scanner/" + y,   //A2iA k issue
+            //url: x + y,
+            // url: "http://localhost:8196/iBASWebApi/" + y,  //237 New
+            url: "http://localhost:2200/api/Scanner/" + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: {},
+            success: function (data) {
+                console.log(data);
+                //var xmlDocument = $($.parseXML('<?xml version="1.0" encoding="utf-8" ?><roots><item>1</item><item>2</item></roots>'));
+                var xmlDocument = $($.parseXML(data));
+                var $downloadAnchor = $("<a/>", {
+                    href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument[0]),
+                    download: "MyXML.xml"
+
+                });
+
+                $downloadAnchor.text("Click me to download XML");
+                $("body").append($downloadAnchor);
+            },
+            error: getError
+        });
+        //href: 'data:text/xml;charset=UTF-8,' + (new XMLSerializer()).serializeToString(xmlDocument.context),
+
+        
+        //e.preventDefault();
+    }
+
+    function GetSelectedReconslationType(Type) {
+        var selectedText = Type.options[Type.selectedIndex].innerHTML;
+        var selectedValue = Type.value;
+        //alert("Selected Text: " + selectedText + " Value: " + selectedValue);
+
+        //if(selectedValue != 1)
+        //{
+        //    var divretype = document.getElementById('divretype');
+        //    divretype.style.visibility = 'hidden';
+        //}
+
+        //else 
+        //{
+        //    var divretype = document.getElementById('divretype');
+        //    divretype.style.visibility = 'visible';
+        //}
+    }
+
+    function BranchTextBoxHide(Type) {
+        var selectedText = Type.options[Type.selectedIndex].innerHTML;
+        var selectedValue = Type.value;
+        //alert("Selected Text: " + selectedText + " Value: " + selectedValue);
+
+        if(selectedValue != 1)
+        {
+            var divretype = document.getElementById('bText');
+            divretype.style.visibility = 'hidden';
+        }
+
+        else 
+        {
+            var divretype = document.getElementById('bText');
+            divretype.style.visibility = 'visible';
+        }
+    }
+
+
+    //------------------added by me--------------------------------------------------
+
+    $(document).ready(function () {
+        var divre = document.getElementById('RecordReconcilationSection');
+        divre.style.visibility = 'hidden';
+
+        var divretype = document.getElementById('bText');
+        divretype.style.visibility = 'hidden';
+
+        //var today = new Date();
+        //var dd = String(today.getDate()).padStart(2, '0');
+        //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        //var yyyy = today.getFullYear();
+
+        //today = mm + '/' + dd + '/' + yyyy;
+        //document.getElementById("ProcessingDate").setAttribute("min", today);
+
+        var today = new Date();
+
+        document.getElementById("ProcessingDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS";
+                }
+            }
+        });
+    });
+
+
+    //------------------------------- by me----------------------------------------------------------
+</script>
+
+<section id="BranchReconcilationSection">
+<div class="row" style="padding-top:1px;font-size: smaller">
+    <div class="col-sm-3">
+        <input type="button" id="btnGoBack" value="home" class="btn-sm" style="background-color:black;color:white;font-size: x-small;" onclick="goBack();" />
+        @*<input type="button" id="btnView" value="View" class="btn-sm" style="background-color:black;color:white;font-size: x-small;" onclick="View();" />*@
+
+        <form id="ProcDate">
+            <label for="ProcessingDate"><b>ProcessingDate:</b></label>
+            <input type="date" id="ProcessingDate" name="ProcessingDate" >
+            @*<input type="button" value="Submit" name="Submit" style="width:100px;">*@
+
+        </form>
+
+        <div id="divretype">
+            <label><b>Reconsilation Type</b></label>
+            <select id="ReType" onchange="BranchTextBoxHide(this)">
+                <option value="2">TellerWise</option>
+                <option value="1">Branchwise</option>
+                @*<option value="2">SerialNoWise</option>*@
+            </select>
+        </div>
+
+        <div>
+            <label><b>Reconsilation Type</b></label>
+            <select id="Reconsilation" onchange="GetSelectedReconslationType(this)">
+                <option value="1">Denomination wise</option>
+                <option value="2">SerialNoWise</option>
+
+
+            </select>
+        </div>
+
+      
+<div id="bText"><input type="text" style="font-size:13px" id="branchText" maxlength="5"></div>
+
+    </div>
+
+    <div class="col-sm-3">
+        <input type="button" id="btnFileDownload" value="Reconsile" class="btn-sm" style="background-color:black;color:white;font-size: x-small;" onclick="BranchReconsilation();" />
+    </div>
+</div>
+<br />
+<div class="row" style="padding:10px;">
+    <span id="downloadLink"></span>
+    <label id="loader" style="display:none"> <span style="color:red">  Loading...</span><img src="~/Content/images/progressss.gif" /></label>
+</div>
+
+<div style="margin-left:.5%;background-color:white" class="tablecontainer" id="draggablediv">
+    @*<br /><br /><br />*@
+    <table id="myDatatable" class="table table-bordered table-striped table-hover" style="width:100%">
+        <thead>
+            <tr>
+                <th rowspan="3" style="text-align:center;border:double;">Denom</th>
+                <th colspan="4" style="text-align:center;border-top:double;">Vault</th>
+                @*<th>Vault Amount</th>*@
+                <th colspan="4" style="text-align:center;border-top:double;border-left:double;">Deposit</th>
+                @*<th>Deposit Amount</th>*@
+                <th colspan="4" style="text-align:center;border-top:double;border-left:double;">WithDrawal</th>
+                @*<th>WithDraw Amount</th>*@
+                <th colspan="4" style="text-align:center;border-top:double;border-left:double;">Currency Chest</th>
+                <th rowspan="3" colspan="2" style="text-align:center;border:double;">Denoms Available</th>
+                <th rowspan="3" colspan="2" style="text-align:center;border:double;">Cash Available</th>
+            </tr>
+            <tr>
+                @*<th>Denom</th>*@
+                <th colspan="2" style="text-align:center;">Machine</th>
+                <th colspan="2" style="text-align:center;border-right:double;">Manual</th>
+                <th colspan="2" style="text-align:center;">Machine</th>
+                <th colspan="2" style="text-align:center;border-right:double;">Manual</th>
+                <th colspan="2" style="text-align:center;">Machine</th>
+                <th colspan="2" style="text-align:center;border-right:double;">Manual</th>
+                <th colspan="2" style="text-align:center;">Machine</th>
+                <th colspan="2" style="text-align:center;">Manual</th>
+                @*<th>Deposit Count</th>
+        <th>Deposit Amount</th>
+        <th>WithDraw Count</th>
+        <th>WithDraw Amount</th>*@
+                @*<th>Denoms Available</th>*@
+                @*<th>Cash Available</th>*@
+            </tr>
+            <tr>
+                @*<th>Denom</th>*@
+                <th style="text-align:center;border-bottom:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                <th style="text-align:center;border-bottom:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                <th style="text-align:center;border-bottom:double;border-left:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                <th style="text-align:center;border-bottom:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                <th style="text-align:center;border-bottom:double;border-left:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                <th style="text-align:center;border-bottom:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                <th style="text-align:center;border-bottom:double;border-left:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                <th style="text-align:center;border-bottom:double;">Count</th>
+                <th style="text-align:center;border-bottom:double;">Amount</th>
+                @*<th>Deposit Count</th>
+        <th>Deposit Amount</th>
+        <th>WithDraw Count</th>
+        <th>WithDraw Amount</th>*@
+                @*<th>Denoms Available</th>*@
+                @*<th>Cash Available</th>*@
+            </tr>
+        </thead>
+    </table>
+
+</div>
+
+ </section>
+
+<section id="RecordReconcilationSection">
+
+    <div style="margin-left:.5%;background-color:white" class="tablecontainer" id="draggablediv">
+        <input type="button" id="btnGoBack" value="Back" class="btn-sm" style="background-color:black;color:white;font-size: x-small;" onclick="goBack1();" />
+
+        <br /><br /><br />
+        <table id="myRecordDatatable" class="table table-bordered table-striped table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Total_Cash</th>
+                    <th>Total_Cash_Deposit</th>
+                    <th>Total_Cash_Widthrawal</th>
+                    <th>Cash_Reconciled</th>
+                    <th>Cash_Not_Reconciled</th>
+
+
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</section>

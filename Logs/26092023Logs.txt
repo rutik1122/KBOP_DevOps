@@ -1,0 +1,516 @@
+10:59 AM: Exception: LoginiBAS
+10:59 AM: StackTrace: CommonSettings data read
+10:59 AM: Exception: LoginiBAS
+10:59 AM: StackTrace: Role Mapping started
+10:59 AM: Exception: LoginiBAS
+10:59 AM: StackTrace: Data from Role Master table
+10:59 AM: Exception: LoginiBAS
+10:59 AM: StackTrace: Role Mapping completed
+11:00 AM: Exception: ValidateSession
+11:00 AM: StackTrace: ----- started -----
+11:00 AM: Exception: ValidateSession
+11:00 AM: StackTrace: reading ds value
+11:00 AM: Exception: ValidateSession userid
+11:00 AM: StackTrace: uid:46
+11:00 AM: Exception: Validate Session Log
+11:00 AM: StackTrace: ---- result ----
+11:00 AM: Exception: DB session
+11:00 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:00 AM: Exception: Local session
+11:00 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:00 AM: Exception: Validate Session Log
+11:00 AM: StackTrace: ---- return true ----
+11:00 AM: Exception: ValidateSession
+11:00 AM: StackTrace: ----- started -----
+11:00 AM: Exception: ValidateSession
+11:00 AM: StackTrace: reading ds value
+11:00 AM: Exception: ValidateSession userid
+11:00 AM: StackTrace: uid:46
+11:00 AM: Exception: Validate Session Log
+11:00 AM: StackTrace: ---- result ----
+11:00 AM: Exception: DB session
+11:00 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:00 AM: Exception: Local session
+11:00 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:00 AM: Exception: Validate Session Log
+11:00 AM: StackTrace: ---- return true ----
+11:01 AM: Exception: ValidateSession
+11:01 AM: StackTrace: ----- started -----
+11:01 AM: Exception: ValidateSession
+11:01 AM: StackTrace: reading ds value
+11:01 AM: Exception: ValidateSession userid
+11:01 AM: StackTrace: uid:46
+11:01 AM: Exception: Validate Session Log
+11:01 AM: StackTrace: ---- result ----
+11:01 AM: Exception: DB session
+11:01 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:01 AM: Exception: Local session
+11:01 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:01 AM: Exception: Validate Session Log
+11:01 AM: StackTrace: ---- return true ----
+11:07 AM: Exception: ValidateSession
+11:07 AM: StackTrace: ----- started -----
+11:07 AM: Exception: ValidateSession
+11:07 AM: StackTrace: reading ds value
+11:07 AM: Exception: ValidateSession userid
+11:07 AM: StackTrace: uid:46
+11:07 AM: Exception: Validate Session Log
+11:07 AM: StackTrace: ---- result ----
+11:07 AM: Exception: DB session
+11:07 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:07 AM: Exception: Local session
+11:07 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:07 AM: Exception: Validate Session Log
+11:07 AM: StackTrace: ---- return true ----
+11:07 AM: Exception: ValidateSession
+11:07 AM: StackTrace: ----- started -----
+11:07 AM: Exception: ValidateSession
+11:07 AM: StackTrace: reading ds value
+11:07 AM: Exception: ValidateSession userid
+11:07 AM: StackTrace: uid:46
+11:07 AM: Exception: Validate Session Log
+11:07 AM: StackTrace: ---- result ----
+11:07 AM: Exception: DB session
+11:07 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:07 AM: Exception: Local session
+11:07 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:07 AM: Exception: Validate Session Log
+11:07 AM: StackTrace: ---- return true ----
+11:07 AM: Exception: ValidateSession
+11:07 AM: StackTrace: ----- started -----
+11:07 AM: Exception: ValidateSession
+11:07 AM: StackTrace: reading ds value
+11:07 AM: Exception: ValidateSession userid
+11:07 AM: StackTrace: uid:46
+11:07 AM: Exception: Validate Session Log
+11:07 AM: StackTrace: ---- result ----
+11:07 AM: Exception: DB session
+11:07 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:07 AM: Exception: Local session
+11:07 AM: StackTrace: Session ID: JpRMI2NLElKO5OrDnupVO9Y2
+11:07 AM: Exception: Validate Session Log
+11:07 AM: StackTrace: ---- return true ----
+11:34 AM: Exception: LoginiBAS
+11:34 AM: StackTrace: CommonSettings data read
+11:34 AM: Exception: LoginiBAS
+11:34 AM: StackTrace: Role Mapping started
+11:34 AM: Exception: LoginiBAS
+11:34 AM: StackTrace: Data from Role Master table
+11:34 AM: Exception: LoginiBAS
+11:34 AM: StackTrace: Role Mapping completed
+11:34 AM: Exception: ValidateSession
+11:34 AM: StackTrace: ----- started -----
+11:34 AM: Exception: ValidateSession
+11:34 AM: StackTrace: reading ds value
+11:34 AM: Exception: ValidateSession userid
+11:34 AM: StackTrace: uid:46
+11:34 AM: Exception: Validate Session Log
+11:34 AM: StackTrace: ---- result ----
+11:34 AM: Exception: DB session
+11:34 AM: StackTrace: Session ID: Ay7ejzCXpBTZRcKJlDBolbd8
+11:34 AM: Exception: Local session
+11:34 AM: StackTrace: Session ID: Ay7ejzCXpBTZRcKJlDBolbd8
+11:34 AM: Exception: Validate Session Log
+11:34 AM: StackTrace: ---- return true ----
+11:34 AM: Exception: ValidateSession
+11:34 AM: StackTrace: ----- started -----
+11:34 AM: Exception: ValidateSession
+11:34 AM: StackTrace: reading ds value
+11:34 AM: Exception: ValidateSession userid
+11:34 AM: StackTrace: uid:46
+11:34 AM: Exception: Validate Session Log
+11:34 AM: StackTrace: ---- result ----
+11:34 AM: Exception: DB session
+11:34 AM: StackTrace: Session ID: Ay7ejzCXpBTZRcKJlDBolbd8
+11:34 AM: Exception: Local session
+11:34 AM: StackTrace: Session ID: Ay7ejzCXpBTZRcKJlDBolbd8
+11:34 AM: Exception: Validate Session Log
+11:34 AM: StackTrace: ---- return true ----
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: ------------- Function Start -------------
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: client request
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: pass parameter
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: parameter set
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: success response
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: success response2
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: success response3
+11:34 AM: Exception: Report Page Details
+11:34 AM: StackTrace: success response4
+11:44 AM: Exception: iBasLogout
+11:44 AM: StackTrace: Function started
+11:48 AM: Exception: LoginiBAS
+11:48 AM: StackTrace: CommonSettings data read
+11:48 AM: Exception: LoginiBAS
+11:48 AM: StackTrace: Role Mapping started
+11:48 AM: Exception: LoginiBAS
+11:48 AM: StackTrace: Data from Role Master table
+11:48 AM: Exception: LoginiBAS
+11:48 AM: StackTrace: Role Mapping completed
+11:48 AM: Exception: ValidateSession
+11:48 AM: StackTrace: ----- started -----
+11:48 AM: Exception: ValidateSession
+11:48 AM: StackTrace: reading ds value
+11:48 AM: Exception: ValidateSession userid
+11:48 AM: StackTrace: uid:77
+11:48 AM: Exception: Validate Session Log
+11:48 AM: StackTrace: ---- result ----
+11:48 AM: Exception: DB session
+11:48 AM: StackTrace: Session ID: 1cYNeheed8ybCSLZUzcQHJpl
+11:48 AM: Exception: Local session
+11:48 AM: StackTrace: Session ID: 1cYNeheed8ybCSLZUzcQHJpl
+11:48 AM: Exception: Validate Session Log
+11:48 AM: StackTrace: ---- return true ----
+11:48 AM: Exception: ValidateSession
+11:48 AM: StackTrace: ----- started -----
+11:48 AM: Exception: ValidateSession
+11:48 AM: StackTrace: reading ds value
+11:48 AM: Exception: ValidateSession userid
+11:48 AM: StackTrace: uid:77
+11:48 AM: Exception: Validate Session Log
+11:48 AM: StackTrace: ---- result ----
+11:48 AM: Exception: DB session
+11:48 AM: StackTrace: Session ID: 1cYNeheed8ybCSLZUzcQHJpl
+11:48 AM: Exception: Local session
+11:48 AM: StackTrace: Session ID: 1cYNeheed8ybCSLZUzcQHJpl
+11:48 AM: Exception: Validate Session Log
+11:48 AM: StackTrace: ---- return true ----
+11:48 AM: Exception: ValidateSession
+11:48 AM: StackTrace: ----- started -----
+11:48 AM: Exception: ValidateSession
+11:48 AM: StackTrace: reading ds value
+11:48 AM: Exception: ValidateSession userid
+11:48 AM: StackTrace: uid:77
+11:48 AM: Exception: Validate Session Log
+11:48 AM: StackTrace: ---- result ----
+11:48 AM: Exception: DB session
+11:48 AM: StackTrace: Session ID: 1cYNeheed8ybCSLZUzcQHJpl
+11:48 AM: Exception: Local session
+11:48 AM: StackTrace: Session ID: 1cYNeheed8ybCSLZUzcQHJpl
+11:48 AM: Exception: Validate Session Log
+11:48 AM: StackTrace: ---- return true ----
+11:49 AM: Exception: iBasLogout
+11:49 AM: StackTrace: Function started
+11:49 AM: Exception: LoginiBAS
+11:49 AM: StackTrace: CommonSettings data read
+11:49 AM: Exception: LoginiBAS
+11:49 AM: StackTrace: Role Mapping started
+11:49 AM: Exception: LoginiBAS
+11:49 AM: StackTrace: Data from Role Master table
+11:49 AM: Exception: LoginiBAS
+11:49 AM: StackTrace: Role Mapping completed
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: ----- started -----
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: reading ds value
+11:50 AM: Exception: ValidateSession userid
+11:50 AM: StackTrace: uid:77
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- result ----
+11:50 AM: Exception: DB session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Local session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- return true ----
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: ----- started -----
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: reading ds value
+11:50 AM: Exception: ValidateSession userid
+11:50 AM: StackTrace: uid:77
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- result ----
+11:50 AM: Exception: DB session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Local session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- return true ----
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: ----- started -----
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: reading ds value
+11:50 AM: Exception: ValidateSession userid
+11:50 AM: StackTrace: uid:77
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- result ----
+11:50 AM: Exception: DB session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Local session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- return true ----
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: ----- started -----
+11:50 AM: Exception: ValidateSession
+11:50 AM: StackTrace: reading ds value
+11:50 AM: Exception: ValidateSession userid
+11:50 AM: StackTrace: uid:77
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- result ----
+11:50 AM: Exception: DB session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Local session
+11:50 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:50 AM: Exception: Validate Session Log
+11:50 AM: StackTrace: ---- return true ----
+11:52 AM: Exception: ValidateSession
+11:52 AM: StackTrace: ----- started -----
+11:52 AM: Exception: ValidateSession
+11:52 AM: StackTrace: reading ds value
+11:52 AM: Exception: ValidateSession userid
+11:52 AM: StackTrace: uid:77
+11:52 AM: Exception: Validate Session Log
+11:52 AM: StackTrace: ---- result ----
+11:52 AM: Exception: DB session
+11:52 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:52 AM: Exception: Local session
+11:52 AM: StackTrace: Session ID: oNPAFGrg23DWzQBSncuORAur
+11:52 AM: Exception: Validate Session Log
+11:52 AM: StackTrace: ---- return true ----
+4:58 PM: Exception: LoginiBAS
+4:58 PM: StackTrace: CommonSettings data read
+4:58 PM: Exception: LoginiBAS
+4:58 PM: StackTrace: Role Mapping started
+4:58 PM: Exception: LoginiBAS
+4:58 PM: StackTrace: Data from Role Master table
+4:58 PM: Exception: LoginiBAS
+4:58 PM: StackTrace: Role Mapping completed
+4:58 PM: Exception: ValidateSession
+4:58 PM: StackTrace: ----- started -----
+4:58 PM: Exception: ValidateSession
+4:58 PM: StackTrace: reading ds value
+4:58 PM: Exception: ValidateSession userid
+4:58 PM: StackTrace: uid:103
+4:58 PM: Exception: Validate Session Log
+4:58 PM: StackTrace: ---- result ----
+4:58 PM: Exception: DB session
+4:58 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:58 PM: Exception: Local session
+4:58 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:58 PM: Exception: Validate Session Log
+4:58 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: ----- started -----
+4:59 PM: Exception: ValidateSession
+4:59 PM: StackTrace: reading ds value
+4:59 PM: Exception: ValidateSession userid
+4:59 PM: StackTrace: uid:103
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- result ----
+4:59 PM: Exception: DB session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Local session
+4:59 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+4:59 PM: Exception: Validate Session Log
+4:59 PM: StackTrace: ---- return true ----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: ----- started -----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: reading ds value
+5:01 PM: Exception: ValidateSession userid
+5:01 PM: StackTrace: uid:103
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- result ----
+5:01 PM: Exception: DB session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Local session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- return true ----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: ----- started -----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: reading ds value
+5:01 PM: Exception: ValidateSession userid
+5:01 PM: StackTrace: uid:103
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- result ----
+5:01 PM: Exception: DB session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Local session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- return true ----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: ----- started -----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: reading ds value
+5:01 PM: Exception: ValidateSession userid
+5:01 PM: StackTrace: uid:103
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- result ----
+5:01 PM: Exception: DB session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Local session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- return true ----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: ----- started -----
+5:01 PM: Exception: ValidateSession
+5:01 PM: StackTrace: reading ds value
+5:01 PM: Exception: ValidateSession userid
+5:01 PM: StackTrace: uid:103
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- result ----
+5:01 PM: Exception: DB session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Local session
+5:01 PM: StackTrace: Session ID: tRA0zse0bRqF4vVQWBOnzIJ1
+5:01 PM: Exception: Validate Session Log
+5:01 PM: StackTrace: ---- return true ----
+5:16 PM: Exception: LoginiBAS
+5:16 PM: StackTrace: CommonSettings data read
+5:16 PM: Exception: LoginiBAS
+5:16 PM: StackTrace: Role Mapping started
+5:16 PM: Exception: LoginiBAS
+5:16 PM: StackTrace: Data from Role Master table
+5:16 PM: Exception: LoginiBAS
+5:16 PM: StackTrace: Role Mapping completed
+5:17 PM: Exception: ValidateSession
+5:17 PM: StackTrace: ----- started -----
+5:17 PM: Exception: ValidateSession
+5:17 PM: StackTrace: reading ds value
+5:17 PM: Exception: ValidateSession userid
+5:17 PM: StackTrace: uid:77
+5:17 PM: Exception: Validate Session Log
+5:17 PM: StackTrace: ---- result ----
+5:17 PM: Exception: DB session
+5:17 PM: StackTrace: Session ID: BxWNtrRNOzSIqKFm9rIPrn3r
+5:17 PM: Exception: Local session
+5:17 PM: StackTrace: Session ID: BxWNtrRNOzSIqKFm9rIPrn3r
+5:17 PM: Exception: Validate Session Log
+5:17 PM: StackTrace: ---- return true ----

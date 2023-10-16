@@ -1,0 +1,104 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+@*<head>
+        <meta name="viewport" content="width=device-width" />
+        <title>ViewTest</title>
+    </head>
+    <body>
+        <div>
+        </div>
+    </body>*@
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+    @*<input type="file" id="file" onchange="FileValidation(event)">*@
+    @*<input type="file" onchange="encodeImageFileAsURL(this)" />*@
+    @*<input type="file" name="file" id="file" onchange="imgchange()">*@
+    <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+    <div id="imgTest"></div>
+    @*Uploaded Image<img id="output">*@
+</body>
+<script>
+    FileValidation = (event) => {
+        var image = document.getElementById('output');
+        debugger;
+        console.log(URL.createObjectURL(event.target.files[0]));
+        image.src = URL.createObjectURL(event.target.files[0]);
+        debugger;
+        var dd = blobToBase64(image.src);
+        debugger;
+        const fi = document.getElementById("file");
+        if (fi.files.length > 0) {
+            for (const i = 0; i <= fi.files.length - 1; i++) {
+                const fsize = fi.files.item(i).size;
+                const file = Math.round((fsize / 1024));
+            }
+        }
+    }
+
+    function encodeImageFileAsURL() {
+        debugger;
+        var filesSelected = document.getElementById("inputFileToLoad").files;
+        debugger;
+        if (filesSelected.length > 0) {
+            var fileToLoad = filesSelected[0];
+
+            var fileReader = new FileReader();
+
+            fileReader.onload = function (fileLoadedEvent) {
+                var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                debugger;
+                var newImage = document.createElement('img');
+                newImage.src = srcData;
+
+                document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+                console.log("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+            }
+            debugger;
+            fileReader.readAsDataURL(fileToLoad);
+        }
+    }
+
+    function imgchange() {
+        debugger;
+        var filePath = $("#file").val();
+        debugger;
+        $("#imgs").attr('src', filePath);
+    }
+
+    var imagebase64 = "";
+
+    //function encodeImageFileAsURL(element) {
+    //    debugger;
+    //    var file = element.files[0];
+    //    var reader = new FileReader();
+    //    reader.onloadend = function () {
+    //        imagebase64 = reader.result;
+    //    }
+    //    //debugger;
+    //    var ff = reader.readAsDataURL(file);
+    //    debugger;
+    //    alert(ff);
+    //} 
+
+    function blobToBase64(blob) {
+
+        return new Promise((resolve, _) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+        });
+    }
+
+</script>
+
+</html>

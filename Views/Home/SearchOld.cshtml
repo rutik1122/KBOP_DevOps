@@ -1,0 +1,519 @@
+﻿@*<form method="post" autocomplete="off">
+</form>*@
+    <div class="row" style="padding-top:1px;font-size: smaller">
+        <div class="col-sm-3">
+            @*<input type="button" id="btnGoBack" value="Back" class="btn-sm" style="background-color:black;color:white;font-size: x-large;" onclick="goBack();" />*@
+        </div>
+    </div>
+
+    <div class="row" style="padding-top:5px;font-size: smaller">
+        <div class="col-sm-12">
+            <div class="col-sm-3 padding-0">
+                <div class="col-sm-12 padding-0">
+                    <div class="col-sm-3 padding-0">
+                        <b>Search Period:</b>
+                    </div>
+                    <div class="col-sm-9 padding-0">
+                        <input id="FromDate" style="width:105px" />
+                        <input id="ToDate" style="width:105px" />
+                        <button id="Day" class="btn-sm" style="background-color:black;color:white;font-size: x-small;width:68px" onclick="getDate('Day')">Day</button>
+                        <button id="Week" class="btn-sm" style="background-color:black;color:white;font-size: x-small;width:68px" onclick="getDate('Week')">Week</button>
+                        <button id="Month" class="btn-sm" style="background-color:black;color:white;font-size: x-small;width:68px" onclick="getDate('Month')">Month</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7 padding-0">
+                <div class="col-sm-12 padding-0">
+                    <div class="col-sm-2 padding-0">
+                        <b>Search Requirements:</b>
+                    </div>
+                    <div class="col-sm-10 padding-0">
+                        <div class="col-sm-12 padding-0">
+                            <div class="col-sm-2 padding-0">
+                                Machine SN
+                                <input id="Machine" style="width:90px" />
+                            </div>
+                            <div class="col-sm-2 padding-0">
+                                Teller Id
+                                <input id="Teller" style="width:90px" />
+                            </div>
+                            <div class="col-sm-2 padding-0">
+                                Trans Ref No
+                                <input id="TransRefNo" style="width:90px" />
+                            </div>
+                            <div class="col-sm-2 padding-0 ">
+                                Note Serial No
+                                <input id="SerialNo" style="width:90px" />
+                            </div>
+                            <div class="col-sm-2 padding-0 ">
+                                Branch
+                                <input id="Branch" style="width:90px" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 padding-0">
+                <div class="col-sm-12">
+                    <b>
+                        Total Count:  <label id="TotalCount" style="margin-left: 5px;"></label>
+                    </b>
+                </div>
+                <div class="col-sm-12">
+                    <button id="Search" class="btn-sm" value="Search" style="background-color:black;color:white;width: 60px;font-size: x-small;" onclick="SearchSerial();">Search</button>
+                    <button id="exportpdf" class="btn-sm" value="PDF" style="background-color:black;color:white;width: 60px;font-size: x-small;" onclick="exportPDF();">PDF</button>
+                    <button id=" Excel" class="btn-sm" value="Excel" style="background-color:black;color:white;width: 60px;font-size: x-small;" onclick="exportExcel();"> Excel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top:20px;">
+        <div class="col-sm-12">
+            <table id="tblSearchData" style="cursor:pointer;overflow-x:auto;width:100%;border:1px solid black;text-align:center">
+                <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>Machine SN</th>
+                        <th> Branch</th>
+                        <th>Teller</th>
+                        <th> Note Serial No</th>
+                        <th>SN Image</th>
+                        <th>DocType</th>
+                        <th>Trans Type</th>
+                        <th>Denom</th>
+                        <th>Status</th>
+                        @*<th>Status</th>*@
+                        <th>Reject_Reason </th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @*<tr>
+                            <td> sdsdsad1 </td>
+                            <td> sdsdsad2 </td>
+                            <td> sdsdsad3 </td>
+                            <td> sdsdsad4 </td>
+                            <td> sdsdsad5 </td>
+                            <td>
+                                <img src="~/Content/templateMicr.png" /> </td>
+                            <td> sdsdsad7</td>
+                            <td> sdsdsad8 </td>
+                            <td> sdsdsad9 </td>
+                            <td> sdsdsad10</td>
+                            <td> sdsdsad11 </td>
+                            <td>12 </td>
+                        </tr>*@
+                </tbody>
+            </table>
+            <table id="tblSearchDataNone" style="cursor:pointer;overflow-x:auto;width:100%;border:1px solid black;text-align:center;display:none">
+                <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>Machine SN</th>
+                        <th> Branch</th>
+                        <th>Teller</th>
+                        <th> Note Serial No</th>
+                        <th>SN Image</th>
+                        <th>DocType</th>
+                        <th>Version</th>
+                        <th>Denom</th>
+                        <th>Output</th>
+                        @*<th>Status</th>*@
+                        <th>Reject_Reason </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*<tr>
+                            <td> sdsdsad1 </td>
+                            <td> sdsdsad2 </td>
+                            <td> sdsdsad3 </td>
+                            <td> sdsdsad4 </td>
+                            <td> sdsdsad5 </td>
+                            <td>
+                                <img src="~/Content/templateMicr.png" /> </td>
+                            <td> sdsdsad7</td>
+                            <td> sdsdsad8 </td>
+                            <td> sdsdsad9 </td>
+                            <td> sdsdsad10</td>
+                            <td> sdsdsad11 </td>
+                            <td>12 </td>
+                        </tr>*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <style type="text/css">
+        .padding-0 {
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>*@
+    <script type="text/javascript">
+        var rooturl = '@Url.Content("~/")';
+        var x = '@ViewBag.URL';
+        var WebImageURL = '@ViewBag.WebImageURL';
+        var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+
+        //------------------added by me--------------------------------------------------
+
+        $(document).ready(function () {
+
+            $.ajax({
+                type: "POST",
+                url: rooturl + "Home/ValidateSession",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                    if (data == "False") {
+                        window.location = rooturl + "home/LoginiBAS";
+                    }
+                }
+            });
+        });
+
+
+        //------------------------------- by me----------------------------------------------------------
+        var pdfdoc = new jsPDF();
+        var specialElementHandlers = {
+            '#ignoreContent': function (element, renderer) {
+                return true;
+            }
+        };
+        function exportPDF() {
+            pdfdoc.fromHTML($("#tblSearchData").html(), 10, 10, {
+                'width': 110,
+                'elementHandlers': specialElementHandlers
+            });
+            pdfdoc.save('First.pdf');
+
+        }
+        function exportExcel() {
+            debugger;
+            $("#tblSearchData").table2excel({
+                filename: "Table.xls"
+            });
+        }
+
+        function SearchSerial() {
+            debugger;
+            
+            var MachineNo, TellerId, TransRefNo, SerialNo, Branch;
+
+            MachineNo = $("#Machine").val();
+            TellerId = $("#Teller").val();
+            TransRefNo = $("#TransRefNo").val();
+            SerialNo = $("#SerialNo").val();
+            Branch = $("#Branch").val();
+
+            var FromDate = $("#FromDate").val();
+            var ToDate = $("#ToDate").val();
+
+            if (FromDate == null || FromDate == "") {
+                alert("From Date is mandatory!");
+                return false;
+            }
+
+            if (ToDate == null || ToDate == "") {
+                alert("To Date is required!");
+                return false;
+            }
+
+            var validate = false;
+
+            if (MachineNo != "" || TellerId != "" || TransRefNo != "" || SerialNo != "" || Branch != "")
+                validate = true;
+
+            if (validate == false) {
+                alert("Minimum 1 addition data is required!");
+                return false;
+            }
+            
+            //if ($("#Machine").val() != "") {
+            //    SerailNum = $("#Machine").val();
+            //}
+            //if ($("#Teller").val() != "") {
+            //    SerailNum = $("#Teller").val();
+            //}
+            //if ($("#SNText").val() != "") {
+            //    SerailNum = $("#SNText").val();
+            //}
+            //if(SerailNum == ""){
+            
+            //    if ($("#Branch").val() != "") {
+            //        SerailNum = $("#Branch").val();
+            //    }
+            //}
+            //$("#tblSearchDataNone tr").remove();  //for
+           // $('#tblSearchDataNone').detach();
+            $("#tblSearchData").find("tr:gt(0)").remove();
+            
+            var branch = $("#Branch").val();
+            //SerailNum = "IV269ES001";
+            var base64 = "";
+            $.ajax({
+                type: 'POST',
+                url: x + "getnotedetails",
+                //url: "http://localhost:8198/api/Scanner/getnotedetails",
+                // url: "https://103.231.78.237:9443/ibasWebapi/api/Scanner/getnotedetails",
+                crossDomain: true,
+                dataType: 'json',
+                //data: { 'serialno': SerailNum, 'fromdate': FromDate, 'todate': ToDate, 'branch': branch },  //by anandi
+                data: { 'TellerID': TellerId, 'fromdate': FromDate, 'todate': ToDate, 'branch': Branch, 'MachineSerialNo': MachineNo,  'TransRefNo': TransRefNo },
+                success: function (result) {
+                   // $("#tblSearchDataNone").remove();  //for
+                   // $("#tblSearchDataNone").find("tr:gt(0)").remove();
+                    debugger;
+                    var SerialData = {};
+                    SerialData = result;
+                    $("#TotalCount").text(SerialData.length);
+                    for (var i = 0; i < SerialData.length; i++) {
+                        var row = document.createElement('tr');
+                        var cell = document.createElement('td');
+                        cell.innerHTML = SerialData[i].capturetimestamp;
+                        row.appendChild(cell);
+                        var cell2 = row.insertCell(1);
+                        cell2.innerHTML = SerialData[i].MachineSerialNo;
+                        row.appendChild(cell2);
+                        var cell3 = row.insertCell(2);
+                        cell3.innerHTML = SerialData[i].branch;
+                        row.appendChild(cell3);
+                        var cell4 = row.insertCell(3);
+                        cell4.innerHTML = SerialData[i].TellerID;
+                        row.appendChild(cell4);
+                        var cell5 = row.insertCell(4);
+                        cell5.innerHTML = SerialData[i].serialno;
+                        row.appendChild(cell5);
+                        var cell6 = row.insertCell(5);
+                        if (SerialData[i].sn_imagepath != null) {
+                            var newImgStr = SerialData[i].sn_imagepath.replace(PhysicalImageURL, WebImageURL);
+                            var splitedUrl = newImgStr.replace(/\\/g, "/");
+                            var element = document.createElement("img");
+                            element.id = "imageId_" + i;
+                            element.src = splitedUrl;
+                            element.height = 17;
+                            element.width = 180;
+                           // base64 = getBase64Image(element);
+                            // var img = "<img id='image_"+ i +"' height='40' width='250' src=" + newImgStr + "  />";
+                            //cell6.innerHTML = img;
+                        }
+                        cell6.appendChild(element);
+                        //  cell6.innerHTML = SerialData[i].sn_imagepath;
+                        row.appendChild(cell6);
+                        var cell7 = row.insertCell(6);
+                        cell7.innerHTML = SerialData[i].scanneddoctype;
+                        row.appendChild(cell7);
+                        var cell8 = row.insertCell(7);
+                        cell8.innerHTML = result[i].currncy_version;
+                        row.appendChild(cell8);
+                        var cell9 = row.insertCell(8);
+                        cell9.innerHTML = SerialData[i].currncy_denom;
+                        row.appendChild(cell9);
+                        var cell10 = row.insertCell(9);
+                        cell10.innerHTML = SerialData[i].output_pocket;
+                        row.appendChild(cell10);
+                        var cell11 = row.insertCell(10);
+                        //cell11.innerHTML = SerialData[i].status;
+                        //row.appendChild(cell11);
+                        //var cell12 = row.insertCell(11);
+                        cell11.innerHTML = SerialData[i].error_code;
+                        row.appendChild(cell11);
+                        //var cell13 = row.insertCell(12);
+                        //if (SerialData[i].sn_imagepath != null) {
+                        //    // base64 = getBase64Image(element);
+                        //    cell13.innerHTML = base64;
+                        //}
+                        //row.appendChild(cell13);
+                        document.getElementById("tblSearchData").appendChild(row);
+                        // $("#tblSearchData tr td:nth-child(13)").hide();
+                    }
+                    ////for (var i = 0; i < SerialData.length; i++) {
+                    ////    var row = document.createElement('tr');
+                    ////    var cell = document.createElement('td');
+                    ////    cell.innerHTML = SerialData[i].capturetimestamp;
+                    ////    row.appendChild(cell);
+                    ////    var cell2 = row.insertCell(1);
+                    ////    cell2.innerHTML = SerialData[i].MachineSerialNo;
+                    ////    row.appendChild(cell2);
+                    ////    var cell3 = row.insertCell(2);
+                    ////    cell3.innerHTML = SerialData[i].branch;
+                    ////    row.appendChild(cell3);
+                    ////    var cell4 = row.insertCell(3);
+                    ////    cell4.innerHTML = SerialData[i].TellerID;
+                    ////    row.appendChild(cell4);
+                    ////    var cell5 = row.insertCell(4);
+                    ////    cell5.innerHTML = SerialData[i].serialno;
+                    ////    row.appendChild(cell5);
+                    ////    var cell6 = row.insertCell(5);
+                    ////    if (SerialData[i].sn_imagepath != null) {
+                    ////        var newImgStr = SerialData[i].sn_imagepath.replace(PhysicalImageURL, WebImageURL);
+                    ////        var element = document.createElement("img");
+                    ////        element.id = "imageId_" + i;
+                    ////        element.src = newImgStr;
+                    ////        element.height = 17;
+                    ////        element.width = 180;
+                    ////        //  element.crossOrigin = "Anonymous";
+
+                    ////        base64 = getBase64Image(element);
+                    ////        var element2 = document.createElement("img");
+                    ////        element2.id = "imageId_" + i;
+                    ////        element2.src = base64;
+                    ////        element2.height = 17;
+                    ////        element2.width = 180;
+                    ////        element2.crossOrigin = "Anonymous";
+                    ////    }
+                    ////    cell6.appendChild(element2);
+                    ////    row.appendChild(cell6);
+                    ////    var cell7 = row.insertCell(6);
+                    ////    cell7.innerHTML = SerialData[i].scanneddoctype;
+                    ////    row.appendChild(cell7);
+                    ////    var cell8 = row.insertCell(7);
+                    ////    cell8.innerHTML = result[i].currncy_version;
+                    ////    row.appendChild(cell8);
+                    ////    var cell9 = row.insertCell(8);
+                    ////    cell9.innerHTML = SerialData[i].currncy_denom;
+                    ////    row.appendChild(cell9);
+                    ////    var cell10 = row.insertCell(9);
+                    ////    cell10.innerHTML = SerialData[i].output_pocket;
+                    ////    row.appendChild(cell10);
+                    ////    var cell11 = row.insertCell(10);
+                    ////    cell11.innerHTML = SerialData[i].status;
+                    ////    row.appendChild(cell11);
+                    ////    var cell12 = row.insertCell(11);
+                    ////    cell12.innerHTML = SerialData[i].error_code;
+                    ////    row.appendChild(cell12);
+                    ////    document.getElementById("tblSearchDataNone").appendChild(row);
+
+                    ////}
+                },
+                error: getError
+            });
+        }
+        function getBase64Image(img) {
+
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL("image/jpeg");
+            return dataURL;
+
+        }
+        $('#FromDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "yyyy/mm/dd",
+            language: "tr"
+
+        });
+        $('#ToDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "yyyy/mm/dd",
+            language: "tr"
+
+        });
+
+        function getDate(data) {
+            debugger;
+            var date = new Date();
+            if (data == 'Day') {
+                var dd = date.getDate();
+                var mm = date.getMonth() + 1;
+                var yyyy = date.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                //var Todaysdate = dd + '/' + mm + '/' + yyyy;
+                var Todaysdate = yyyy + '/' + mm + '/' + dd;
+                document.getElementById("FromDate").value = Todaysdate;
+               // $('#FromDate').datepicker("setDate", new Date(Todaysdate));
+                var dd = date.getDate();
+                var mm = date.getMonth() + 1;
+                var yyyy = date.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                //var Todaysdate = dd + '/' + mm + '/' + yyyy;
+                var Todaysdate = yyyy + '/' + mm + '/' + dd;
+                document.getElementById("ToDate").value = Todaysdate;
+
+            }
+            if (data == 'Week') {
+                var day = date.getDay();
+                var firstDayOfWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (day == 0 ? -6 : 1) - day);
+                var dd = firstDayOfWeek.getDate();
+                var mm = firstDayOfWeek.getMonth() + 1;
+                var yyyy = firstDayOfWeek.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                //var firstDayOfWeek = dd + '/' + mm + '/' + yyyy;
+                var firstDayOfWeek = yyyy + '/' + mm + '/' + dd;
+                document.getElementById("FromDate").value = firstDayOfWeek;
+
+                var lastDayOfWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (day == 0 ? 0 : 7) - day);
+                var dd = lastDayOfWeek.getDate();
+                var mm = lastDayOfWeek.getMonth() + 1;
+                var yyyy = lastDayOfWeek.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+               // var lastDayOfWeek = dd + '/' + mm + '/' + yyyy;
+                var lastDayOfWeek = yyyy + '/' + mm + '/' + dd;
+                document.getElementById("ToDate").value = lastDayOfWeek;
+            }
+            if (data == 'Month') {
+                var firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
+                var dd = firstDayOfMonth.getDate();
+                var mm = firstDayOfMonth.getMonth() + 1;
+                var yyyy = firstDayOfMonth.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                //var firstDayOfMonth = dd + '/' + mm + '/' + yyyy;
+                var firstDayOfMonth = yyyy + '/' + mm + '/' + dd;
+                document.getElementById("FromDate").value = firstDayOfMonth;
+
+                var lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                var dd = lastDayOfMonth.getDate();
+                var mm = lastDayOfMonth.getMonth() + 1;
+                var yyyy = lastDayOfMonth.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                //var lastDayOfMonth = dd + '/' + mm + '/' + yyyy;
+                var lastDayOfMonth = yyyy + '/' + mm + '/' + dd;
+                document.getElementById("ToDate").value = lastDayOfMonth;
+
+            }
+
+        }
+    </script>

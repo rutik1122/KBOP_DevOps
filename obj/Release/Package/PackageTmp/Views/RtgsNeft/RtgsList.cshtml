@@ -1,0 +1,302 @@
+﻿
+@{
+    ViewBag.Title = "RtgsList";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<script type="text/javascript">
+
+    var root = '@Url.Content("~/")';
+
+    $(document).ready(function () {
+
+        var x = document.getElementById("urlVal").value;
+        var y = "getRtgsList";
+        var userId = document.getElementById("tellerDetails").value;
+
+        //debugger;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '/' + mm + '/' + dd;
+        //today = yyyy + '/08/30';
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: { 'tellerId': userId, 'Date_Time': today, 'ApiCall': 'START' },
+            success: function (result) {
+                RtgsList(result);
+            },
+            error: getError
+        });
+    });
+
+
+    function getError(result) {
+
+        var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+
+    function RtgsList(printer) {
+        //debugger;
+        // Iterate over the collection of data,below line for removing table data except header
+        //$("#myRecordDatatable").find("tr:gt(0)").remove();
+        $("#myDatatable").find("tr:gt(0)").remove();
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            AddRecordRow(print);
+        });
+    }
+
+
+    function AddRecordRow(print) {
+        //debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myDatatable tbody").length == 0) {
+            $("#myDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myDatatable tbody").append(
+            RecordTableRow(print));
+    }
+
+
+    function RecordTableRow(print) {
+        //debugger;
+        //$("#myDatatable tr").remove();
+        if (print.RecordCount != null) {
+
+            var ret;
+
+            var RetRow =
+                "<tr>" +
+                '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.RecordCount + '">' + print.count_id + '</div></td>' +
+                '<td style="text-align:center;font-size: 14px;">' + print.InsertTimeStamp + '</td>' +
+                '<td style="font-size: 14px;">' + print.FrontImgPath + '</td>';
+
+
+            if (print.Status == "2") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: greenyellow;">' + print.FormStatus + '</td>' +
+                /*'<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'*/
+                    '<td></td>'
+                "</tr>";
+            }
+            else if (print.Status == "3") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: orange;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" /> </td>'
+                "</tr>";
+            }
+            else if (print.Status == "6") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: deepskyblue;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'
+                "</tr>";
+            }
+            else {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: red;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'
+                "</tr>";
+            }
+
+            //if (print.Status == "2") {
+            //    ret =
+            //        "<tr>" +
+            //        '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.RecordCount + '">' + print.count_id + '</div></td>' +
+            //        '<td style="text-align:center;font-size: 14px;">' + print.InsertTimeStamp + '</td>' +
+            //        '<td style="font-size: 14px;">' + print.FrontImgPath + '</td>' +
+            //        '<td style="text-align:center;font-size: 14px; background-color: greenyellow;">' + print.FormStatus + '</td>' +
+            //        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px; background-color: greenyellow;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'
+            //    "</tr>";
+            //}
+            //else if (print.Status == "3") {
+            //    ret =
+            //    "<tr>" +
+            //        '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.RecordCount + '">' + print.count_id + '</div></td>' +
+            //        '<td style="text-align:center;font-size: 14px;">' + print.InsertTimeStamp + '</td>' +
+            //        '<td style="font-size: 14px;">' + print.FrontImgPath + '</td>' +
+            //        '<td style="text-align:center;font-size: 14px; background-color: greenyellow;">' + print.FormStatus + '</td>' +
+            //        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px; background-color: greenyellow;" onclick="VerifyData(' + print.count_id + ');" /> </td>'
+            //    "</tr>";
+            //}
+
+
+            //var ret =
+            //    "<tr>" +
+            //    '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.RecordCount + '">' + print.count_id + '</div></td>' +
+            //    '<td style="text-align:center;font-size: 14px;">' + print.InsertTimeStamp + '</td>' +
+            //    '<td style="font-size: 14px;">' + print.FrontImgPath + '</td>' +
+            //    '<td style="text-align:center;font-size: 14px; background-color: greenyellow;">' + print.FormStatus + '</td>' +
+            //    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px; background-color: greenyellow;" onclick="VerifyData(' + print.count_id + ');" /> </td>'
+            //    /*'<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 2px; width: 75px;" href="~/RtgsNeft/RtgsForm?id=' + print.count_id + '" /> </td>'*/
+            //    "</tr>";
+
+
+
+            return RetRow;
+        }
+        else {
+            var ret =
+                //"<tr>" +
+                // '<td <div> No Records Found </div></td>' +
+
+                //"</tr>";
+                alert("No Records Found!!!!!!");
+            return ret;
+        }
+    }
+
+
+    function ReloadStatus(data1) {
+        var x = document.getElementById("urlVal").value;
+        var y = "getRtgsList";
+        //var y = "rtgsImageUpload";
+        var userId = document.getElementById("tellerDetails").value;
+
+        debugger;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '/' + mm + '/' + dd;
+
+        //alert("url: " + x + y);
+
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: { 'tellerId': userId, 'Date_Time': today, 'ApiCall': 'RELOAD_STATUS' },
+            success: function (result) {
+                RtgsList(result);
+            },
+            error: getError
+        });
+    }
+
+
+    function VerifyData(recordId) {
+        //debugger;
+        var rooturl = '@Url.Content("~/")';
+
+        //var dd = "123";
+
+        window.open(rooturl + "RtgsNeft/RtgsForm?id=" + recordId, "_self");
+
+        //// Ajax call working - issue in view
+        //$.ajax({
+        //    url: rooturl + 'RtgsNeft/RtgsForm',
+        //    //headers: authHeaders,
+        //    type: 'GET',
+        //    data: { 'id': recordId }
+        //});
+    }
+
+
+    function resendRequest() {
+        var x = document.getElementById("urlVal").value;
+        var y = "";
+    }
+
+
+    function getReset() {
+        //debugger;
+        var ProcessType = "reset";
+        var x = document.getElementById("urlVal").value;
+        var y = "ResetAiForms";
+
+        var userId = document.getElementById("tellerDetails").value;
+
+        //debugger;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '/' + mm + '/' + dd;
+
+        //flag = "Reset"
+        if (confirm('Do you want to reset captured and failed data?')) {
+            $.ajax({
+                url: x + y,
+                //headers: authHeaders,
+                type: 'POST',
+                data: { 'tellerId': userId, 'Date_Time': today },
+                success: getSuccessReset,
+                error: getError
+            });
+        }
+    };
+
+
+    function getSuccessReset(result) {
+        alert(result);
+        var rooturl = '@Url.Content("~/")';
+        window.open(rooturl + "RtgsNeft/RtgsList", "_self");
+    }
+
+</script>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Rtgs / Neft Form
+            </h1>
+        </div>
+
+        <div class="page-content">
+
+            <div class="row" style="margin-left: .5%;">
+                <input type="button" id="btnVerify" value="Reload Status" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="ReloadStatus('1');" />
+                <input type="button" id="btnReset" value="Reset All" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px;" onclick="getReset();" />
+                <input type="button" id="btnResend" value="Resend" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px;" onclick="resendRequest();" />
+            </div>
+            <br />
+            <div class="row">
+                @using (Html.BeginForm())
+                {
+                    <div style="margin-left:.5%;background-color:white" class="tablecontainer" id="tableDiv">
+                        <table id="myDatatable" class="table table-bordered table-striped table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Data Id</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Insert Time Stamp</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Image Path</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Status</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

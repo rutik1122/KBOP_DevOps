@@ -1,0 +1,390 @@
+﻿<script src="~/Scripts/GetCash.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+@{
+    ViewBag.Title = "CashData";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" hidden />
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+<input id="PageType" value="@ViewBag.PT" hidden />
+<input id="sniId" name="sniId" value="" hidden />
+<input id="cid" value="" hidden />
+
+
+<div class="row col-12 mb-3 my-0">
+    <div class="text-center">
+        <h3 class="mb-0 text-primary ">
+            <span class="bg-200 dark__bg-1100">@ViewBag.TitleName</span>
+        </h3>
+    </div>
+</div>
+
+<div class="row justify-content-center mb-3">
+    <div class="col-xxl-8 col-lg-8 col-md-12 col-sm-12">
+        <div class="card px-3 py-2">
+            <form class="row g-3">
+                <div class="col-lg-4">
+                    <label class="form-label">Mobile No / Account No</label>
+                    <input id="AccNo" type="text" class="form-control form-control-sm">
+                </div>
+                <div class="col-lg-4" id="div_denom_amt">
+                    <label class="form-label">Denomination Amount</label>
+                    <input id="D_Amt" type="text" class="form-control form-control-sm" disabled>
+                </div>
+                <div class="col-lg-4" id="div_denom_count">
+                    <label class="form-label">Denomination Count</label>
+                    <input id="denom_count" type="text" class="form-control form-control-sm" disabled>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center" style="margin-top: 20px;">
+                        <button id="btn_cash" class="btn btn-sm btn-primary ml-2" type="button" onclick="fetchCashData()" ><span id="span_get_cash"></span></button>
+                        <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#resetmodal" onclick="ResetDataFunctionCall()">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="div_denom_tbl" class="row justify-content-center mb-2">
+    <div class="col-xxl-8 col-lg-8 col-md-12 col-sm-12">
+        <div class="card ">
+            <!-- <h6 class="text-center mt-3 font-weight-bolder">Credit Account</h6> -->
+            <div class="card-body p-2 ">
+                @if (ViewBag.PT == "CASHEX")
+                {
+                    <div class="input-group input-group-sm mb-2">
+                        <span class="input-group-text"><b>Cash In</b></span>
+                        <input id="in_cash" class="form-control" value="" disabled>
+                        &nbsp;&nbsp;
+                        <span class="input-group-text"><b>Cash Out</b></span>
+                        <input id="out_cash" class="form-control" value="" disabled>
+                    </div>
+                }
+
+                <div id="div_denom_tbl" class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th scope="col" style="text-align:center;">Denom</th>
+                                <th scope="col"></th>
+                                <th scope="col" style="text-align:center;">Cash In</th>
+                                <th scope="col" style="text-align:center;">Cash Out</th>
+                                <th scope="col" style="text-align:center;">Denom Value</th>
+                                <th scope="col" style="text-align:center;">Available Denom</th>
+                                <th scope="col" style="text-align:center;">Entry</th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            <tr id="row_2000">
+                                <td class="text-wrap"><label style="font-size:16px;">2000</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_2000_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_2000_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_2000_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <label id="lbl_2000_AValue" style="font-size:16px;"></label>
+                                </td>
+                                <td class="text-wrap">
+                                    <input id="input_2000" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('2000')">
+                                </td>
+                            </tr>
+                            <tr id="row_500">
+                                <td class="text-wrap"><label style="font-size:16px;">500</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_500_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_500_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_500_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_500_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_500" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('500')">
+                                </td>
+                            </tr>
+                            <tr id="row_200">
+                                <td class="text-wrap"><label style="font-size:16px;">200</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_200_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_200_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_200_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_200_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_200" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('200')">
+                                </td>
+                            </tr>
+                            <tr id="row_100">
+                                <td class="text-wrap"><label style="font-size:16px;">100</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_100_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_100_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_100_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_100_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_100" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('100')">
+                                </td>
+                            </tr>
+                            <tr id="row_50">
+                                <td class="text-wrap"><label style="font-size:16px;">50</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_50_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_50_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_50_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_50_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_50" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('50')">
+                                </td>
+                            </tr>
+                            <tr id="row_20">
+                                <td class="text-wrap"><label style="font-size:16px;">20</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_20_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_20_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_20_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_20_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_20" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('20')">
+                                </td>
+                            </tr>
+                            <tr id="row_10">
+                                <td class="text-wrap"><label style="font-size:16px;">10</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_10_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_10_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_10_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_10_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_10" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('10')">
+                                </td>
+                            </tr>
+                            <tr id="row_5">
+                                <td class="text-wrap"><label style="font-size:16px;">5</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_5_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_5_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_5_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_5_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_5" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('5')">
+                                </td>
+                            </tr>
+                            <tr id="row_2">
+                                <td class="text-wrap"><label style="font-size:16px;">2</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_2_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_2_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_2_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_2_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_2" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('2')">
+                                </td>
+                            </tr>
+                            <tr id="row_1">
+                                <td class="text-wrap"><label style="font-size:16px;">1</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_1_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_1_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_1_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_1_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_1" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('1')">
+                                </td>
+                            </tr>
+                            <tr id="row_50p">
+                                <td class="text-wrap"><label style="font-size:16px;">0.5</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_50p_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_50p_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_50p_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_50p_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    <input id="input_50p" type="number" min="0" value="0" class="form-control form-control-sm" onkeyup="CashInput('50p')">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap"><label style="font-size:16px;">Total</label></td>
+                                <td class="text-wrap"><label style="font-size:16px;">X</label></td>
+                                <td class="text-wrap"><label id="lbl_total_in" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_total_out" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_total_DValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap"><label id="lbl_total_AValue" style="font-size:16px;"></label></td>
+                                <td class="text-wrap">
+                                    @if (ViewBag.PT == "CASHEX")
+                                    {
+                                        <div id="div_out_box" class="form-check">
+                                            <input class="form-check-input" id="outbox" type="checkbox" onclick="CashInput('CheckBox');" />
+                                            <label class="form-check-label" for="outbox">Out</label>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-wrap" colspan="7">
+                                    <div class="input-group input-group-sm">
+                                        <div class="col-sm-7"></div>
+                                        <div class="col-sm-5">
+                                            <button id="btn_insert_cash" class="btn btn-sm btn-secondary" onclick="ManualDataEntry()">Insert Cash</button>
+                                            <a href="#authenticationmodal" data-bs-toggle="modal">
+                                                <button id="btn_submit" class="btn btn-primary btn-sm" onclick="VerifyCashData();">Submit</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Authentication Model on submit -->
+<div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-1" data-bs-theme="light">
+                    <h4 class="mb-0 text-white" id="authentication-modal-label">Verification</h4>
+                </div>
+                <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2 px-1">
+                <div id="div_confirm_msg" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                    <h5 class="text-center">
+                        <strong class="me-auto">Do you want to Submit this Transaction ?</strong>
+                    </h5>
+                </div>
+                <table id="tbl_verf_fail" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Error Msg</th>
+                            <td class="text-wrap">
+                                <lable id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbl_verf_result" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Response</th>
+                            <td id="td_resp" class="text-wrap">
+                                <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="div_reject_button" class="row g-2 mt-2 mx-4">
+                    <div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="SubmitData()">YES</a></div>
+                    <div class="col-sm-6">
+                        <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                           aria-label="Close">NO</a>
+                    </div>
+                </div>
+                <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                    </div>
+                </div>
+                <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="returnToCheckerList()">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Authentication Model on submit -->
+@*<div class="row col-12 mb-3 my-0 text-center">
+        <form class="d-flex align-items-center" action="#">
+            <div class="row">
+                <h3 class="mb-0 text-primary position-relative">
+                    <span id="spam_header" class="bg-200 dark__bg-1100 pe-3">
+
+                    </span>
+                </h3>
+            </div>
+            <div class="row">
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-sm btn-primary ml-2" type="button" onclick="fetchCashData()"> Get Vault Cash Data </button>
+                </div>
+            </div>
+        </form>
+    </div>*@
+
+<script type="text/javascript">
+
+    debugger;
+    var rooturl = '@Url.Content("~/")';
+    var PageType = "";
+    var x = '@ViewBag.URL';
+    var username = "";
+    var cashinout = "";
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    var outputData = true;
+    var paise_50 = "0.5";
+
+    $("#ProcessingBar").hide();
+    $("#div_denom_tbl").hide();
+
+    // Reset Logic Begin
+    $("#div_reset_msg").show();
+    $("#div_reset_button").show();
+    $("#btn_close_reset").show();
+    $("#btn_yes_reset").show();
+    $("#btn_no_reset").show();
+    $("#div_reset_success").hide();
+    $("#tbl_reset_response").hide();
+    $("#success_reset").hide();
+    $("#failed_reset").hide();
+    $("#div_reload_page_button").hide();
+    $("#btn_reload").hide();
+        // Reset Logic End
+
+    $(document).ready(function () {
+        debugger;
+        PageType = document.getElementById("PageType").value;
+        username = document.getElementById("loginid").value;
+
+        if (PageType == "SOD") {
+            document.getElementById("span_get_cash").innerHTML = "Get Vault Cash";
+        }
+        else if (PageType == "EOD") {
+            document.getElementById("span_get_cash").innerHTML = "Set Cash";
+        }
+        else if (PageType == "CASHEX") {
+            $("#div_denom_amt").hide();
+            $("#div_denom_count").hide();
+            document.getElementById("span_get_cash").innerHTML = "Get Cash";
+        }
+
+        //span_get_cash
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+    });
+
+</script>

@@ -1,0 +1,498 @@
+﻿<html>
+<head>
+    @*<script src="https://unpkg.com/read-excel-file@4.x/bundle/read-excel-file.min.js"></script>*@
+    <script src="@Url.Content("~/Scripts/read-excel-file.min.js")"></script>
+
+    <script src="~/Scripts/aes.js"></script>
+</head>
+<body>
+
+    @{
+        ViewBag.Title = "PrinterMaster";
+    }
+
+    @*<h4>Printer Master</h4>*@
+
+    <style>
+        h4 {
+            text-align: center;
+            color: red;
+            font-size: xx-large;
+        }
+
+        h3 {
+            text-align: center;
+            color: #2033EA;
+            font-size: xx-large;
+        }
+
+        label {
+            color: red;
+        }
+
+        a {
+            font-size: 30px;
+            float: right;
+        }
+
+        .save {
+            display: none;
+        }
+
+        ​ .cancel {
+            display: none;
+        }
+    </style>
+
+    <div class="row" style="margin-top:40px;text-align:left">
+        <div class="col-sm-11">
+
+            <div><input class="btn btn-primary" style="float:initial;font-weight:bold; padding: 10px 10px" type="submit" id="btnMappingMaster" name="btnSearch" value="PrinterMapping"></div></br>
+            <div><input type="file" id="input"></div>
+
+            <table id="tbl-data"></table>
+
+        </div>
+        <a href="~/home/Index">Back</a>
+    </div>
+    <body style="background-color:whitesmoke">
+        <input id="encData" name="encData" value="" hidden />
+        <div style="margin-left:.5%;background-color:white" class="tablecontainer" id="draggablediv">
+            <br /><br /><br />
+            <table id="myDatatable" class="table table-bordered table-striped table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>branch_code</th>
+                        <th>machineserialno</th>
+                        <th>sorter_ip</th>
+                        <th>sorter_port</th>
+                        <th>printer_ip</th>
+                        <th>printer_port</th>
+                        <th>printer_model</th>
+                        <th>teller_id</th>
+                        <th>recieptprinting</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+
+        <div id="myModal" data-id="1" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title">Edit Printer Details</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-sm">
+                            <div class="well bs-component" style="background-color:lightgray">
+                                <div class="row">
+
+                                    <div class="col-sm-7">
+                                        <label for="uname"><b>Enter Branch Code</b></label>
+                                        <input type="text" style="font-size:30px" id="branch_code" maxlength="15">
+                                    </div><br />
+
+
+
+                                    <div class="col-sm-7">
+                                        <label for="uname"><b>Enter Sorter IP</b></label>
+                                        @*@Html.TextBoxFor(m => m.Sorter_IP, new { @class = "form-control", @maxlength = "15" })*@
+                                        <input type="text" style="font-size:30px" id="sorter_ip" maxlength="15">
+                                    </div><br />
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-sm-7">
+                                        <label for="uname"><b>Enter Sorter Port</b></label>
+                                        <input type="text" style="font-size:30px" id="sorter_port" maxlength="15">
+                                    </div><br />
+
+                                    <div class="col-sm-7">
+                                        <label for="uname"><b>Enter Printer IP</b></label>
+                                        <input type="text" style="font-size:30px" id="printer_ip" maxlength="15">
+                                    </div><br />
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-sm-7">
+                                        <label for="uname"><b>Enter Printer Port</b></label>
+                                        <input type="text" style="font-size:30px" id="printer_port" maxlength="15">
+                                    </div><br />
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-sm-7">
+                                        <label for="uname"><b>Enter Teller ID</b></label>
+                                        <input type="text" style="font-size:30px" id="inteller_id" maxlength="15">
+                                    </div><br />
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-primary" style="float: initial;font-weight:bold; padding: 10px 10px" type="submit" id="btnSave" name="btnSave" value="Save">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </body>
+
+
+    <script type="text/javascript">
+        var arr = {};
+
+        $("body").on("click", "#btnMappingMaster", function () {
+            window.location = rooturl + "home/MappingMaster";
+        });
+
+        var rooturl = '@Url.Content("~/")'
+
+        var access_token = window.localStorage.getItem('AccessToken');
+        var bearer = window.localStorage.getItem('TokenType');
+        var gusername = window.localStorage.getItem('username');
+        var authHeaders = {};
+        authHeaders.Authorization = bearer + " " + access_token;
+
+     
+
+        var x = '@ViewBag.URL';
+        var y = 'getprintermapdetails';
+        $(document).ready(function () {
+
+            $.ajax({
+                url: x + y,
+                headers: authHeaders,
+                type: 'POST',
+                success: function (result) {
+
+                    PrinterMapDetails(result);
+
+                },
+                error: getError
+            });
+
+
+        })
+        function PrinterMapDetails(printer) {
+            // Iterate over the collection of data
+            $.each(printer, function (index, print) {
+                // Add a row to the Product table
+                AddRow(print);
+            });
+        }
+
+
+
+        function AddRow(print) {
+            // Check if <tbody> tag exists, add one if not
+            if ($("#myDatatable tbody").length == 0) {
+                $("#myDatatable").append("<tbody></tbody>");
+            }
+            // Append row to <table>
+            $("#myDatatable tbody").append(
+              TableRow(print));
+        }
+        function TableRow(print) {
+
+
+
+            var ret =
+              "<tr>" +
+               '<td <div  id= "ID">' + print.id + '</div></td>' +
+               '<td class="b_code"><div class="row_data" edit_type="click">' + print.inbranch_code + '</div></td>' +
+              '<td <div  id= "machine_serial">' + print.inmachineserialno + '</div></td>' +
+               //"<td id= 'machine_serial' class = 'unselectable'>" + print.inmachineserialno + "</td>" +
+
+                 '<td ><div class="row_data" edit_type="click"  id= "sorterip">' + print.insorter_ip + '</div></td>' +
+                  '<td ><div class="row_data" edit_type="click" id= "sorterport">' + print.insorter_port + '</div></td>' +
+                   '<td ><div class="row_data" edit_type="click" id= "printerip">' + print.inprinter_ip + '</div></td>' +
+                    '<td ><div class="row_data" edit_type="click" id= "printerport">' + print.inprinter_port + '</div></td>' +
+                     '<td ><div class="row_data" edit_type="click" id= "printermodel">' + print.inprinter_model + '</div></td>' +
+                '<td <div  id= "tellerid">' + print.inteller_id + '</div></td>' +
+                 '<td ><div class="row_data" edit_type="click" id= "recieptprinting">' + print.inrecieptprinting + '</div></td>' +
+
+       "<td>"
+        + "<a align='center' class='popup btn btn-primary btnSelect'><i  class='glyphicon glyphicon-edit'></i><a/>" + "</td>" +
+        "<td>" + "<a id='lock-icon' class='btn btn-danger' onclick=DeleteRow('" + print.id + "')><i class='glyphicon glyphicon-trash'></i><a/>";
+            + "</td>" +
+
+              "</tr>";
+            return ret;
+        }
+
+        function getError(result) {
+            if (result.status == 401 && result.statusText == "Unauthorized") {
+                alert(result.responseText);
+                // window.location = rooturl + "home/Login";
+                window.location = rooturl + "home/LoginiBAS";
+            }
+            else {
+                alert(result.responseText);
+            }
+        }
+
+        $("#myDatatable").on('click', '.btnSelect', function () {
+            var a = '@ViewBag.URL';
+            var b = 'Updateprinterdetails';
+            //var b = 'Updateprinterdetails_New';
+
+            var currentRow = $(this).closest("tr");
+
+            var id = currentRow.find("td:eq(0)").text();
+            var branch_code = currentRow.find("td:eq(1)").text();
+            var drpsorter = currentRow.find("td:eq(2)").text();
+            var sorter_ip = currentRow.find("td:eq(3)").text();
+            var sorter_port = currentRow.find("td:eq(4)").text();
+            var printer_ip = currentRow.find("td:eq(5)").text();
+            var printer_port = currentRow.find("td:eq(6)").text();
+            var printer_model = currentRow.find("td:eq(7)").text();
+            var inteller_id = currentRow.find("td:eq(8)").text();
+            var receipt_printing = currentRow.find("td:eq(9)").text();
+            if (branch_code == "" || drpsorter == "" || sorter_ip == "" || sorter_port == "" || printer_ip == "" || printer_port == "" || printer_model == "" || receipt_printing == "")
+            {
+                alert("Fields should not be empty");
+                location.reload();
+                return;
+
+            }
+            //var regexbranch_code = /^[0-9]+$/;
+            var regexbranch_code = /^\d{0,5}$/;
+           
+            if (!regexbranch_code.test(branch_code)) {
+                alert("Fields should contain numbers  with 5 digits only, branch_code !!");
+                location.reload();
+                return;
+            }
+
+            var regexsorter_port = /^\d{0,5}$/;
+            if (!regexsorter_port.test(sorter_port)) {
+                alert("Fields should contain numbers with 5 digits  only,sorter_port !!");
+                location.reload();
+                return;
+            }
+
+
+            var regexprinter_ip = /^[A-Za-z0-9,.]{0,21}$/;
+            if (!regexprinter_ip.test(printer_ip)) {
+                alert("Fields should contain numcers,characters (,)(.) and 21 digits only,printer_ip !!");
+                location.reload();
+                return;
+            }
+
+            //a
+            //var regexprinter_port = /^[0-9]+$/;
+            var regexprinter_port = /^\d{0,5}$/;
+            if (!regexprinter_port.test(printer_port)) {
+                alert("Fields should contain numbers with 5 digits  only,printer_port !!");
+                
+                location.reload();
+                return;
+            }
+
+            var regexsorter_ip = /^[0-9.]{0,16}$/;
+            if (!regexsorter_ip.test(sorter_ip)) {
+                alert("Fields should contain numbers , (.) and 16 digits only,sorter_ip !!");
+                location.reload();
+                return;
+            }
+
+            var regex = /^[A-Za-z0-9.,]+$/;
+            if (!regex.test(branch_code) || !regex.test(drpsorter) || !regex.test(sorter_ip) || !regex.test(sorter_port) || !regex.test(printer_ip) || !regex.test(printer_port) || !regex.test(printer_model) || !regex.test(receipt_printing))
+            {
+                alert("Fields should not contain special characters");
+                location.reload();
+                return;
+            }
+            //debugger;
+            var v = '19000123870091234590'
+            var iiv = v.substring(2, 18);
+            var d = '|' + id + '|' + branch_code + '|' + drpsorter + '|' + sorter_ip + '|' + sorter_port + '|' + printer_ip + '|' + printer_port + '|' + printer_model + '|' + inteller_id + '|' + receipt_printing;
+            //debugger;
+            var key = CryptoJS.enc.Utf8.parse(v.substring(2, 18));
+            var iv = CryptoJS.enc.Utf8.parse(v.substring(2, 18));
+            var dVal = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(d), key, { keySize: 128 / 8, iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+            //debugger;
+            document.getElementById("encData").value = dVal;
+            var dFinalVal = document.getElementById("encData").value;
+            
+            //debugger;
+            $.ajax({
+                url: a + b,
+                headers: authHeaders,  //Added for Authorization error ,
+                type: 'POST',
+                dataType: 'JSON',
+                //data: {
+                //    'id': id, 'inbranch_code': branch_code, 'inmachineserialno': drpsorter, 'insorter_ip': sorter_ip, 'insorter_port': sorter_port,
+                //    'inprinter_ip': printer_ip, 'inprinter_port': printer_port, 'inprinter_model': printer_model, 'inteller_id': inteller_id, 'inrecieptprinting': receipt_printing
+                //},
+                data: { 'inbranch_code': dFinalVal },
+                success: function (data, textStatus, xhr) {
+                    console.log(data);
+                    alert("Data Updated Successfully!!");
+                    location.reload();
+                },
+                error: getError
+            });
+        });
+        function DeleteRow(Id) {
+            var a = '@ViewBag.URL';
+            var b = 'DeltSorterdetails';
+            if (confirm('Do you really want to delete?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: a + b,
+                    datatype: 'JSON',
+                    data: { 'Id': Id },
+                    success: function (response) {
+                        if (response.success) {
+                            $.alert.open("Data Deleted successfully..");
+                        }
+                        location.reload();
+                    },
+                    error: function (msg) {
+                        $.alert.open(msg.responseText);
+                    }
+                });
+            }
+        }
+
+        //--->make div editable > start
+        $(document).on('click', '.row_data', function (event) {
+            event.preventDefault();
+
+            if ($(this).attr('edit_type') == 'button') {
+                return false;
+            }
+
+            //make div editable
+            $(this).closest('div').attr('contenteditable', 'true');
+            //add bg css
+            $(this).addClass('bg-warning').css('padding', '5px');
+
+            $(this).focus();
+        })
+        //--->make div editable > end
+
+
+        var input = document.getElementById('input');
+        input.addEventListener('change', function () {
+            var user = localStorage.getItem("username");
+
+            readXlsxFile(input.files[0]).then(function (data) {
+                //console.log(data);
+                var i = 0;
+                data.map((row, index) => {
+                    if (i = 0) {
+                        let table = document.getElementById('tbl-data');
+                generateTableHead(table, row);
+            }
+                    if (i > 0) {
+                        let table = document.getElementById('tbl-data');
+                        generateTableRows(table, row);
+                    }
+            i++;
+        });
+        for (var a = 0; a < data.length; a++) {
+            if (a > 0) {
+                var arr = {};
+                arr = data[a];
+
+                var x = '@ViewBag.URL';
+                var y = "insertprinterdetails";
+
+                var branch_code = arr[0];
+                var drpsorter = arr[1];
+                var sorter_ip = arr[2];
+                var sorter_port = arr[3];
+                var printer_ip = arr[4];
+                var printer_port = arr[5];
+                var printer_model = arr[6];
+                var tellerid = user;
+                var receipt_printing = arr[7];
+
+                $.ajax({
+                    url: x + y,
+                    headers: authHeaders,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'inbranch_code': branch_code, 'inmachineserialno': drpsorter, 'insorter_ip': sorter_ip, 'insorter_port': sorter_port,
+                        'inprinter_ip': printer_ip, 'inprinter_port': printer_port, 'inprinter_model': printer_model, 'inteller_id': tellerid, 'inrecieptprinting': 'YES'
+                    },
+                    success: function (data, textStatus, xhr) {
+                        console.log(data);
+                        //alert("Printer Mapped Successfully!!!!!");
+                        //location.reload();
+                    },
+                    error: getError
+
+                });
+            }
+        }
+        alert("Printer Mapped Successfully!!!!!");
+        location.reload();
+        });
+
+        });
+
+        function generateTableHead(table, data) {
+            let thead = table.createTHead();
+            let row = thead.insertRow();
+            for(let key of data) {
+                let th = document.createElement('th');
+                let text = document.createTextNode(key);
+                th.appendChild(th);
+                row.appendChild(th);
+            }
+        }
+
+        function generateTableRows(table, data) {
+            let newRow = table.insertRow(-1);
+            data.map((row, index) => {
+                let newCell = newRow.inserCell();
+            let newText = document.createTextNode(row);
+            newCell.appendChild(newText);
+
+
+        });
+        }
+
+        //------------------added by me--------------------------------------------------
+
+        $(document).ready(function () {
+
+            $.ajax({
+                type: "POST",
+                url: rooturl + "Home/ValidateSession",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                    if (data == "False") {
+                        window.location = rooturl + "Home/LoginiBAS";
+                    }
+                }
+            });
+        });
+
+
+        //------------------------------- by me----------------------------------------------------------
+
+
+
+    </script>
+</body>
+</html>

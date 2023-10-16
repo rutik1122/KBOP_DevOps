@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "CtsSelectionPage";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                CTS Selection Page
+                @*<small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    Manual Upload
+                </small>*@
+            </h1>
+        </div>
+        <div class="page-content">
+            @using (Html.BeginForm("CtsSelectionPage", "TransferCts"))
+            {
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2" style="font-size:15px"><b>Clearing Type</b></label>
+                        <div class="col-sm-9">
+                            @Html.DropDownList("Clearing_Type", new List<SelectListItem>
+                            {
+                                new SelectListItem{ Text = "Regular Clearing", Value = "01" },
+                                new SelectListItem{ Text = "Special Clearing", Value = "99" }
+                            })
+                        </div>
+                    </div>
+
+                    <br /><br />
+
+                    <div class="form-group">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2" style="font-size:15px"><b>Scanning Type</b></label>
+                        <div class="col-sm-9">
+                            @Html.DropDownList("Scanning_Type", new List<SelectListItem>
+                            {
+                               new SelectListItem{ Text = "Retail Without Slip", Value = "2" },
+                               new SelectListItem{ Text = "Retail With Slip", Value = "1" }
+                            })
+                        </div>
+                    </div>
+
+                    <br /><br />
+
+                    <div class="form-group">
+                        <label class="col-sm-1"></label>
+                        <div class="col-sm-11">
+                            <button class="btn btn-info" type="submit" value="submit">
+                                <i class="ace-icon fa fa-check bigger-110"></i>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,429 @@
+﻿
+<script src="~/Scripts/CommonValidation.js"></script>
+<script src="~/Scripts/SignPopUp.js"></script>
+
+
+@{
+    ViewBag.Title = "CheckerWithdraw";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+
+
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+@*<input id="PhysicalImageUrlVal" value="@ViewBag.Count_id" hidden />*@
+<input id="verf" value="@ViewBag.Verf" hidden />
+<input id="tranType" value="@ViewBag.tranType" hidden />
+
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                @ViewBag.headerVal
+                @*Cash Withdrawal Checker*@
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    <label id="refno" name="refno">@ViewBag.RefNo</label> - <label id="id" name="id">@ViewBag.Count_id</label>
+                </small>
+            </h1>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-sm-7">
+                    <img src="" id="FG" style="height:400px;width:800px;align-content:center" onclick="ChqSlipPopUp();" />
+                </div>
+                <div class="col-sm-5">
+                    <div class="row">
+                        <label id="lbl_accno" class="col-sm-3" style="font-weight:bold"></label>
+                        <input id="accno" name="accno" value="" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-3"><b>Payee name:</b></label>
+                        <input id="name" name="name" value="" />
+                    </div>
+                    <br />
+                    <div class="row" id="div_date">
+                        <label class="col-sm-3"><b>Cheque Date:</b></label>
+                        <input id="ChequeDateTxt" name="ChequeDateTxt" value="" />
+                    </div>
+                    <br id="br_date" />
+                    <div class="row">
+                        <label id="lbl_amt" class="col-sm-3" style="font-weight:bold"></label>
+                        <input id="amt" name="amt" value="" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-sm-2" style="padding-top: 10px;padding-bottom:10px;padding-left:30px;">
+                                <input type="button" id="btnVerify" value="Back" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 6px;" onclick="Verify('BACK')" />
+                            </div>
+                            <div class="col-sm-2" style="padding-top: 10px;padding-bottom:10px;">
+                                <input id="decision" name="decision" value="" maxlength="1" type="text" style="width:30px;" onkeyup="decisionPress()" />
+                                @*<input type="button" id="rejectList" name="rejectList" value="~~~" hidden />*@
+                            </div>
+                            <div class="col-sm-8" style="padding-top: 10px;padding-bottom:10px">
+                                <input type="button" id="btnSubmit" value="Submit" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 6px;" onclick="Verify('SUBMIT')" />
+                                @*<input type="button" id="btnSubmit_l3" value="Submit" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 6px;" onclick="Verify('SUBMIT')" />*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="rejectDiv" style="padding-top: 10px;padding-bottom:10px" hidden>
+
+                        <input id="rejectCode" name="rejectCode" value="" style="width:40px; height:35px;" placeholder="CODE" disabled />
+                        <input id="rejectDescription" name="rejectDescription" value="" style="height:35px;" placeholder="DESCRIPTION" disabled />
+
+                    </div>
+                </div>
+            </div>
+            <div id="popup" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move "><b>Signature</b><span id="btn_close" onclick="closeButton()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="signTable">
+                    <thead style="border: 1px solid black; background-color: cadetblue; color: white;">
+                        <tr style="background-color: #438EB9">
+                            <th style="text-align:center">Name</th>
+                            <th style="text-align:center">Sign Img</th>
+                            <th style="text-align:center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="popup1" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar1" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move "><b>Chq/Slip</b><span id="btn_close" onclick="closeButton1()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="chqSlipTable" style="width:800px;">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="popup2" style="display: none; background-color: white; position: absolute; top: 0px; z-index: 9999; box-shadow: 6px 6px 5px #888888; border-radius: 6px; border: 1px solid #4f4f4f; max-height: 500px; overflow-y: scroll;">
+                <div id="popup_bar2" style="width: 100%; background-color: #438EB9; color: white; position: relative; top: 0; border-radius: 6px 6px 0 0; text-align: center; height: 24px; cursor: move; font-size: 20px;"><b>Item Return Reason</b><span id="btn_close" onclick="closeButton()" style="float:right;cursor:pointer;padding-right:6px;">[X]</span></div>
+                <table id="itemReasonTable">
+                    <thead style="border:1px solid black;background-color: cadetblue;color:white;">
+                        <tr style="background-color: #438EB9">
+                            <th style="text-align: center; width: 50px; font-size: 20px;">Code</th>
+                            <th style="text-align: center; width: 240px; font-size: 20px;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-2">
+                    <input id="ItemId" style="display:none" />
+                </div>
+                <div class="col-sm-4">
+                    <input type="button" id="frontGimg" value="Front" style="background-color:black;color:white;width: 60px;font-size: x-small;" class="btn" onclick="switchimage_new('frontGimg', 'FG', 'BOT_RGB')" />
+                    <input type="button" id="backGimg" value="Back" style="background-color:black;color:white;width: 60px;font-size: x-small;" class="btn" onclick="switchimage_new('backGimg', 'FG', 'TOP_RGB')" />
+                    <input type="button" id="frontIRimg" value="IR" style="background-color:black;color:white;width: 50px;font-size: x-small;" class="btn" onclick="switchimage_new('frontIRimg', 'FG', 'BOT_IRR')" />
+                    <input type="button" id="waterMark" value="WM" style="background-color:black;color:white;width: 50px;font-size: x-small;" class="btn" onclick="switchimage_new('waterMark', 'FG', 'TOP_QIR')" />
+                </div>
+                <div class="col-sm-6"></div>
+            </div>
+            <br />
+            <div class="row col-sm-7">
+                @*<div id="div_micr" class="col-sm-7">
+                        <label class="col-sm-1">Cheque No.</label>
+                        <input class="col-sm-2" id="chqnoDataEntry" name="chqnoDataEntry" value="" />
+                        <label class="col-sm-1">Sort Code</label>
+                        <input class="col-sm-2" id="sortcodeDataEntry" name="sortcodeDataEntry" value="" />
+                        <label class="col-sm-1">San Code</label>
+                        <input class="col-sm-2" id="sanDataEntry" name="sanDataEntry" value="" />
+                        <label class="col-sm-1">Tr Code</label>
+                        <input class="col-sm-2" id="trDataEntry" name="trDataEntry" value="" />
+                    </div>*@
+                <div class="row" id="div_instrument_srl_no">
+                    <label class="col-sm-2">Instrument Srl No:</label>
+                    <input class="col-sm-2" id="chqnoDataEntry" name="chqnoDataEntry" value="" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-2">Transaction Particular</label>
+                    <input class="col-sm-4" id="id_transaction_particular" value="" />
+                    <label class="col-sm-2">Report Code</label>
+                    <input class="col-sm-4" id="id_report_code" value="" />
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-sm-2">Remark 1</label>
+                    <input class="col-sm-4" id="id_remark_1" value="" />
+                    <label class="col-sm-2">Remark 2</label>
+                    <input class="col-sm-4" id="id_remark_2" value="" />
+                </div>
+                <br />
+                <div class="row" id="div_instrument_alpha">
+                    <label class="col-sm-2">Instrument Alpha</label>
+                    <input class="col-sm-4" id="id_instrument_alpha" value="" />
+                </div>
+            </div>
+        </div>
+        <div id="partial_table" hidden>
+            @Html.Partial("_ItemReturnReason")
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var ValidationPassed = false;
+    var PerviousType = "";
+    var tranType = document.getElementById("tranType").value;
+    var x = document.getElementById("urlVal").value;
+    var root = '@Url.Content("~/")';
+    var verf = document.getElementById("verf").value;
+
+    $(document).ready(function () {
+        debugger;
+
+        var refno = document.getElementById("refno").innerHTML;
+        var id = document.getElementById("id").innerHTML;
+        var username = document.getElementById("loginid").value;
+
+        //var x = document.getElementById("urlVal").value;
+        var y = 'getWithdrawData';
+
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: { CheckerId: username, TransactionRefNo: refno, count_id: id, transactionType: tranType, Verf: verf },
+            success: getData,
+            error: getError
+        });
+
+        //x = document.getElementById("urlVal").value;
+
+        //var verf = document.getElementById("verf").value;
+        //if (verf == "L2") {
+        //    $("#btnSubmit_l3").hide();
+        //}
+        //else if (verf == "L3") {
+        //    $("#btnSubmit").hide();
+        //}
+
+    });
+
+
+    function getError(result) {
+        var msg = result.responseJSON.Message;
+        alert(msg);
+    }
+
+
+    function getData(result) {
+        debugger;
+        var img = result.Image;
+        document.getElementById("FG").src = img;
+
+        if (tranType == "CASHWDL") {
+            document.getElementById("accno").value = result.DebitAccNo;
+            document.getElementById("lbl_accno").innerHTML = "Debit Account No:";
+            document.getElementById("lbl_amt").innerHTML = "Cheque Amount:";
+        }
+        else {
+            document.getElementById("accno").value = result.CreditAccNo;
+            document.getElementById("lbl_accno").innerHTML = "Credit Account No:";
+            $("#div_date").hide();
+            $("#br_date").hide();
+            document.getElementById("lbl_amt").innerHTML = "Slip Amount:";
+            //$("#div_micr").hide();
+            $("#div_instrument_alpha").hide();
+            $("#div_instrument_srl_no").hide();
+        }
+
+        document.getElementById("name").value = result.PayeeName;
+        document.getElementById("ChequeDateTxt").value = result.date;
+        document.getElementById("amt").value = result.ChqAmount;
+        document.getElementById("chqnoDataEntry").value = result.ChequeNo;
+        //document.getElementById("sortcodeDataEntry").value = result.SortCode;
+        //document.getElementById("sanDataEntry").value = result.SanCode;
+        //document.getElementById("trDataEntry").value = result.TrCode;
+
+        document.getElementById("id_transaction_particular").value = result.transaction_particular;
+        document.getElementById("id_report_code").value = result.report_code;
+        document.getElementById("id_remark_1").value = result.remark_1;
+        document.getElementById("id_remark_2").value = result.remark_2;
+        document.getElementById("id_instrument_alpha").value = result.instrument_alpha;
+    }
+
+
+    function Verify(val) {
+        debugger;
+        var rooturl = '@Url.Content("~/")';
+        var refno = document.getElementById("refno").innerHTML;
+        var id = document.getElementById("id").innerHTML;
+        var username = document.getElementById("loginid").value;
+
+        var x = document.getElementById("urlVal").value;
+        var y = 'postCheckerWithdrawData';
+
+        var verf = document.getElementById("verf").value;
+
+        debugger;
+        //var transaction_type = document.getElementById("tranType").value;
+
+        if (val == "BACK") {
+            if (tranType == "CASHWDL") {
+                $.ajax({
+                    url: x + y,
+                    //headers: authHeaders,
+                    type: 'POST',
+                    data: { TransactionRefNo: refno, count_id: id, btnVal: val, Verf: verf },
+                    success: window.open(rooturl + "DepositWithdraw/CheckerWithdrawList", "_self"),
+                    error: getError
+                });
+            }
+            else if (tranType == "CASHDEP") {
+                $.ajax({
+                    url: x + y,
+                    //headers: authHeaders,
+                    type: 'POST',
+                    data: { TransactionRefNo: refno, count_id: id, btnVal: val, Verf: verf },
+                    success: window.open(rooturl + "DepositWithdraw/CheckerDepositList", "_self"),
+                    error: getError
+                });
+            }
+
+        }
+        else {
+            var decision = document.getElementById("decision").value.toUpperCase();
+
+            if (decision != "A" && decision != "R") {
+                alert("Enter correct decision!");
+                return false;
+            }
+
+            var code = document.getElementById("rejectCode").value;
+            var desc = document.getElementById("rejectDescription").value;
+
+            debugger;
+
+            if (decision == "R" && (code == null || code == "" || desc == null || desc == "")) {
+                alert("Reject Code and description is mandatory!");
+                return false;
+            }
+
+            debugger;
+
+            if (decision == "R") {
+                if (tranType == "CASHWDL") {
+                    $.ajax({
+                        url: x + y,
+                        //headers: authHeaders,
+                        type: 'POST',
+                        data: { TransactionRefNo: refno, count_id: id, btnVal: 'REJECT', Verf: verf, transactionType: tranType },
+                        success: window.open(rooturl + "DepositWithdraw/CheckerWithdrawList", "_self"),
+                        error: getError
+                    });
+                }
+                else if (tranType == "CASHDEP") {
+                    $.ajax({
+                        url: x + y,
+                        //headers: authHeaders,
+                        type: 'POST',
+                        data: { TransactionRefNo: refno, count_id: id, btnVal: 'REJECT', Verf: verf, transactionType: tranType },
+                        success: window.open(rooturl + "DepositWithdraw/CheckerDepositList", "_self"),
+                        error: getError
+                    });
+                }
+
+            }
+            else if (decision == "A") {
+
+                //// Cheque Data Validation
+                //if (tranType == "CASHWDL") {
+                //    // Cheque data validation
+                //    var output1 = ChequeDataValidation();
+
+                //    if (output1 == false)
+                //        return false;
+                //}
+
+				var srlno = document.getElementById("chqnoDataEntry").value;
+
+				if (tranType == "CASHWDL") {
+					if (srlno == null || srlno == "") {
+						alert("Alert! Serial No is Mandatory!");
+						return false;
+					}
+					else if (srlno == "000000") {
+						alert("Alert! Enter Proper Serial No!");
+						return false;
+					}
+					else if (srlno.length != 6) {
+						alert("Alert! Enter Proper 6 digit Serial No!");
+						return false;
+					}
+				}
+
+
+
+                var accno = document.getElementById("accno").value;
+                var name = document.getElementById("name").value;
+                var date = document.getElementById("ChequeDateTxt").value;
+                var amt = document.getElementById("amt").value;
+                var chqno = document.getElementById("chqnoDataEntry").value;
+                //var sort = document.getElementById("sortcodeDataEntry").value;
+                //var san = document.getElementById("sanDataEntry").value;
+                //var tr = document.getElementById("trDataEntry").value;
+
+                var trans_particular = document.getElementById("id_transaction_particular").value;
+                var rpt_code = document.getElementById("id_report_code").value;
+                var remark1 = document.getElementById("id_remark_1").value;
+                var remark2 = document.getElementById("id_remark_2").value;
+                var instrument_alpha = document.getElementById("id_instrument_alpha").value;
+
+                var output2 = WithdrawChecker();
+
+                if (output2 == false)
+                    return false;
+
+                debugger;
+
+                $.ajax({
+                    url: x + y,
+                    //headers: authHeaders,
+                    type: 'POST',
+                    //data: {
+                    //    TransactionRefNo: refno, count_id: id, btnVal: 'ACCEPT', ChequeNo: chqno, SortCode: sort, SanCode: san, TrCode: tr, ChqAmount: amt, date: date,
+                    //    DebitAccNo: accno, PayeeName: name, Verf: verf, transactionType: tranType
+                    //},
+                    data: {
+                        TransactionRefNo: refno, count_id: id, btnVal: 'ACCEPT', ChequeNo: chqno, //SortCode: sort, SanCode: san, TrCode: tr,
+                        ChqAmount: amt, date: date, DebitAccNo: accno, PayeeName: name, Verf: verf, transactionType: tranType,
+                        transaction_particular: trans_particular, report_code: rpt_code, remark_1: remark1, remark_2: remark2, instrument_alpha: instrument_alpha
+                    },
+                    success: successmsg,
+                    error: getError
+                });
+
+
+            }
+        }
+
+        function successmsg(result) {
+            //debugger;
+            alert(result);
+            //debugger;
+            /*var rooturl = @Url.Content("~/")*/
+
+            if (tranType == "CASHWDL")
+                window.open(rooturl + "DepositWithdraw/CheckerWithdrawList", "_self");
+            else if (tranType == "CASHDEP")
+                window.open(rooturl + "DepositWithdraw/CheckerDepositList", "_self");
+        }
+
+
+    }
+
+
+</script>

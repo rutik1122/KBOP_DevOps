@@ -1,0 +1,468 @@
+﻿
+@{
+    ViewBag.Title = "RtgsList";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+@*<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />*@
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+<script type="text/javascript">
+
+    //var root = '@Url.Content("~/")';
+    var x = document.getElementById("urlVal").value;
+    var uploadtype = "";
+    var rooturl = '@Url.Content("~/")';
+
+    var userId = document.getElementById("tellerDetails").value;
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+
+
+    });
+
+
+    function GetList() {
+        debugger;
+        //var userId = document.getElementById("tellerDetails").value;
+
+        uploadtype = document.getElementById("Upload_Type").value;
+
+        //debugger;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        var bankcode = document.getElementById("bankcode").value;
+
+        today = yyyy + '/' + mm + '/' + dd;
+        //today = yyyy + '/08/30';
+
+        var y = "getRtgsList";
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: { tellerId: userId, Date_Time: today, ApiCall: 'START', BankCode: bankcode, UploadType: uploadtype },
+            success: function (result) {
+                RtgsList(result);
+            },
+            error: getError
+        });
+    }
+
+
+    function getError(result) {
+
+        //var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+
+    function RtgsList(printer) {
+        debugger;
+
+        $("#myDatatable").find("tr:gt(0)").remove();
+
+        $("#div_without_cheque").hide();
+        $("#div_with_cheque").hide();
+
+        debugger;
+
+        $("#myDatatable td").remove();
+        $("#myDatatable_2 td").remove();
+
+        if (uploadtype == "01" || uploadtype == "02") {
+
+            $("#div_without_cheque").show();
+
+            $.each(printer, function (index, print) {
+                // Add a row to the Product table
+                AddRecordRow(print);
+            });
+        }
+        else if (uploadtype == "03" || uploadtype == "04") {
+
+            $("#div_with_cheque").show();
+
+            $.each(printer, function (index, print) {
+                // Add a row to the Product table
+                AddRecordRow_2(print);
+            });
+        }
+
+    }
+
+
+    function AddRecordRow(print) {
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myDatatable tbody").length == 0) {
+            $("#myDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myDatatable tbody").append(
+            RecordTableRow(print));
+    }
+
+
+    function AddRecordRow_2(print) {
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myDatatable_2 tbody").length == 0) {
+            $("#myDatatable_2").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myDatatable_2 tbody").append(
+            RecordTableRow_2(print));
+    }
+
+
+    function RecordTableRow(print) {
+        debugger;
+        //$("#myDatatable tr").remove();
+        if (print.RecordCount != null) {
+
+            var ret;
+
+            var RetRow =
+                "<tr>" +
+                '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.RecordCount + '">' + print.count_id + '</div></td>' +
+                '<td style="text-align:center;font-size: 14px;">' + print.InsertTimeStamp + '</td>' +
+                '<td style="font-size: 14px;">' + print.FrontImgPath + '</td>' +
+                '<td style="text-align:center;font-size: 14px;">' + print.DataEntry + '</td>';
+
+
+            if (print.Status == "2") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: greenyellow;">' + print.FormStatus + '</td>' +
+                /*'<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'*/
+                    '<td></td>'
+                "</tr>";
+            }
+            else if (print.Status == "3") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: yellow;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" /> </td>'
+                "</tr>";
+            }
+            else if (print.Status == "7") {
+                if (userId == print.DataEntry) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: orange;">' + print.FormStatus + '</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" /> </td>'
+                    "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: orange;">' + print.FormStatus + '</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'
+                    "</tr>";
+                }
+            }
+            else if (print.Status == "6") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: deepskyblue;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'
+                "</tr>";
+            }
+            else {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: red;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'
+                "</tr>";
+            }
+
+            return RetRow;
+        }
+        else {
+            var ret =
+                //"<tr>" +
+                // '<td <div> No Records Found </div></td>' +
+
+                //"</tr>";
+                alert("No Records Found!!!!!!");
+            return ret;
+        }
+    }
+
+
+    function RecordTableRow_2(print) {
+        debugger;
+
+        if (print.RecordCount != null) {
+
+            var ret;
+
+            var RetRow =
+                "<tr>" +
+                '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.RecordCount + '">' + print.count_id + '</div></td>' +
+                '<td style="text-align:center;font-size: 14px;">' + print.count_id_cheque + '</td>' +
+                '<td style="text-align:center;font-size: 14px;">' + print.InsertTimeStamp + '</td>' +
+                '<td style="font-size: 14px;">' + print.FrontImgPath + '</td>' +
+                '<td style="text-align:center;font-size: 14px;">' + print.DataEntry + '</td>';
+
+
+            if (print.Status == "30") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: deepskyblue;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData_withCheque(' + print.count_id + ', ' + print.count_id_cheque + ');" disabled /> </td>'
+                "</tr>";
+            }
+            else if (print.Status == "31" || print.Status == "32") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: red;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData_withCheque(' + print.count_id + ', ' + print.count_id_cheque + ');" disabled /> </td>'
+                "</tr>";
+            }
+            else if (print.Status == "33") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: yellow;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData_withCheque(' + print.count_id + ', ' + print.count_id_cheque + ');" /> </td>'
+                "</tr>";
+            }
+            else if (print.Status == "34") {
+
+                if (userId == print.DataEntry) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: orange;">' + print.FormStatus + '</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData_withCheque(' + print.count_id + ', ' + print.count_id_cheque + ');" /> </td>'
+                    "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: orange;">' + print.FormStatus + '</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData_withCheque(' + print.count_id + ', ' + print.count_id_cheque + ');" disabled /> </td>'
+                    "</tr>";
+                }
+                
+            }
+            else if (print.Status == "35") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: lightgreen;">' + print.FormStatus + '</td>' +
+                    '<td></td>'
+                "</tr>";
+            }
+            else {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: red;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Data Entry" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData_withCheque(' + print.count_id + ', ' + print.count_id_cheque + ');" disabled /> </td>'
+                "</tr>";
+            }
+
+            return RetRow;
+        }
+        else {
+            var ret =
+                //"<tr>" +
+                // '<td <div> No Records Found </div></td>' +
+
+                //"</tr>";
+                alert("No Records Found!!!!!!");
+            return ret;
+        }
+    }
+
+
+    function ReloadStatus(data1) {
+        //var x = document.getElementById("urlVal").value;
+        var y = "getRtgsList";
+        //var y = "rtgsImageUpload";
+        //var userId = document.getElementById("tellerDetails").value;
+
+        debugger;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '/' + mm + '/' + dd;
+
+        //alert("url: " + x + y);
+
+        var bankcode = document.getElementById("bankcode").value;
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: { tellerId: userId, Date_Time: today, ApiCall: 'RELOAD_STATUS', BankCode: bankcode, UploadType: uploadtype },
+            success: function (result) {
+                RtgsList(result);
+            },
+            error: getError
+        });
+    }
+
+
+    function VerifyData(recordId) {
+        //debugger;
+        //var rooturl = '@Url.Content("~/")';
+
+        var bankcode = document.getElementById("bankcode").value;
+
+        
+        window.open(rooturl + "RtgsNeft/RtgsForm?id=" + recordId + "&bankcode=" + bankcode, "_self");
+
+    }
+
+    function VerifyData_withCheque(recordId, chqid) {
+        //debugger;
+        //var rooturl = '@Url.Content("~/")';
+
+        var bankcode = document.getElementById("bankcode").value;
+        
+        window.open(rooturl + "RtgsNeft/RtgsFormWithCheque?id=" + recordId + "&bankcode=" + bankcode + "&chqId=" + chqid, "_self");
+
+    }
+
+
+    function resendRequest() {
+        //var x = document.getElementById("urlVal").value;
+        var y = "";
+    }
+
+
+    function getReset() {
+        //debugger;
+        var ProcessType = "reset";
+        //var x = document.getElementById("urlVal").value;
+        var y = "ResetAiForms";
+
+        //var userId = document.getElementById("tellerDetails").value;
+
+        //debugger;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '/' + mm + '/' + dd;
+
+        //flag = "Reset"
+        if (confirm('Do you want to reset captured and failed data?')) {
+            $.ajax({
+                url: x + y,
+                //headers: authHeaders,
+                type: 'POST',
+                data: { 'tellerId': userId, 'Date_Time': today },
+                success: getSuccessReset,
+                error: getError
+            });
+        }
+    };
+
+
+    function getSuccessReset(result) {
+        alert(result);
+        //var rooturl = '@Url.Content("~/")';
+        window.open(rooturl + "RtgsNeft/RtgsList", "_self");
+    }
+
+</script>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Rtgs / Neft Form
+            </h1>
+        </div>
+
+        <div class="page-content">
+            <div class="row" style="margin-left: .5%;">
+                @*<label class="col-sm-1"></label>*@
+                <label class="col-sm-2" style="font-size:15px"><b>Upload Type</b></label>
+                <div class="col-sm-3">
+                    @Html.DropDownList("Upload_Type", new List<SelectListItem>
+                    {
+                        new SelectListItem{ Text = "Manual Upload without Cheque", Value = "01" },
+                        new SelectListItem{ Text = "Machine Scanned without Cheque", Value = "02" },
+                        new SelectListItem{ Text = "Manual Upload with Cheque", Value = "03" },
+                        new SelectListItem{ Text = "Machine Scanned with Cheque", Value = "04" }
+                    })
+                </div>
+                <dib class="col-sm-1">
+                    <input type="button" id="btnList" value="Get list" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="GetList();" />
+                </dib>
+            </div>
+            <br />
+            <div class="row" style="margin-left: .5%;">
+                <input type="button" id="btnVerify" value="Reload Status" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="ReloadStatus('1');" />
+                <input type="button" id="btnReset" value="Reset All" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px;" onclick="getReset();" />
+                <input type="button" id="btnResend" value="Resend" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px;" onclick="resendRequest();" />
+            </div>
+            <br />
+            <div id="div_without_cheque" class="row" hidden>
+                @using (Html.BeginForm())
+                {
+                    <div style="margin-left:.5%;background-color:white" class="tablecontainer" id="tableDiv">
+                        <table id="myDatatable" class="table table-bordered table-striped table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Data Id</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Insert Time Stamp</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Image Path</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Data Entry</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Status</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                }
+            </div>
+            <div id="div_with_cheque" class="row" hidden>
+                @using (Html.BeginForm())
+                {
+                    <div style="margin-left:.5%;background-color:white" class="tablecontainer" id="tableDiv">
+                        <table id="myDatatable_2" class="table table-bordered table-striped table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center; border: double; font-size: 14px;">RTGS Id</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Cheque Id</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Insert Time Stamp</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Image Path</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Data Entry</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Status</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

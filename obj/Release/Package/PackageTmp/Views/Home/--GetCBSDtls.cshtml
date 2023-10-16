@@ -1,0 +1,889 @@
+﻿@model ikloud_Aflatoon.Infrastructure.cbstetails
+<div id="cbsdetails">
+    @Html.HiddenFor(m => m.cbsdls)
+    @Html.HiddenFor(m => m.JoinHldrs)
+    @*@Html.HiddenFor(m => m.Account)*@
+    @*@if (Model.callby != "ClientCode")
+        {*@
+    @Html.HiddenFor(m => m.payeenameselected)
+    <div class="w3-container  w3-margin w3-card-8" style="font-weight: 700" id="divpayee">
+        @if (Model.cbsdls != null)
+        {
+            if (Model.PayeeName != null)
+            {
+                @Html.DropDownList("Payee", new SelectList(Model.PayeeName), new { onchange = "getselect();" })
+            }
+            else
+            {
+                @*@Html.DropDownList("Payee", new SelectList(""), "Not Found", new { onchange = "getselect();" })*@
+                @Html.DropDownList("Payee", new List<SelectListItem>
+                        {
+                            new SelectListItem{ Text="Not Found", Value = "Not Found" },
+                         }, new { onchange = "getselect();" })
+            }
+        }
+    </div>
+    @*}*@
+    <div class="w3-container w3-light-grey w3-margin w3-card-4 w3-high">
+        <!--cbsdiv-->
+        @if (Model.cbsdls != null)
+        {
+            <script type="text/javascript">
+                $("#cbsdetails").removeClass();
+                $("#divpayee").removeClass();
+            </script>
+            if (Model.cbsdls.Substring(1, 1) != "F")
+            {
+                @*if (Model.cbsdls.Split('|').ElementAt(3) == "SBFCR" || Model.cbsdls.Split('|').ElementAt(3) == "SBFCS" || Model.cbsdls.Split('|').ElementAt(3) == "CAFCR" || Model.cbsdls.Split('|').ElementAt(3) == "CAFCS")
+                    {
+                        <script type="text/javascript">
+                            alert('Alert! FCRA A/C Check Branch confirmation for source of Funds!!');
+                        </script>
+                    }*@
+                //----------------For Loan Account pop-------------Axis Bank Requirment--------------
+                if (Model.cbsdls.Split('|').ElementAt(4) == "LTRAC" || Model.cbsdls.Split('|').ElementAt(4) == "LNAGT" ||
+                    Model.cbsdls.Split('|').ElementAt(4) == "LNAPG" || Model.cbsdls.Split('|').ElementAt(4) == "LATME" || Model.cbsdls.Split('|').ElementAt(4) == "LNECG"
+                    || Model.cbsdls.Split('|').ElementAt(4) == "LRGMI" || Model.cbsdls.Split('|').ElementAt(4) == "LNACT" || Model.cbsdls.Split('|').ElementAt(4) == "LNKCC"
+                    || Model.cbsdls.Split('|').ElementAt(4) == "LSAHL" || Model.cbsdls.Split('|').ElementAt(4) == "LSHSG")
+                {
+
+                    <script type="text/javascript">
+
+                        if ($("#accnt").val().substring(4, 5) == '6') {
+                            alert('Alert! Loan account - Please check!!');
+                        }
+
+                    </script>
+                }
+                <input type="hidden" id="Scheme" name="Scheme" value="@Model.cbsdls.Split('|').ElementAt(4)" />
+                if (Model.cbsdls.Split('|').ElementAt(4) == "SBSML" || Model.cbsdls.Split('|').ElementAt(4) == "SBEZ2" || Model.cbsdls.Split('|').ElementAt(4) == "SBZRO")
+                {
+                    <script type="text/javascript">
+                        alert('Please Exercise Caution - Scheme Code SBSML, SBZRO,SBEZ2');
+                    </script>
+                }
+
+                /*  if (Model.cbsdls.Split('|').ElementAt(4) == "SBTRZ" || Model.cbsdls.Split('|').ElementAt(4) == "CACOS" || Model.cbsdls.Split('|').ElementAt(4) == "INCOS")
+                  {
+
+                      <script type="text/javascript">
+                          debugger;
+
+                          var tempslpamt = $("#slpamount").val();
+                          var tempchqamt = $("#Amt").val();
+                          var instrtype = $("#instType").val();
+                          if (instrtype == "S") {
+                              if (tempslpamt.replace(/,/g, "") > 50000) {
+                                 // document.getElementById("normaldiv").classList.add("w3-yellow"); Commenetd 10-09-2018------Error Div Not Declare---
+                                  alert('Alert! Exceeds Rs. 50,000, check the beneficiary\n if third party, to comply with RBI guidelines!!');
+                              }
+                          }
+                          else {
+                              if (tempchqamt.replace(/,/g, "") > 50000) {
+                                  document.getElementById("normaldiv").classList.add("w3-yellow");
+                                  alert('Alert! Exceeds Rs. 50,000, check the beneficiary\n if third party, to comply with RBI guidelines!!');
+                              }
+                          }
+
+
+                      </script>
+                  }*/
+            }//|| Model.cbsdls.Split('|').ElementAt(3) == "SBNRO"
+            if (Model.cbsdls.Split('|').ElementAt(1) == "S" && Model.cbsdls.Split('|').ElementAt(2) != "")
+            {
+                //-----------|| Model.cbsdls.Split('|').ElementAt(8) == "0" Remove on 06-01-2018 by axis bank
+                if (Model.cbsdls.Split('|').ElementAt(5) == "C" || Model.cbsdls.Split('|').ElementAt(5) == "T")
+                {
+                    <div class="w3-container w3-highway-red">
+                        <div class="w3-container">
+                            <label>
+                                Name:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(3)
+                            </label>
+                        </div>
+                        @*<div class="w3-container">
+                                @if (Model.JoinHldrs != null)
+                                {
+                                    <h4>
+                                        <label>
+                                            Joint Holders:
+                                        </label>
+                                        @for (int i = 3; i < Model.JoinHldrs.Split('|').Count() - 1; i++)
+                                        {
+                                            <label>
+                                                @Model.JoinHldrs.Split('|').ElementAt(i)
+                                            </label>
+                                        }
+                                    </h4>
+                                }
+                            </div>*@
+                        <div class="w3-container">
+                            <label>
+                                Scheme Code:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(4)
+                            </label>
+                        </div>
+                        <div class="w3-container">
+                            <label>
+                                Freeze Code:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(5)
+                            </label>
+                        </div>
+                        <div class="w3-container">
+                            <label>
+                                MOP:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(6) - @Model.MOP
+                            </label>
+                        </div>
+                        <div class="w3-container">
+                            <label>
+                                Account Status:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(7) - @Model.AccountStatus
+                            </label>
+                        </div>
+                        <div class="w3-container">
+                            <label>
+                                NRE Flag:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(11)
+                            </label>
+                        </div>
+                        <div class="w3-container">
+                            <label>
+                                Scheme Type:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(12)
+                            </label>
+                        </div>
+                        <div class="w3-container">
+                            <label>
+                                Account Ownership:
+                            </label>
+                            <label>
+                                @Model.cbsdls.Split('|').ElementAt(13)
+                                - @Model.AccountOwnership
+                            </label>
+                        </div>
+                    </div>
+                    if (Model.cbsdls.Split('|').ElementAt(5) == "T")
+                    {
+                        <script type="text/javascript">
+                            alert('Alert! Total Freez Account !!');
+                            document.getElementById("blockkey").value = "1";
+
+                        </script>
+                    }
+                    else if (Model.cbsdls.Split('|').ElementAt(5) == "C")
+                    {
+                        <script type="text/javascript">
+                            alert('Alert! Credit Freez Account !!');
+                            document.getElementById("blockkey").value = "1";
+
+                        </script>
+                    }
+                    @*else if (Model.cbsdls.Split('|').ElementAt(8) == "0")
+                        {
+                            <script type="text/javascript">
+                                alert('Alert! Clearing credit limit zero!!');
+                                document.getElementById("blockkey").value = "1";
+                            </script>
+                        }*@
+
+                    @*else if (Model.cbsdls.Split('|').ElementAt(5) == "T")
+                            {
+                                <script type="text/javascript">
+                                    alert('Alert! Total Freez Account !!');
+                                    document.getElementById("blockkey").value = "1";
+                                    document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                                </script>
+                        }*@
+
+                }
+                else
+                {
+                    if (Model.cbsdls.Split('|').ElementAt(4) == "SBNRE" || Model.cbsdls.Split('|').ElementAt(4) == "NROFN" || Model.cbsdls.Split('|').ElementAt(4) == "SBFRL" || Model.cbsdls.Split('|').ElementAt(4) == "UBFRL"
+                        || Model.cbsdls.Split('|').ElementAt(4) == "SBFCR" || Model.cbsdls.Split('|').ElementAt(4) == "SBFCS" || Model.cbsdls.Split('|').ElementAt(4) == "CAFCR"
+                        || Model.cbsdls.Split('|').ElementAt(4) == "CAFCS")
+                    {
+
+                        if (Model.cbsdls.Split('|').ElementAt(4) == "SBFCR" || Model.cbsdls.Split('|').ElementAt(4) == "SBFCS" || Model.cbsdls.Split('|').ElementAt(4) == "CAFCR"
+                        || Model.cbsdls.Split('|').ElementAt(4) == "CAFCS")
+                        {
+                            <script type="text/javascript">
+
+                                alert('Alert! FCRA A/C Check Branch confirmation for source of Funds!!');
+
+                            </script>
+                        }
+
+                        //|| Model.cbsdls.Split('|').ElementAt(6) == "D" Remove for axis bank
+                        if (Model.cbsdls.Split('|').ElementAt(7) == "C" || Model.cbsdls.Split('|').ElementAt(7) == "I" || Model.cbsdls.Split('|').ElementAt(12) == "TDA")
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("blockkey").value = "1";
+                            </script>
+                        }
+                        if (Model.cbsdls.Split('|').ElementAt(5) == "D")
+                        {
+                            //w3-highway-blue  Remove on 05-01-2018 as suggested by reman-----------
+                            <div class="w3-container">
+                                <div class="w3-container">
+                                    <label>
+                                        Name:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(3)
+                                    </label>
+                                </div>
+                                @*<div class="w3-container">
+                                        @if (Model.JoinHldrs != null)
+                                        {
+                                            <h4>
+                                                <label>
+                                                    Joint Holders:
+                                                </label>
+                                                @for (int i = 3; i < Model.JoinHldrs.Split('|').Count() - 1; i++)
+                                                {
+                                                    <label>
+                                                        @Model.JoinHldrs.Split('|').ElementAt(i)
+                                                    </label>
+                                                }
+                                            </h4>
+                                        }
+                                    </div>*@
+                                <div class="w3-container">
+                                    <label>
+                                        Scheme Code:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(4)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Freeze Code:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(5)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        MOP:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(6) - @Model.MOP
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Account Status:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(7) - @Model.AccountStatus
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        NRE Flag:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(11)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Scheme Type:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(12)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Account Ownership:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(13)
+                                        - @Model.AccountOwnership
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            if (Model.cbsdls.Split('|').ElementAt(5) == "C" || Model.cbsdls.Split('|').ElementAt(5) == "T")
+                            {
+                                if (Model.cbsdls.Split('|').ElementAt(5) == "C")
+                                {
+                                    <script type="text/javascript">
+                                        alert('Alert! Credit Freez Account !!');
+                                        document.getElementById("blockkey").value = "1";
+                                        //document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                                    </script>
+                                }
+                                else if (Model.cbsdls.Split('|').ElementAt(5) == "T")
+                                {
+                                    <script type="text/javascript">
+                                        alert('Alert! Total Freez Account !!');
+                                        document.getElementById("blockkey").value = "1";
+                                        //document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                                    </script>
+                                }
+
+                            }
+                            else
+                            {
+                                <script type="text/javascript">
+                                    document.getElementById("blockkey").value = "0";
+                                </script>
+                            }
+                            <div class="w3-container w3-highway-red">
+                                <div class="w3-container">
+                                    <label>
+                                        Name:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(3)
+                                    </label>
+                                </div>
+                                @*<div class="w3-container">
+                                        @if (Model.JoinHldrs != null)
+                                        {
+                                            <h4>
+                                                <label>
+                                                    Joint Holders:
+                                                </label>
+                                                @for (int i = 3; i < Model.JoinHldrs.Split('|').Count() - 1; i++)
+                                                {
+                                                    <label>
+                                                        @Model.JoinHldrs.Split('|').ElementAt(i)
+                                                    </label>
+                                                }
+                                            </h4>
+                                        }
+                                    </div>*@
+                                <div class="w3-container">
+                                    <label>
+                                        Scheme Code:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(4)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Freeze Code:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(5)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        MOP:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(6) - @Model.MOP
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Account Status:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(7) - @Model.AccountStatus
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        NRE Flag:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(11)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Scheme Type:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(12)
+                                    </label>
+                                </div>
+                                <div class="w3-container">
+                                    <label>
+                                        Account Ownership:
+                                    </label>
+                                    <label>
+                                        @Model.cbsdls.Split('|').ElementAt(13)
+                                        - @Model.AccountOwnership
+                                    </label>
+                                </div>
+                            </div>
+                        }
+
+                    }
+                    else//|| Model.cbsdls.Split('|').ElementAt(6) == "D" Remove for axis bank
+                    {
+                        if (Model.cbsdls.Split('|').ElementAt(7) == "C" || Model.cbsdls.Split('|').ElementAt(7) == "I" || Model.cbsdls.Split('|').ElementAt(12) == "TDA")
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("blockkey").value = "1";
+                                $("#normaldiv").removeClass();
+                                document.getElementById("normaldiv").classList.add("w3-highway-red");
+                            </script>
+                        }
+                        else
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("blockkey").value = "0";
+                            </script>
+                        }
+
+                        if (Model.cbsdls.Split('|').ElementAt(5) == "C" || Model.cbsdls.Split('|').ElementAt(5) == "T" || Model.cbsdls.Split('|').ElementAt(5) == "D")
+                        {
+                            if (Model.cbsdls.Split('|').ElementAt(5) == "C")
+                            {
+                                <script type="text/javascript">
+                                    alert('Alert! Credit Freez Account !!');
+                                    document.getElementById("blockkey").value = "1";
+                                    document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                                </script>
+                            }
+                            else if (Model.cbsdls.Split('|').ElementAt(5) == "T")
+                            {
+                                <script type="text/javascript">
+                                    alert('Alert! Total Freez Account !!');
+                                    document.getElementById("blockkey").value = "1";
+                                    document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                                </script>
+                            }
+                            else if (Model.cbsdls.Split('|').ElementAt(5) == "D")
+                            {
+                                <script type="text/javascript">
+                                    document.getElementById("blockkey").value = "0";
+                                    //document.getElementById("normaldiv").classList.add("w3-highway-blue"); Comment on 5-01-18 reman changes
+                                </script>
+                            }
+
+                        }
+                        else
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("blockkey").value = "0";
+                            </script>
+                        }
+
+                        <div class="w3-container" id="normaldiv">
+                            <div class="w3-container">
+                                <label>
+                                    Name:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(3)
+                                </label>
+                            </div>
+                            @*<div class="w3-container">
+                                    @if (Model.JoinHldrs != null)
+                                    {
+                                        <h4>
+                                            <label>
+                                                Joint Holders:
+                                            </label>
+                                            @for (int i = 3; i < Model.JoinHldrs.Split('|').Count() - 1; i++)
+                                            {
+                                                <label>
+                                                    @Model.JoinHldrs.Split('|').ElementAt(i)
+                                                </label>
+                                            }
+                                        </h4>
+                                    }
+                                </div>*@
+                            <div class="w3-container">
+                                <label>
+                                    Scheme Code:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(4)
+                                </label>
+                            </div>
+                            <div class="w3-container">
+                                <label>
+                                    Freeze Code:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(5)
+                                </label>
+                            </div>
+                            <div class="w3-container">
+                                <label>
+                                    MOP:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(6) - @Model.MOP
+                                </label>
+                            </div>
+                            <div class="w3-container">
+                                <label>
+                                    Account Status:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(7) - @Model.AccountStatus
+                                </label>
+                            </div>
+                            <div class="w3-container">
+                                <label>
+                                    NRE Flag:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(11)
+                                </label>
+                            </div>
+                            <div class="w3-container">
+                                <label>
+                                    Scheme Type:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(12)
+                                </label>
+                            </div>
+                            <div class="w3-container">
+                                <label>
+                                    Account Ownership:
+                                </label>
+                                <label>
+                                    @Model.cbsdls.Split('|').ElementAt(13)
+                                    - @Model.AccountOwnership
+                                </label>
+                            </div>
+                        </div>
+                    }
+                    //-------For Axis Bank-----------
+                    <script type="text/javascript">
+                        $("#cbsdetails").removeClass();
+                        $("#divpayee").removeClass();
+                    </script>
+                    @*if (Model.cbsdls.Split('|').ElementAt(8) == "0")
+                        {
+                            <script type="text/javascript">
+
+                                alert('Alert! Clearing credit limit zero!!');
+                                document.getElementById("blockkey").value = "1";
+                            </script>
+                        }*@
+                    if (Model.cbsdls.Split('|').ElementAt(9) == "Y")
+                    {
+                        <script type="text/javascript">
+                            document.getElementById("divpayee").classList.add("w3-highway-red");
+                            document.getElementById("cbsdetails").classList.add("w3-highway-red");
+
+                        </script>
+                    }
+
+                    if (Model.cbsdls.Split('|').ElementAt(3).Contains("INSTA KIT"))
+                    {
+                        <script type="text/javascript">
+                            document.getElementById("normaldiv").classList.add("w3-yellow");
+                        </script>
+                    }
+
+                    if (Model.cbsdls.Split('|').ElementAt(4) == "ODSNR")
+                    {
+                        <script type="text/javascript">
+                            alert('Alert! ODSNR Account!!');
+                            document.getElementById("normaldiv").classList.add("w3-highway-red");
+                            document.getElementById("blockkey").value = "1";
+
+                        </script>
+                    }
+                    else if (Model.cbsdls.Split('|').ElementAt(4) == "SBFRN" || Model.cbsdls.Split('|').ElementAt(4) == "PBFRN")
+                    {
+                        <script type="text/javascript">
+                            alert('Alert! FCRA A/C Check Branch confirmation for source of Funds!!');
+                            document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                        </script>
+                    }
+                    else if (Model.cbsdls.Split('|').ElementAt(4) == "CABNK" || Model.cbsdls.Split('|').ElementAt(4) == "CACOB")
+                    {
+                        <script type="text/javascript">
+                            //if (document.getElementById("instType").value == "S") {
+                            alert('Alert! Check the beneficiary name if third party, to comply with RBI guidelines!!');
+                            //}
+                            document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                        </script>
+                    }
+                    else if (Model.cbsdls.Split('|').ElementAt(4) == "CACTS")
+                    {
+                        <script type="text/javascript">
+                            if (document.getElementById("instType").value == "S") {
+                                alert('Alert! Sub-Member Bank, Please check the Back-Endorsement!!');
+                            }
+                            document.getElementById("normaldiv").classList.add("w3-highway-schoolbus");
+
+                        </script>
+                    }
+                    else if (Model.cbsdls.Split('|').ElementAt(11) == "Y")
+                    {
+                        <script type="text/javascript">
+                            alert('Alert! NRE Account!!');
+                            document.getElementById("normaldiv").classList.add("w3-highway-red");
+
+                        </script>
+                    }
+                    //------------Added On 10-12-2018------------------For SBRZ and CACOS---and INCOS-----------
+                    if (Model.cbsdls.Split('|').ElementAt(4) == "SBTRZ" || Model.cbsdls.Split('|').ElementAt(4) == "SBTRS" || Model.cbsdls.Split('|').ElementAt(4) == "CASOC" || Model.cbsdls.Split('|').ElementAt(4) == "CACOS" || Model.cbsdls.Split('|').ElementAt(4) == "INCOS")
+                    {
+
+                        <script type="text/javascript">
+                            debugger;
+
+                            var tempslpamt = $("#slpamount").val();
+                            var tempchqamt = $("#Amt").val();
+                            var instrtype = $("#instType").val();
+                            $("#normaldiv").removeClass();
+                            document.getElementById("normaldiv").classList.add("w3-yellow");
+                            if (instrtype == "S") {
+                                if (tempslpamt.replace(/,/g, "") > 50000 || tempslpamt.replace(/,/g, "") > "50000") {
+                                    $("#normaldiv").removeClass();
+                                    document.getElementById("normaldiv").classList.add("w3-highway-red");// Commenetd 10-09-2018------Error Div Not Declare---
+                                    alert('Alert! Exceeds Rs. 50,000, check the beneficiary\n if third party, to comply with RBI guidelines!!');
+                                }
+                            }
+                            else {
+                                $("#normaldiv").removeClass();
+                                if (tempchqamt.replace(/,/g, "") > 50000 || tempchqamt.replace(/,/g, "") > "50000") {
+                                    document.getElementById("normaldiv").classList.add("w3-highway-red");
+                                    alert('Alert! Exceeds Rs. 50,000, check the beneficiary\n if third party, to comply with RBI guidelines!!');
+                                }
+                            }
+
+                        </script>
+                    }
+                    //------------------------------------------------------END---------------------------
+                    //------------------------Added on 29-08-2019----------Start-------Pop
+                    if (Model.SchemeCode == Model.cbsdls.Split('|').ElementAt(4))
+                    {
+                        if (Model.popRqd == "Y")
+                        {
+                            <script type="text/javascript">
+                                alert('@Model.Message');
+                            </script>
+                        }
+                        if (Model.AllowToBlock == "Y")
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("blockkey").value = "1";
+                            </script>
+                        }
+                        if (Model.Color != "N")
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("normaldiv").classList.add("w3-highway-@Model.Color");
+                            </script>
+                           
+                        }
+                    }
+                    //------------------------Added on 29-08-2019----------END-------
+                    if (Model.cbsdls.Split('|').ElementAt(4) == "SUKAN")
+                    {
+            <!--<input type="hidden" id="Scheme" name="Scheme" value="@Model.cbsdls.Split('|').ElementAt(4)" />-->
+                        <script type="text/javascript">
+                            // debugger;
+                            //  alert('Alert! Sukanya Samrudhi!!');
+                            var tempSamt = $("#slpamount").val();
+                            var tempamt = $("#Amt").val();
+                            var instrtype = $("#instType").val();
+                            document.getElementById("normaldiv").classList.add("w3-yellow");
+
+                            if (instrtype == "S") {
+                                if (tempSamt.replace(/,/g, "") % 100 != 0 || tempSamt.replace(/,/g, "") > 150000) {
+                                    alert('Alert! Sukanya Samrudhi, Amount not valid!!');
+                                    document.getElementById("blockkey").value = "1";
+                                    document.getElementById("normaldiv").classList.add("w3-yellow");
+
+                                }
+                                else {
+                                    document.getElementById("blockkey").value = "0";
+                                }
+                            }
+                            else {
+
+                                if (tempamt.replace(/,/g, "") % 100 != 0 || tempamt.replace(/,/g, "") > 150000) {
+                                    alert('Alert! Sukanya Samrudhi, Amount not valid!!');
+                                    document.getElementById("blockkey").value = "1";
+                                    document.getElementById("normaldiv").classList.add("w3-yellow");
+
+                                }
+                                else {
+                                    document.getElementById("blockkey").value = "0";
+                                }
+                            }
+
+
+
+                        </script>
+                    }
+                    //---------------------------------curntAc.slice(-10)-----
+                    if (Model.cbsdls.Split('|').ElementAt(13) == "O")
+                    {
+
+                        <script type="text/javascript">
+                            debugger;
+                            var sliceAccount = $("#accnt").val();
+                            if ($("#accnt").val() == "06410125027255") {
+                                document.getElementById("normaldiv").classList.add("w3-safety-purple");
+                            }
+                            else if (sliceAccount.slice(-8) == "10633030" || sliceAccount.slice(-8) == "10633031" || sliceAccount.slice(-8) == "10633032") {
+
+                                alert('Alert! CPC Account !!');
+                                document.getElementById("normaldiv").classList.add("w3-highway-red");
+                                document.getElementById("blockkey").value = "1";
+
+                            }
+                            else if (sliceAccount.slice(-8) == "10633033") {
+                                alert('Alert! CPC Others Kindly Check BAR Code !!');
+                                document.getElementById("blockkey").value = "0";
+
+                                document.getElementById("normaldiv").classList.add("w3-yellow");
+                            }
+                            else {
+
+                                document.getElementById("normaldiv").classList.add("w3-highway-schoolbus");
+                                document.getElementById("blockkey").value = "0";
+                            }
+
+                            if ($("#NarrationID").val() == "Y") {
+                                if ($("#accnt").val().length == 14) {
+                                    document.getElementById('ofc').value = "1";
+                                    if ($("#accnt").val() == "06410125027255") {
+                                        document.getElementById('narsndiv').style.display = "";
+                                        narrationReqirdflg = true;
+                                    }
+                                    else {
+                                        narrationAC($("#accnt").val());
+                                    }
+                                }
+
+                            }
+                        </script>
+
+                    }
+                    else
+                    {
+                        <script type="text/javascript">
+                            document.getElementById('ofc').value = "0";
+                            document.getElementById('narsndiv').style.display = "none";
+                            narrationReqirdflg = false;
+                        </script>
+                    }
+                    @*if (Model.cbsdls.Split('|').ElementAt(8) == "0")
+                        {
+                            <script type="text/javascript">
+
+                                alert('Alert! Clearing credit limit zero!!');
+                                document.getElementById("blockkey").value = "1";
+                            </script>
+                        }*@
+
+                    if (Model.cbsdls.Split('|').ElementAt(11) == "Y")
+                    {
+                        <script type="text/javascript">
+                            if ($("#NarrationID").val() == "Y") {
+                                document.getElementById('ofc').value = "1";
+                                document.getElementById('narsndiv').style.display = "";
+                                narrationReqirdflg = true;
+                            }
+                        </script>
+                    }
+                    else
+                    {
+                        <script type="text/javascript">
+                            if ($("#NarrationID").val() == "Y") {
+                                var SchemCode = document.getElementById('SchemCode');
+                                for (var i = 0; i < SchemCode.length; i++) {
+                                    //alert(rtncode);
+                                    if (Model.cbsdls.Split('|').ElementAt(3) == SchemCode[i].value) {
+                                        //  alert(rtnlistDescrp[i].value);
+                                        document.getElementById('narsndiv').style.display = "";
+                                        document.getElementById('ofc').value = "1";
+                                        narrationReqirdflg = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        </script>
+                    }
+
+                }
+            }//-----------------19-12-2017---------------
+            else
+            {
+                <div class="w3-container w3-highway-red" style="float: left">
+                    <h4 class="w3-container">@Model.cbsdls.Split('|').ElementAt(2)</h4>
+                    <script type="text/javascript">
+                        document.getElementById("blockkey").value = "1";
+                        if ($("#NarrationID").val() == "Y") {
+                            document.getElementById('narsndiv').style.display = "none";
+                            document.getElementById('ofc').value = "0";
+                            narrationReqirdflg = false;
+                        }
+                    </script>
+                </div>
+            }
+        }
+        else if (Model.cbsdls == null)
+        {
+            <div class="w3-container w3-highway-red" style="float: right">
+                <h3 class="w3-container">
+                    <strong>Account Details Not Found!!</strong>
+                </h3>
+            </div>
+            <script type="text/javascript">
+                document.getElementById("blockkey").value = "1";
+                if ($("#NarrationID").val() == "Y") {
+                    document.getElementById('narsndiv').style.display = "none";
+                    document.getElementById('ofc').value = "0";
+                    narrationReqirdflg = false;
+                }
+            </script>
+
+        }
+    </div>
+    @if (Model.callby != "ClientCode")
+    {
+        <script type="text/javascript">
+            // alert('aila');
+            var selectedpayee = document.getElementById("payeenameselected").value;
+            var el = document.getElementById("Payee");
+            //alert(selectedpayee);
+            for (var i = 0; i < el.options.length; i++) {
+                if (el.options[i].text == selectedpayee) {
+                    // el.selectedIndex = i;
+                    //alert(el.options[i].text);
+                    el.options[i].selected = true;
+                    break;
+                }
+            }
+        </script>
+    }
+</div>

@@ -1,0 +1,238 @@
+﻿@*<script src="~/Scripts/Data.js"></script>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<div class="row col-12 mb-3 my-0">
+    <form class="d-flex align-items-center" action="#">
+        <div style="text-align: center;" class="row">
+            <h3 style="text-align: center;" class="mb-0 text-primary position-relative">
+                <span id="spam_header" class="bg-200 dark__bg-1100 pe-3">
+                    K-BOP | Kores Branch Operation Platform
+                </span>
+            </h3>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    $("#ProcessingBar").hide();
+
+    $(document).ready(function () {
+
+        //debugger;
+
+        //var username =   window.localStorage.getItem('username');
+
+        @*if (username != "") {
+            window.localStorage.setItem('username', '@Session["user"].ToString()');
+        }*@
+
+        window.localStorage.setItem('username', '@Session["user"].ToString()');
+
+        var allowPreviousSession = false;
+
+        debugger;
+        if ('@Session["LoginFlag"].ToString()' == '1') {
+            let text = "You are already logged in! Do you still wish to continue ?";
+            if (confirm(text) != true) {
+                allowPreviousSession = true;
+                var RootUrl = '@Url.Content("~/")';
+                //window.open(rooturl + 'Home/LoginiBAS', '_self');
+                window.location = RootUrl + "Home/LoginiBAS";
+            }
+        }
+
+
+        if ('@Session["userlogin"].ToString()' == "False" && allowPreviousSession == false) {
+            var RootUrl = '@Url.Content("~/")';
+
+            $.ajax({
+                url: RootUrl + 'Home/setSession',
+                dataType: 'html',
+                success: function (data) {
+                }
+            });
+
+        }
+
+
+        if ('@Session["login"].ToString()' == "True") {
+            debugger;
+            window.localStorage.setItem('AccessToken', '@Session["k_bop_tok"].ToString()');
+            window.localStorage.setItem('TokenType', '@Session["k_bop_token_type"].ToString()');
+            ////var tokenurl = '@ViewBag.URL';
+            ////getToken(tokenurl);
+
+        }
+
+    });
+
+    function callbackFunction(result) {
+        //debugger;
+        window.localStorage.setItem('AccessToken', result.access_token);
+        window.localStorage.setItem('TokenType', result.token_type);
+        window.localStorage.setItem('username', '@Session["user"].ToString()');
+
+    }
+    function errorResponse(result) {
+        //debugger;
+        alert(result.responseText);
+
+
+    }
+
+
+    function Search() {
+        var RootUrl = '@Url.Content("~/")';
+        $.ajax({
+            type: "POST",
+            url: Rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "home/LoginiBAS";
+                }
+            }
+        });
+    }
+
+    jQuery(function ($) {
+        $('#id-disable-check').on('click', function () {
+            var inp = $('#form-input-readonly').get(0);
+            if (inp.hasAttribute('disabled')) {
+                inp.setAttribute('readonly', 'true');
+                inp.removeAttribute('disabled');
+                inp.value = "This text field is readonly!";
+            }
+            else {
+                inp.setAttribute('disabled', 'disabled');
+                inp.removeAttribute('readonly');
+                inp.value = "This text field is disabled!";
+            }
+        });
+
+        $('.sparkline').each(function () {
+            var $box = $(this).closest('.infobox');
+            var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+            $(this).sparkline('html',
+                                {
+                                    tagValuesAttribute: 'data-values',
+                                    type: 'bar',
+                                    barColor: barColor,
+                                    chartRangeMin: $(this).data('min') || 0
+                                });
+        });
+
+        //$('.date-picker').datepicker({
+        //    autoclose: true,
+        //    todayHighlight: true,
+        //    dateFormat: "dd-MM-yyyy",
+        //    changeMonth: true,
+        //    changeYear: true,
+        //    yearRange: "-15:+15",
+        //    showOn: "both"
+        //})
+        ////show datepicker when clicking on the icon
+        //.next().on(ace.click_event, function () {
+        //    $(this).prev().focus();
+        //});
+
+
+        
+
+        /////////////////////////////////////
+        $(document).one('ajaxloadstart.page', function (e) {
+            $tooltip.remove();
+        });
+
+
+
+
+        var d1 = [];
+        for (var i = 0; i < Math.PI * 2; i += 0.5) {
+            d1.push([i, Math.sin(i)]);
+        }
+
+        var d2 = [];
+        for (var i = 0; i < Math.PI * 2; i += 0.5) {
+            d2.push([i, Math.cos(i)]);
+        }
+
+        var d3 = [];
+        for (var i = 0; i < Math.PI * 2; i += 0.2) {
+            d3.push([i, Math.tan(i)]);
+        }
+
+
+
+
+
+        $('#recent-box [data-rel="tooltip"]').tooltip({ placement: tooltip_placement });
+        function tooltip_placement(context, source) {
+            var $source = $(source);
+            var $parent = $source.closest('.tab-content')
+            var off1 = $parent.offset();
+            var w1 = $parent.width();
+
+            var off2 = $source.offset();
+            //var w2 = $source.width();
+
+            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+            return 'left';
+        }
+
+
+        $('.dialogs,.comments').ace_scroll({
+            size: 300
+        });
+
+
+        //Android's default browser somehow is confused when tapping on label which will lead to dragging the task
+        //so disable dragging when clicking on label
+        var agent = navigator.userAgent.toLowerCase();
+        if (ace.vars['touch'] && ace.vars['android']) {
+            $('#tasks').on('touchstart', function (e) {
+                var li = $(e.target).closest('#tasks li');
+                if (li.length == 0) return;
+                var label = li.find('label.inline').get(0);
+                if (label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation();
+            });
+        }
+
+        //$('#tasks').sortable({
+        //    opacity: 0.8,
+        //    revert: true,
+        //    forceHelperSize: true,
+        //    placeholder: 'draggable-placeholder',
+        //    forcePlaceholderSize: true,
+        //    tolerance: 'pointer',
+        //    stop: function (event, ui) {
+        //        //just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
+        //        $(ui.item).css('z-index', 'auto');
+        //    }
+        //});
+
+        $('#tasks').disableSelection();
+        $('#tasks input:checkbox').removeAttr('checked').on('click', function () {
+            if (this.checked) $(this).closest('li').addClass('selected');
+            else $(this).closest('li').removeClass('selected');
+        });
+
+
+        //show the dropdowns on top or bottom depending on window height and menu position
+        $('#task-tab .dropdown-hover').on('mouseenter', function (e) {
+            var offset = $(this).offset();
+
+            var $w = $(window)
+            if (offset.top > $w.scrollTop() + $w.innerHeight() - 100)
+                $(this).addClass('dropup');
+            else $(this).removeClass('dropup');
+        });
+
+    })
+</script>

@@ -1,0 +1,150 @@
+﻿@{
+	ViewBag.Title = "NewRTGSForm";
+	Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<div class="row col-12 mb-3 my-0">
+	<form class="d-flex align-items-center" action="#">
+		<div class="row">
+			<h5 class="mb-0 text-secondary position-relative">
+				<span class="bg-200 dark__bg-1100 pe-3">
+					RTGS /
+					NEFT
+				</span>
+			</h5>
+		</div>
+	</form>
+</div>
+<div class="row mb-2">
+	<div class="col-lg-8 col-md-8 col-sm-12">
+		<div class="card" style="max-height: 69vh;overflow:scroll;position: relative;">
+			<!-- style="max-height: 45%;overflow:scroll;" -->
+			<div class="card-body p-2">
+				<div class="row d-flex">
+					<div class="col-lg-12">
+						<div class="form-group row mx-1 mb-0">
+							<div class="form-check form-check-inline col">
+								<label class="form-check-label" for="optionsRadios1">
+									<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
+										   value="option1" checked /> Front
+								</label>
+							</div>
+							<div class="form-check col">
+								<label class="form-check-label" for="optionsRadios2">
+									<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
+										   value="option2" /> Back
+								</label>
+							</div>
+							<div class="col">
+								<div class="btn-group">
+									<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip"
+											data-bs-placement="top" title="Rotate">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+											 class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+											<path fill-rule="evenodd"
+												  d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
+											<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
+										</svg>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="text-center mb-2 mx-2">
+							<img src="~/assets/images/rtgs2.jpeg" class="img-fluid" alt="rtgs" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4 col-md-4 col-sm-12">
+		<div class="card" style="max-height: 69vh;overflow:scroll;position:relative;">
+			<!-- <h6 class="text-center mt-3 font-weight-bolder">Demo</h6> -->
+			<div class="card-body p-2">
+				<div class="table-responsive">
+					<table class="table table-sm table-bordered" id="tblDynamicForm">
+					</table>
+				</div>
+				<div class="text-center">
+					<a href="#">
+						<button class="btn btn-secondary btn-sm">Back</button>
+					</a>
+					<a href="#">
+						<button onclick="return AiRequestCall()" class="btn btn-primary btn-sm">Submit</button>
+					</a>
+					<a href="#reset-modal" data-bs-toggle="modal">
+						<button class="btn btn-danger btn-sm">Reset</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Reset Modal -->
+<div class="modal fade" id="reset-modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+		<div class="modal-content position-relative">
+			<div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+
+				<button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+			</div>
+			<div class="modal-body p-0">
+				<div class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+					<!-- <div class="bg-warning me-3 icon-item"><span class="fas fa-exclamation-circle text-white fs-3"></span></div> -->
+					<h5 class="text-center">
+						<span class="fas fa-exclamation-circle text-warning fs-3"></span>&nbsp;&nbsp;&nbsp;<strong class="me-auto">Are you sure to reset?</strong>
+					</h5>
+				</div>
+				<div class="my-3 text-center d-grid gap-2 d-md-block">
+					<button class="btn btn-danger" type="button">Yes </button>
+					<button class="btn btn-primary" type="button" data-bs-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of Reset Modal -->
+
+<tr>
+	<td class="text-wrap">Remittance Type</td>
+	<td class="text-wrap">
+		<input type="text" class="form-control form-control-sm" placeholder="NEFT">
+	</td>
+</tr>
+
+<script type="text/javascript">
+
+    var obj = @Html.Raw(Json.Encode(Model.DynamicFields));
+
+	var tbody = document.createElement("tbody");
+    for (var i = 0; i < obj.length; i++) {
+
+        var field = obj[i];
+
+		var tr = document.createElement("tr");
+
+		var tdLabel = document.createElement("td");
+		tdLabel.className = 'text-wrap';//.attr("class", "text-wrap")
+        tdLabel.appendChild(document.createTextNode(field.field_name));
+
+		var tdInput = document.createElement("td");//.attr("class", "text-wrap");
+		tdInput.className = 'text-wrap';
+		var input = document.createElement("input");//.attr("id", "txt" + field.FieldName).attr("placeholder", field.FieldValue).attr("type", "text").attr("class","form-control form-control-sm");
+		input.type = 'text';
+        input.value = field.field_value;
+		input.className = 'form-control form-control-sm';
+
+		tdInput.appendChild(input);
+
+		tr.appendChild(tdLabel);
+		tr.appendChild(tdInput);
+
+		tbody.appendChild(tr);
+    }
+
+	$("#tblDynamicForm").append(tbody);
+
+
+</script>

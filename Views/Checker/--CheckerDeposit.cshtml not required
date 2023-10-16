@@ -1,0 +1,280 @@
+﻿
+<script src="~/Scripts/DepositChecker.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+
+@{
+    ViewBag.Title = "CheckerDeposit";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+
+
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+<input id="verf" value="@ViewBag.Verf" hidden />
+<input id="tranType" value="@ViewBag.tranType" hidden />
+
+<label id="refno" name="refno" hidden>@ViewBag.RefNo</label>
+<label id="id" name="id" hidden>@ViewBag.Count_id</label>
+
+<input id="CheckerModule" name="CheckerModule" value="@Session["CheckerModule"]" hidden />
+<input id="Pancard_Verf" value="@Session["Pancard_Verf"]" hidden />
+
+<input id="L2StartLimit" value="@Session["l2startlimit"]" hidden />
+<input id="L3StartLimit" value="@Session["l3startlimit"]" hidden />
+<input id="pancard_verf_limit" value="@Session["pancard_verf_limit"]" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+<div class="row col-12 mb-3 my-0">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <h3 class="mb-0 text-primary position-relative"><span class="bg-200 dark__bg-1100 pe-3">Cash Deposit (Checker Verification)</span></h3>
+            <!-- <span style="font-size: 32px;">Cash Withdraw</span> &nbsp;&nbsp;&nbsp; -->
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 d-md-block">
+                <button class="btn btn-sm btn-primary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+                        aria-controls="offcanvasScrolling" onclick="getSignDetails();">
+                    Get Sign
+                </button>
+                <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#reset-modal">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row mb-2">
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <div class="card">
+            <div class="card-body p-2">
+                <div class="row">
+                    <div class="col-lg-12 ">
+                        <div class="form-group row mx-1 mb-0">
+                            <div class="form-check form-check-inline col">
+                                <label class="form-check-label" for="optionsRadios1">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
+                                           value="option1" onclick="switchimage('frontGimg', 'BOT_RGB')" checked /> Front
+                                </label>
+                            </div>
+                            <div class="form-check col">
+                                <label class="form-check-label" for="optionsRadios2">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
+                                           value="option2" onclick="switchimage('backGimg', 'TOP_RGB')" /> Back
+                                </label>
+                            </div>
+                            <div class="form-check col">
+                                <label class="form-check-label" for="optionsRadios3">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3"
+                                           value="option3" onclick="switchimage('frontIRimg', 'BOT_IRR')" /> IR
+                                </label>
+                            </div>
+                            <div class="form-check col">
+                                <label class="form-check-label" for="optionsRadios4">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios4"
+                                           value="option4" onclick="switchimage('waterMark', 'TOP_QIR')" /> WM
+                                </label>
+                            </div>
+                            <div class="col">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" onclick="rotateImage();"
+                                            data-bs-placement="top" title="Rotate">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                             class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
+                                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <img id="FG" src="" class="img-fluid" style="height: 300px; width:auto" alt="INSTRUMENT">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="card ">
+            <!-- <h6 class="text-center mt-3 font-weight-bolder">Credit Account</h6> -->
+            <div class="card-body p-2 ">
+                <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text">Account No.</span>
+                    <input id="AccountNo" type="text" class="form-control" placeholder="Search" data-bs-toggle="tooltip" data-bs-placement="top"
+                           onfocusout="GetPayeee('CASHDEP');">
+                    <button class="btn btn-primary" onclick="GetPayeee('CASHDEP');"><i class="fas fa-search"></i></button>
+                </div>
+                <div id="Payeeee">
+                    <select id="PayeeName" class="form-select form-select-sm mb-2"></select>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-wrap">Acc Status</td>
+                                <td class="text-wrap text-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="Account Status">
+                                    <label id="accStatus" style="font-style:bold;font-size:15px;"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Amount</td>
+                                <td class="text-wrap">
+                                    <input id="amt" type="number" class="form-control form-control-sm" placeholder="12345678" min="1"
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Transaction Amount">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Trans. Particular</td>
+                                <td class="text-wrap">
+                                    <input id="transParticular" type="text" class="form-control form-control-sm" placeholder="12345678" min="1"
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Transaction Particulars" value="By Cash">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Report Code</td>
+                                <td class="text-wrap">
+                                    <select id="rpt_code" class="form-select form-select-sm">
+                                        <option selected>Select Report Code</option>
+                                        <option value="LW">LW</option>
+                                        <option value="PR">PR</option>
+                                        <option value="TR">TR</option>
+                                        <option value="CR">CR</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Remark 1</td>
+                                <td class="text-wrap">
+                                    <input id="remark_1" type="text" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-wrap">Remark 2</td>
+                                <td class="text-wrap">
+                                    <input id="remark_2" type="text" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text">Verification</span>
+                    <input type="text" class="form-control" placeholder="(A or R)">
+                    &nbsp;&nbsp;
+                    <span class="input-group-text">Code</span>
+                    <input type="text" class="form-control" placeholder="88">
+                </div>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Description</span>
+                    <input type="textarea" class="form-control" placeholder="xyz">
+                </div>
+                <div class="text-center mt-3">
+                    <!-- Temporary Button for rejection modal -->
+                    <a href="#reject-modal" data-bs-toggle="modal">
+                        <button class="btn btn-danger btn-sm ">Reject</button>
+                    </a>
+                    <!-- End of Temporary Button for rejection modal -->
+                    <a>
+                        <button class="btn btn-danger btn-sm ">Rollback</button>
+                    </a>
+                    <a>
+                        <button class="btn btn-danger btn-sm ">Back</button>
+                    </a>
+                    <a href="#authentication-modal" data-bs-toggle="modal">
+                        <button class="btn btn-primary btn-sm ">Submit</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var WebImageURL = '@ViewBag.WebImageURL';
+    var PhysicalImageURL = '@ViewBag.PhysicalImageURL';
+    var popup = "";
+    var recipt = "no";
+
+    var ErrorMessage = "";
+
+    var access_token = window.localStorage.getItem('AccessToken');
+    var bearer = window.localStorage.getItem('TokenType');
+
+    var authHeaders = {};
+    authHeaders.Authorization = bearer + " " + access_token;
+
+    var AccountValidation = false;
+    var CompleteValidation = false;
+
+    // Data Field
+    var AccountNo = "";
+    var amount = 0;
+    var instrument_srl_no = "";
+    var instrument_date = "";
+    var instrument_alpha = "";
+    var trans_particular = "";
+    var rpt_code = "";
+    var remark1 = "";
+    var remark2 = "";
+
+    var transtype = "CASHDEP";
+    var ImageUrl = "";
+    var bankcode = "";
+    var flag = "";
+
+    var verf = "";
+
+    var instrument_available = false;
+
+    $("#ProcessingBar").hide();
+
+    // Reset Logic Begin
+    $("#div_reset_msg").show();
+    $("#div_reset_button").show();
+    $("#btn_close_reset").show();
+    $("#btn_yes_reset").show();
+    $("#btn_no_reset").show();
+    $("#div_reset_success").hide();
+    $("#tbl_reset_response").hide();
+    $("#success_reset").hide();
+    $("#failed_reset").hide();
+    $("#div_reload_page_button").hide();
+    $("#btn_reload").hide();
+    // Reset Logic End
+
+    //bankcode = document.getElementById("bankcode").value;
+
+    var imgRotateVal = 0;
+
+    $(document).ready(function () {
+        debugger;
+
+        var refno = document.getElementById("refno").innerHTML;
+        var id = document.getElementById("id").innerHTML;
+        var username = document.getElementById("loginid").value;
+        verf = document.getElementById("verf").value;
+
+        var y = 'getWithdrawData';
+
+        debugger;
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: { CheckerId: username, TransactionRefNo: refno, count_id: id, Verf: verf },
+            success: getData,
+            error: getError
+        });
+
+    });
+
+
+</script>

@@ -1,0 +1,296 @@
+﻿
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+
+<div class="row col-12 mb-3 my-0">
+    <div class="text-center">
+        <h3 class="mb-0 text-primary ">
+            <span class="bg-200 dark__bg-1100">Manual Form Upload</span>
+        </h3>
+    </div>
+</div>
+
+<div class="row justify-content-center mb-3">
+    <div class="row justify-content-center mb-3">
+        <div class="col-xxl-4 col-lg-5 col-md-12 col-sm-12">
+            <div class="card px-3 py-2">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-12" style="text-align: center;">
+                            <label style="font-size:15px;"><b>Upload Type</b></label>
+                        </div>
+                        <div class="col-sm-12" style="text-align: center;">
+                            @Html.DropDownList("UploadType", new List<SelectListItem>
+                            {
+                                //new SelectListItem{ Text = "--Select--", Value = "00" },
+                                new SelectListItem{ Text = "RTGS/NEFT", Value = "01" },
+                                new SelectListItem{ Text = "Cheque", Value = "02" },
+                                //new SelectListItem{ Text = "Slip", Value = "03" },
+                                //new SelectListItem{ Text = "KYC", Value = "04" },
+                                new SelectListItem{ Text = "CTS", Value = "05" },
+                                //new SelectListItem{ Text = "Fix Deposit", Value = "06" },
+                                //new SelectListItem{ Text = "Close Acco.", Value = "07" }
+                                new SelectListItem{ Text = "NRO", Value = "08" },
+                                new SelectListItem{ Text = "Third Party Form", Value = "09" },
+                            })
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3 mx-sm-7">
+                        <div class="col-sm-12" style="text-align: center;">
+                            <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" multiple />
+                            <input id="base64PathVal" value="" hidden />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group mt-3">
+                        <div class="col-sm-12" style="text-align: center;">
+                            <a id="btn_submit" href="#authenticationmodal" data-bs-toggle="modal">
+                                <button class="btn btn-primary btn-sm" onclick="VerifyData();">Import</button>
+                            </a>
+                            @*<button class="btn btn-info" value="Import" onclick="ImportFunction()">
+                                <i class="ace-icon fa fa-check bigger-110"></i>
+                                Import
+                            </button>*@
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-1" data-bs-theme="light">
+                    <h4 class="mb-0 text-white" id="authentication-modal-label">Message Box</h4>
+                </div>
+                <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2 px-1">
+                <div id="div_upload_question" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                    <h5 class="text-center">
+                        <strong class="me-auto">Do you want to Upload the file?</strong>
+                    </h5>
+                </div>
+                <table id="tbl_verf_fail" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Error Msg</th>
+                            <td class="text-wrap">
+                                <lable id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbl_verf_result" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Response</th>
+                            <td class="text-wrap">
+                                <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                    <div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="ImportFunction()">Submit</a></div>
+                    <div class="col-sm-6">
+                        <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                           aria-label="Close">Cancel</a>
+                    </div>
+                </div>
+                <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                    </div>
+                </div>
+                <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="PageReload()">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+    var imgArr = [];
+    var imgName = [];
+
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+    function VerifyData() {
+        $("#div_upload_question").show();
+        $("#tbl_verf_fail").hide();
+        $("#tbl_verf_result").hide();
+        $("#div_submit_pass").show();
+        $("#div_submit_fail").hide();
+        $("#div_response_success").hide();
+    }
+
+    function ImportFunction() {
+
+        debugger;
+        $("#div_upload_question").hide();
+        $("#tbl_verf_fail").hide();
+        $("#tbl_verf_result").show();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").hide();
+        $("#div_response_success").hide();
+        debugger;
+
+        //alert("This is Import function");
+        var base64 = document.getElementById("base64PathVal").value;
+        var userId = document.getElementById("tellerDetails").value;
+
+        var x = document.getElementById("urlVal").value;
+        //var y = "getRtgsList";
+        var y = "rtgsImageUpload";
+        //alert("url: " + x + y);
+        debugger;
+
+        var form_type = document.getElementById("UploadType").value;
+        var bankcode = document.getElementById("bankcode").value;
+
+        var imgNameNull = [];
+
+        document.getElementById("successMsg").innerHTML = "Processing...";
+
+        debugger;
+
+        $.ajax({
+            type: 'POST',
+            url: x + y,
+            data: { ImgList: imgArr, ImgType: form_type, tellerId: userId, ImgNameList: imgName, BankCode: bankcode },
+            //data: { ImgList: imgNameNull, ImgType: form_type, tellerId: userId, ImgNameList: imgName, BankCode: bankcode },
+            success: SuccessImg,
+            error: FailedImg
+        });
+
+        //if (confirm("Do you want to Submit the selected recods!")) {
+        //    //alert("within confirm box!");
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: x + y,
+        //        data: { ImgList: imgArr, ImgType: form_type, tellerId: userId, ImgNameList: imgName, BankCode: bankcode },
+        //        //data: { ImgList: imgNameNull, ImgType: form_type, tellerId: userId, ImgNameList: imgName, BankCode: bankcode },
+        //        success: SuccessImg,
+        //        error: FailedImg
+        //    });
+        //}
+
+    }
+
+    function encodeImageFileAsURL() {
+        //debugger;
+        var filesSelected = document.getElementById("inputFileToLoad").files;
+        var imgType = document.getElementById("UploadType").value;
+        debugger;
+        if (filesSelected.length > 0) {
+
+            for (var i = 0; i < filesSelected.length; i++) {
+                debugger;
+                var fileToLoad = filesSelected[i];
+                var filename = filesSelected[i].name;
+                imgName.push(filename);
+                var fileReader = new FileReader();
+
+                fileReader.onload = function (fileLoadedEvent) {
+                    debugger;
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+                    var newImage = document.createElement('img');
+                    newImage.src = srcData;
+                    var dataVal = srcData.replace("data:image/jpeg;base64,", "");
+
+                    imgArr.push(dataVal);
+
+                }
+
+                fileReader.readAsDataURL(fileToLoad);
+
+            }
+
+        }
+    }
+
+    function SuccessImg(result) {
+        debugger;
+        $("#div_upload_question").hide();
+        $("#tbl_verf_fail").hide();
+        $("#tbl_verf_result").show();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").hide();
+        $("#div_response_success").show();
+        debugger;
+
+        document.getElementById("successMsg").innerHTML = result;
+
+        @*//document.getElementById("inputFileToLoad").files = null;
+        var rooturl = '@Url.Content("~/")';
+        window.open(rooturl + "RtgsNeft/Upload", "_self");
+        alert(result);*@
+    }
+
+    function FailedImg(result) {
+
+        debugger;
+        $("#div_upload_question").hide();
+        $("#tbl_verf_fail").hide();
+        $("#tbl_verf_result").show();
+        $("#div_submit_pass").hide();
+        $("#div_submit_fail").show();
+        $("#div_response_success").hide();
+        debugger;
+
+        document.getElementById("successMsg").innerHTML = result;
+
+        //var msg = result.responseJSON.Message;
+        //alert(msg);
+        //var rooturl = '@Url.Content("~/")';
+        //window.open(rooturl + "RtgsNeft/Upload", "_self");
+    }
+
+    function PageReload() {
+        debugger;
+        window.open(rooturl + "RtgsNeft/Upload", "_self");
+    }
+
+</script>

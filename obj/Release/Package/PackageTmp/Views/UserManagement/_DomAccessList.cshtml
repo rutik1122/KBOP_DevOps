@@ -1,0 +1,17 @@
+﻿
+<div id="ajaxorg" style="padding-left:10%">
+    <label class="w3-label w3-text-black" style="font-weight:600"> Select Domain:</label>
+    <br />
+    @Html.DropDownList("DomAccessPartialView", null, new { @multiple = true, @name = "DomAccessPartialView[]" })
+</div>
+
+
+<script src="~/Scripts/jquery.multiselect.js"></script>
+
+<script type="text/javascript">
+    $('#DomAccessPartialView').multiselect({
+        columns: 4,
+        placeholder: 'Select Domain'
+    });
+</script>
+

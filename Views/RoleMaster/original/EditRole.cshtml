@@ -1,0 +1,172 @@
+﻿<script src="~/Scripts/EditRole.js"></script>
+<script src="~/Scripts/CommonRole.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+@{
+    ViewBag.Title = "EditRole";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input id="uid" name="uid" value="@Session["uid"]" hidden />
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card overflow-hidden">
+                <div class="card-header bg-light py-2">
+                    <h5 class="mb-0 text-center">Edit Role</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row mb-4 mt-2">
+                            <div class="col-lg-4">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter Role name" autofocus />
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Description</label>
+                                <input type="text" class="form-control" id="description" placeholder="Enter Description" autofocus />
+                            </div>
+                        </div>
+                        <!--<div class="row mb-4 mt-2">
+                            <div id="div_list" class="col-lg-3">-->
+                        @*<label class="form-label">Roles</label>*@
+                        <!--</div>
+                        </div>-->
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="div_list" class="col">
+        <div class="card overflow-hidden">
+            <div class="card-body py-0">
+                <div class="table-responsive scrollbar">
+                    <table id="tbl_list" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                        <thead>
+                            <tr>
+                                <th scope="col">Role List</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="row mb-4 mt-2">
+                    <div class="d-grid gap-2 d-md-block text-center mb-3">
+                        <button href="#authenticationmodal" data-bs-toggle="modal" type="button" class="btn btn-primary btn-sm px-4 me-2" onclick="ValidateData()">Save</button>
+                        @*<button type="button" class="btn btn-danger btn-sm px-4 me-2">Cancel</button>*@
+                        <a href="~/RoleMaster/ListOfRoles" class="btn btn-secondary btn-sm px-4">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-1" data-bs-theme="light">
+                    <h4 class="mb-0 text-white" id="authentication-modal-label">Message Box</h4>
+                </div>
+                <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2 px-1">
+                <div id="div_create_question" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                    <h5 class="text-center">
+                        <strong class="me-auto">Do you want to Edit this Role?</strong>
+                    </h5>
+                </div>
+                <table id="tbl_verf_fail" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Error Msg</th>
+                            <td class="text-wrap">
+                                <span id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbl_verf_result" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Response</th>
+                            <td class="text-wrap">
+                                <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                    <div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="PushData()">Edit</a></div>
+                    <div class="col-sm-6">
+                        <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                           aria-label="Close">Cancel</a>
+                    </div>
+                </div>
+                <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                    </div>
+                </div>
+                <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="BackToPage('ROLEMASTER','EDIT')">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+    var x = '@ViewBag.URL';
+    var userId = "";
+    var rowcount = 0;
+    var id = @ViewBag.Id;
+    var uid = "";
+    var name1 = "";
+    var desc = "";
+    var list = "";
+
+    var actionType = "FETCH";
+
+    $(document).ready(function () {
+        debugger;
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+        uid = document.getElementById("uid").value;
+
+
+        var y = "GetRoleData";
+        debugger;
+        $.ajax({
+            type: 'POST',
+            url: x + y,
+            data: { Id: id },
+            success: GetRoleDetails,
+            error: getError
+        });
+    });
+
+</script>
+

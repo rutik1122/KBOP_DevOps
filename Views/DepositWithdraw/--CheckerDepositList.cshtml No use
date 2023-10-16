@@ -1,0 +1,309 @@
+﻿
+@{
+    ViewBag.Title = "CheckerWithdrawList";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input type="hidden" id="usertype" value="@Session["UserType"].ToString()" />
+
+<input type="hidden" id="startlimit" value="@Session["CheckerStartLimit"].ToString()" />
+<input type="hidden" id="stoplimit" value="@Session["CheckerStopLimit"].ToString()" />
+
+<input type="hidden" id="startlimit_l3" value="@Session["CheckerStartLimit_l3"].ToString()" />
+<input type="hidden" id="stoplimit_l3" value="@Session["CheckerStopLimit_l3"].ToString()" />
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var x = document.getElementById("urlVal").value;
+        var y = 'getCheckerWithdrawList';
+
+        var bankcode = document.getElementById("bankcode").value;
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            //data: { 'UserType': document.getElementById("usertype").value, 'UserName': document.getElementById("tellerDetails").value },
+            data: { UserType: document.getElementById("usertype").value, UserName: document.getElementById("tellerDetails").value, BankCode: bankcode, Verf: 'CASHDEP' },
+            success: getListData,
+            error: getError
+        });
+    });
+
+
+    function getError(result) {
+        debugger;
+        var msg = result.responseJSON.Message;
+        alert(msg);
+    }
+
+
+    function getListData(printer) {
+        debugger;
+        // Iterate over the collection of data,below line for removing table data except header
+        //$("#myRecordDatatable").find("tr:gt(0)").remove();
+        $("#myDatatable").find("tr:gt(0)").remove();
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            AddRecordRow(print);
+        });
+    }
+
+
+    function AddRecordRow(print) {
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myDatatable tbody").length == 0) {
+            $("#myDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myDatatable tbody").append(
+            RecordTableRow(print));
+    }
+
+    function RecordTableRow(print) {
+        debugger;
+        if (print.count_id != null) {
+            var ret;
+
+            var loginid = document.getElementById("tellerDetails").value;
+
+            var RetRow =
+                "<tr>" +
+                '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.count_id + '">' + print.count_id + '</div></td>' +
+                '<td style="text-align:center;font-size: 14px;"> <label id="refno_' + print.count_id + '">' + print.TransactionRefNo + '</label></td>' +
+                '<td style="font-size: 14px;text-align:center;"> <label id="accno_' + print.count_id + '">' + print.CreditAccNo + '</label></td>' +
+                '<td style="font-size: 14px;text-align:center;"> <label id="accno_' + print.count_id + '">' + print.PayeeName + '</label></td>' +
+                '<td style="font-size: 14px;text-align:center;"> <label id="amt_' + print.count_id + '">' + print.ChqAmount + '</label></td>' +
+                /*'<td style="font-size: 14px;text-align:center;"> <label id="date_' + print.count_id + '">' + print.date + '</label></td>' +*/
+                /*'<td style="font-size: 14px;text-align:center;"> <label id="chqno_' + print.count_id + '">' + print.ChequeNo + '</label></td>' +*/
+                '<td style="font-size: 14px;text-align:center;">' + print.MakerId + '</td>' +
+                '<td style="font-size: 14px;text-align:center;">' + print.CheckerId + '</td>';
+                /*'<td style="font-size: 14px;text-align:center;">' + print.L3UserId + '</td>';*/
+
+            if (print.Status == 2) {
+
+                if ((parseInt(document.getElementById("startlimit").value) <= parseInt(print.ChqAmount)) && (parseInt(print.ChqAmount) <= parseInt(document.getElementById("stoplimit").value))) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffff99;">Verification Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData(' + print.count_id + ');" /> </td > '
+                    "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #e60000;">Checker Limit not matched</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData(' + print.count_id + ');" disabled /> </td > '
+                    "</tr>";
+                }
+
+            }
+            else if (print.Status == 10) {
+
+                if (print.CheckerId == loginid) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">Verification UnderProcess</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData(' + print.count_id + ');" /> </td > '
+                    "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">Verification UnderProcess</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData(' + print.count_id + ');" disabled /> </td > '
+                    "</tr>";
+                }
+
+            }
+            else if (print.Status == 11) {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: #ff0000;">Rejected in L2</td>' +
+                    '<td style="text-align:center;"></td> </tr>';
+            }
+            else if (print.Status == 12) {
+
+                if (print.MakerId == loginid) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">Get Cash Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="Get Cash" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "getCashDetails(' + print.count_id + ');" /> </td > '
+                    "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">Get Cash Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="Get Cash" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "getCashDetails(' + print.count_id + ');" disabled /> </td > '
+                    "</tr>";
+                }
+
+            }
+            else if (print.Status == 13) {
+
+                if (loginid != print.MakerId && loginid != print.CheckerId
+                    && (parseInt(document.getElementById("startlimit_l3").value) <= parseInt(print.ChqAmount))
+                    && (parseInt(print.ChqAmount) <= parseInt(document.getElementById("stoplimit_l3").value))) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffff99;">L3 Verification Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="L3 Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData_L3(' + print.count_id + ');" /> </td > ' +
+                        "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffff99;">L3 Verification Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="L3 Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData_L3(' + print.count_id + ');" disabled /> </td > '
+                    "</tr>";
+                }
+
+            }
+            else if (print.Status == 14) {
+
+                if (loginid == print.L3UserId) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">L3 Verification Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="L3 Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData_L3(' + print.count_id + ');" /> </td > '
+                    "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">L3 Verification Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="L3 Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "VerifyData_L3(' + print.count_id + ');" disabled /> </td > '
+                    "</tr>";
+                }
+
+            }
+            else if (print.Status == 15) {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: #ff0000;">Rejected in L2</td>' +
+                    '<td style="text-align:center;"></td> </tr>';
+            }
+            else if (print.Status == 16) {
+
+                if (print.MakerId == loginid) {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">Get Cash Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="Get Cash" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "getCashDetails(' + print.count_id + ');" /> </td > '
+                    "</tr>";
+                }
+                else {
+                    RetRow = RetRow +
+                        '<td style="text-align:center;font-size: 14px; background-color: #ffcc00;">Get Cash Pending</td>' +
+                        '<td style="text-align:center;"> <input type="button" id="btnCash" value="Get Cash" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;"' +
+                        ' onclick = "getCashDetails(' + print.count_id + ');" disabled /> </td > '
+                    "</tr>";
+                }
+
+            }
+            else if (print.Status == 17) {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: #00ff00;">Verification Completed</td>' +
+                    '<td style="text-align:center;"></td> </tr>';
+            }
+            else {
+                RetRow = RetRow +
+                    '<td></td>' +
+                    '<td></td> </tr>';
+            }
+
+            return RetRow;
+        }
+        else {
+            var ret =
+
+                alert("No Records Found!!!!");
+            return ret;
+        }
+    }
+
+
+    function VerifyData(count_id) {
+        debugger;
+        var rooturl = '@Url.Content("~/")';
+        var ref = String(count_id);
+        var refno = document.getElementById("refno_" + ref).innerHTML;
+        var dt = "verify"
+
+        window.open(rooturl + "DepositWithdraw/CheckerWithdraw?id=" + ref + "&refno=" + refno + "&datatype=" + dt + "&verf=L2&type=CASHDEP", "_self");
+
+    }
+
+
+    function VerifyData_L3(count_id) {
+        debugger;
+        var rooturl = '@Url.Content("~/")';
+        var ref = String(count_id);
+        var refno = document.getElementById("refno_" + ref).innerHTML;
+        var dt = "verify"
+
+        window.open(rooturl + "DepositWithdraw/CheckerWithdraw?id=" + ref + "&refno=" + refno + "&datatype=" + dt + "&verf=L3&type=CASHDEP", "_self");
+
+    }
+
+
+    function getCashDetails(count_id) {
+        debugger;
+
+        var rooturl = '@Url.Content("~/")';
+        var ref = String(count_id);
+        var refno = document.getElementById("refno_" + ref).innerHTML;
+        var dt = "CASH";
+
+        window.open(rooturl + "DepositWithdraw/CheckerWithdraw?id=" + ref + "&refno=" + refno + "&datatype=" + dt, "_self");
+    }
+
+
+</script>
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Cash Deposit Checker
+            </h1>
+        </div>
+
+        <div class="page-content">
+            <div class="row">
+                @using (Html.BeginForm())
+                {
+                    <div style="margin-left:.5%;background-color:white" class="tablecontainer" id="tableDiv">
+                        <table id="myDatatable" class="table table-bordered table-striped table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Data Id</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Reference No</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Account No</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Payee Name</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Amount</th>
+                                    @*<th style="text-align: center; border: double; font-size: 14px;">Cheque Date</th>
+                                        <th style="text-align: center; border: double; font-size: 14px;">Cheque No</th>*@
+                                    <th style="text-align: center; border: double; font-size: 14px;">Maker Id</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">L2 Verified By</th>
+                                    @*<th style="text-align: center; border: double; font-size: 14px;">L3 Verified By</th>*@
+                                    <th style="text-align: center; border: double; font-size: 14px;">Status</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

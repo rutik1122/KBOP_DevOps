@@ -1,0 +1,99 @@
+﻿@model iBAS.Models.Modeofoperation_master
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/MOPMaster.js"></script>
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" id="selectedBranchValue" value="@ViewBag.selectedDomainId" />
+
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <form>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card overflow-hidden">
+                        <div class="card-header bg-light py-2">
+                            <h5 class="mb-0 text-center">Detials</h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id)
+
+                            <div class="row mb-4 mt-4">
+                                @Html.HiddenFor(model => model.ModifiedBY)
+                            </div>
+                            <div class="row mb-4 mt-4">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Ref_Code, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Ref_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Ref_Code, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Ref_Desc, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    @*<div class="col-md-9">*@
+                                    @Html.EditorFor(model => model.Ref_Desc, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Ref_Desc, "", new { @class = "text-danger" })
+                                    @*</div>*@
+                                </div>
+
+                            </div>
+
+                            <div class="row mb-4 mt-2">
+                                <div class="row mb-1 mt-6">
+                                    <div class="d-grid gap-2 d-md-block text-center mb-3">
+                                        @Html.ActionLink("Back", "OperationList", null, new { @class = "btn btn-secondary btn-sm px-4", style = "color:white" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+@{
+    var message = TempData["success"] ?? string.Empty;
+}
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var message = '@message';
+    if (message)
+       alert(message);
+
+    $(document).ready(function () {
+        debugger;
+
+        $("#ProcessingBar").hide();
+        var branchSelectedValue = document.getElementById('selectedBranchValue').value;
+        document.getElementById('Branch').selectedIndex = branchSelectedValue;
+
+
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+
+</script>

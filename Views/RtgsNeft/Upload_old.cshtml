@@ -1,0 +1,189 @@
+﻿
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+
+<div class="row col-12 mb-3 my-0">
+    <div class="text-center">
+        <h3 class="mb-0 text-primary ">
+            <span class="bg-200 dark__bg-1100">Manual Form Upload</span>
+        </h3>
+    </div>
+</div>
+
+<div class="row justify-content-center mb-3">
+    @using (Html.BeginForm("Upload", "RtgsNeft"))
+    {
+        <div class="row justify-content-center mb-3">
+            <div class="col-xxl-4 col-lg-5 col-md-12 col-sm-12">
+                <div class="card px-3 py-2">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <div class="col-sm-12" style="text-align: center;">
+                                <label style="font-size:15px;"><b>Upload Type</b></label>
+                            </div>
+                            <div class="col-sm-12" style="text-align: center;">
+                                @Html.DropDownList("UploadType", new List<SelectListItem>
+                                {
+                                    //new SelectListItem{ Text = "--Select--", Value = "00" },
+                                    new SelectListItem{ Text = "RTGS/NEFT", Value = "01" },
+                                    new SelectListItem{ Text = "Cheque", Value = "02" },
+                                    //new SelectListItem{ Text = "Slip", Value = "03" },
+                                    //new SelectListItem{ Text = "KYC", Value = "04" },
+                                    new SelectListItem{ Text = "CTS", Value = "05" },
+                                    //new SelectListItem{ Text = "Fix Deposit", Value = "06" },
+                                    //new SelectListItem{ Text = "Close Acco.", Value = "07" }
+                                    new SelectListItem{ Text = "NRO", Value = "08" },
+                                    new SelectListItem{ Text = "Third Party Form", Value = "09" },
+                                })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3 mx-sm-7">
+                            <div class="col-sm-12" style="text-align: center;">
+                                <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" multiple />
+                                <input id="base64PathVal" value="" hidden />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group mt-3">
+                            <div class="col-sm-12" style="text-align: center;">
+                                <button class="btn btn-info" value="Import" onclick="ImportFunction()">
+                                    <i class="ace-icon fa fa-check bigger-110"></i>
+                                    Import
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+
+<script type="text/javascript">
+
+    var rooturl = '@Url.Content("~/")';
+    var imgArr = [];
+    var imgName = [];
+
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+
+
+    function ImportFunction() {
+        //alert("This is Import function");
+        var base64 = document.getElementById("base64PathVal").value;
+        var userId = document.getElementById("tellerDetails").value;
+
+        var x = document.getElementById("urlVal").value;
+        //var y = "getRtgsList";
+        var y = "rtgsImageUpload";
+        //alert("url: " + x + y);
+        debugger;
+
+        var form_type = document.getElementById("UploadType").value;
+        var bankcode = document.getElementById("bankcode").value;
+
+        var imgNameNull = [];
+
+        debugger;
+
+        if (confirm("Do you want to Submit the selected recods!")) {
+            //alert("within confirm box!");
+            $.ajax({
+                type: 'POST',
+                url: x + y,
+                data: { ImgList: imgArr, ImgType: form_type, tellerId: userId, ImgNameList: imgName, BankCode: bankcode },
+                //data: { ImgList: imgNameNull, ImgType: form_type, tellerId: userId, ImgNameList: imgName, BankCode: bankcode },
+                success: SuccessImg,
+                error: FailedImg
+            });
+        }
+
+    }
+
+    function encodeImageFileAsURL() {
+        //debugger;
+        var filesSelected = document.getElementById("inputFileToLoad").files;
+        var imgType = document.getElementById("UploadType").value;
+        debugger;
+        if (filesSelected.length > 0) {
+
+            for (var i = 0; i < filesSelected.length; i++) {
+                debugger;
+                var fileToLoad = filesSelected[i];
+                var filename = filesSelected[i].name;
+                imgName.push(filename);
+                var fileReader = new FileReader();
+
+                fileReader.onload = function (fileLoadedEvent) {
+                    debugger;
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+                    var newImage = document.createElement('img');
+                    newImage.src = srcData;
+                    var dataVal = srcData.replace("data:image/jpeg;base64,", "");
+
+                    imgArr.push(dataVal);
+
+                }
+
+                fileReader.readAsDataURL(fileToLoad);
+
+            }
+
+        }
+    }
+
+    function SuccessImg(result) {
+        debugger;
+        //document.getElementById("inputFileToLoad").files = null;
+        var rooturl = '@Url.Content("~/")';
+        window.open(rooturl + "RtgsNeft/Upload", "_self");
+        alert(result);
+    }
+
+    function FailedImg(result) {
+        debugger;
+        //document.getElementById("inputFileToLoad").files = null;
+
+        var msg = result.responseJSON.Message;
+        alert(msg);
+
+        var rooturl = '@Url.Content("~/")';
+        window.open(rooturl + "RtgsNeft/Upload", "_self");
+
+        //alert(result);
+    }
+
+</script>

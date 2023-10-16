@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "CheckerWithdraw";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+
+
+<input id="loginid" value="@Session["Login_Page_Id"]" hidden />
+@*<input id="PhysicalImageUrlVal" value="@ViewBag.Count_id" hidden />*@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+
+        var refno = document.getElementById("refno").innerHTML;
+        var id = document.getElementById("id").innerHTML;
+        var username = document.getElementById("loginid").value;
+
+        var x = document.getElementById("urlVal").value;
+        var y = 'getWithdrawData';
+
+        $.ajax({
+            url: x + y,
+            headers: authHeaders,
+            type: 'POST',
+            data: { 'CheckerId': username, 'TransactionRefNo': refno, 'count_id': id },
+            success: getData,
+            error: getError
+        });
+
+    });
+
+
+    function getError(result) {
+        var msg = result.responseJSON.Message;
+        alert(msg);
+    }
+
+
+    function getData(result) {
+        debugger;
+        var img = result.Image;
+        document.getElementById("imgVal").src = img;
+        document.getElementById("accno").value = result.DebitAccNo;
+        document.getElementById("name").value = result.PayeeName;
+        document.getElementById("date").value = result.date;
+        document.getElementById("amt").value = result.ChqAmount;
+        document.getElementById("chqno").value = result.ChequeNo;
+        document.getElementById("sortcode").value = result.SortCode;
+        document.getElementById("sancode").value = result.SanCode;
+        document.getElementById("trcode").value = result.TrCode;
+    }
+
+
+    function Verify(val) {
+        debugger;
+        var rooturl = '@Url.Content("~/")';
+        var refno = document.getElementById("refno").innerHTML;
+        var id = document.getElementById("id").innerHTML;
+        var username = document.getElementById("loginid").value;
+
+        var x = document.getElementById("urlVal").value;
+        var y = 'postCheckerWithdrawData';
+
+        if (val == "BACK" || val == "REJECT") {
+            $.ajax({
+                url: x + y,
+                headers: authHeaders,
+                type: 'POST',
+                data: { 'TransactionRefNo': refno, 'count_id': id, 'btnVal': val },
+                success: window.open(rooturl + "DepositWithdraw/CheckerWithdrawList", "_self"),
+                error: getError
+            });
+        }
+        else if (val == "ACCEPT") {
+
+            var accno = document.getElementById("accno").value;
+            var name = document.getElementById("name").value;
+            var date = document.getElementById("date").value;
+            var amt = document.getElementById("amt").value;
+            var chqno = document.getElementById("chqno").value;
+            var sort = document.getElementById("sortcode").value;
+            var san = document.getElementById("sancode").value;
+            var tr = document.getElementById("trcode").value;
+
+            $.ajax({
+                url: x + y,
+                headers: authHeaders,
+                type: 'POST',
+                data: {
+                    'TransactionRefNo': refno, 'count_id': id, 'btnVal': val, 'ChequeNo': chqno, 'SortCode': sort, 'SanCode': san, 'TrCode': tr, 'ChqAmount': amt, 'date': date,
+                    'DebitAccNo': accno, 'PayeeName': name
+                },
+                success: window.open(rooturl + "DepositWithdraw/CheckerWithdrawList", "_self"),
+                error: getError
+            });
+        }
+    }
+
+
+    
+
+
+</script>
+
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Cash Withdrawal Checker
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    <label id="refno" name="refno" >@ViewBag.RefNo</label> - <label id="id" name="id">@ViewBag.Count_id</label>
+                </small>
+            </h1>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-sm-7">
+                    <img src="" id="imgVal" style="height:400px;width:800px;align-content:center" />
+                </div>
+                <div class="col-sm-5">
+                    <div class="row">
+                        <label class="col-sm-3"><b>Account No:</b></label>
+                        <input id="accno" name="accno" value="" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-3"><b>Payee name:</b></label>
+                        <input id="name" name="name" value="" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-3"><b>Cheque Date:</b></label>
+                        <input id="date" name="date" value="" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-3"><b>Cheque Amount:</b></label>
+                        <input id="amt" name="amt" value="" />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <input type="button" id="btnVerify" value="Back" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="Verify('BACK')" />
+                        <input type="button" id="btnAccept" value="Accept" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="Verify('ACCEPT')" />
+                        <input type="button" id="btnReject" value="Reject" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="Verify('REJECT')" />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-7">
+                    <label class="col-sm-1">Cheque No.</label>
+                    <input class="col-sm-2" id="chqno" name="chqno" value="" />
+                    <label class="col-sm-1">Sort Code</label>
+                    <input class="col-sm-2" id="sortcode" name="sortcode" value="" />
+                    <label class="col-sm-1">San Code</label>
+                    <input class="col-sm-2" id="sancode" name="sancode" value="" />
+                    <label class="col-sm-1">Tr Code</label>
+                    <input class="col-sm-2" id="trcode" name="trcode" value="" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewBag.Title = "ClosedAccountList";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<input type="hidden" id="tellerDetails" value="@Session["Login_Page_Id"].ToString()" />
+
+<input id="urlVal" value="@ViewBag.URL" hidden />
+<input id="WebImageUrlVal" value="@ViewBag.WebImageURL" hidden />
+<input id="PhysicalImageUrlVal" value="@ViewBag.PhysicalImageURL" hidden />
+@*<input id="RtgsNeftForm" value="@ViewBag.RtgsNeftForm" hidden />*@
+
+<input id="bankcode" name="bankcode" value="@Session["BankCode"]" hidden />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var rooturl = '@Url.Content("~/")';
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+
+        var x = document.getElementById("urlVal").value;
+        var y = "getRtgsList";
+        var userId = document.getElementById("tellerDetails").value;
+
+        //debugger;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        var bankcode = document.getElementById("bankcode").value;
+
+        today = yyyy + '/' + mm + '/' + dd;
+        //today = yyyy + '/08/30';
+
+        $.ajax({
+            url: x + y,
+            //headers: authHeaders,
+            type: 'POST',
+            data: { tellerId: userId, Date_Time: today, ApiCall: 'START', BankCode: bankcode, ImgType: 'ClsAc' },
+            success: function (result) {
+                FdList(result);
+            },
+            error: getError
+        });
+
+    });
+
+
+    function getError(result) {
+
+        var rooturl = '@Url.Content("~/")';
+
+        if (result.status == 401 && result.statusText == "Unauthorized") {
+            alert(result.responseText);
+            window.location = rooturl + "home/Login";
+        }
+        else {
+            alert(result.responseText);
+        }
+    }
+
+
+    function FdList(printer) {
+        debugger;
+        // Iterate over the collection of data,below line for removing table data except header
+        //$("#myRecordDatatable").find("tr:gt(0)").remove();
+        $("#myDatatable").find("tr:gt(0)").remove();
+        $.each(printer, function (index, print) {
+            // Add a row to the Product table
+            AddRecordRow(print);
+        });
+    }
+
+    function AddRecordRow(print) {
+        debugger;
+        // Check if <tbody> tag exists, add one if not
+        if ($("#myDatatable tbody").length == 0) {
+            $("#myDatatable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#myDatatable tbody").append(
+            RecordTableRow(print));
+    }
+
+
+    function RecordTableRow(print) {
+        debugger;
+        //$("#myDatatable tr").remove();
+        if (print.RecordCount != null) {
+
+            var ret;
+
+            var RetRow =
+                "<tr>" +
+                '<td style="text-align:center;font-size: 14px;"> <div id="count_id_' + print.RecordCount + '">' + print.count_id + '</div></td>' +
+                '<td style="text-align:center;font-size: 14px;">' + print.InsertTimeStamp + '</td>' +
+                '<td style="font-size: 14px;">' + print.FrontImgPath + '</td>';
+
+
+            if (print.Status == "0") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: orange;">' + print.FormStatus + '</td>' +
+                    '<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" /> </td>'
+                "</tr>";
+            }
+            else if (print.Status == "2") {
+                RetRow = RetRow +
+                    '<td style="text-align:center;font-size: 14px; background-color: greenyellow;">' + print.FormStatus + '</td>' +
+                    /*'<td style="text-align:center;"> <input type="button" id="btnVerify" value="Verify" class="btn" style="color:white;font-size: 12px; padding: 1px; width: 75px;" onclick="VerifyData(' + print.count_id + ');" disabled /> </td>'*/
+                    '<td></td>'
+                "</tr>";
+            }
+
+            return RetRow;
+        }
+        else {
+            var ret =
+                //"<tr>" +
+                // '<td <div> No Records Found </div></td>' +
+
+                //"</tr>";
+                alert("No Records Found!!!!!!");
+            return ret;
+        }
+    }
+
+
+    function VerifyData(recordId) {
+        //debugger;
+        var rooturl = '@Url.Content("~/")';
+
+        //var dd = "123";
+
+        var bankcode = document.getElementById("bankcode").value;
+
+        window.open(rooturl + "RtgsNeft/ClosedAccForm?id=" + recordId + "&bankcode=" + bankcode, "_self");
+
+
+    }
+
+</script>
+
+
+<div class="main-content-inner">
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                Closed Account Form
+            </h1>
+        </div>
+
+        <div class="page-content">
+
+            <div class="row" style="margin-left: .5%;">
+                <input type="button" id="btnVerify" value="Reload Status" class="btn" style="color:white;font-size: 13px; padding: 2px; width: 95px;" onclick="ReloadStatus('1');" />
+                <input type="button" id="btnReset" value="Reset All" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px;" onclick="getReset();" />
+                <input type="button" id="btnResend" value="Resend" class="btn" style="background-color: black; color: white; font-size: 13px; padding: 2px;" onclick="resendRequest();" />
+            </div>
+            <br />
+            <div class="row">
+                @using (Html.BeginForm())
+                {
+                    <div style="margin-left:.5%;background-color:white" class="tablecontainer" id="tableDiv">
+                        <table id="myDatatable" class="table table-bordered table-striped table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Data Id</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Insert Time Stamp</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Image Path</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;">Status</th>
+                                    <th style="text-align: center; border: double; font-size: 14px;"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

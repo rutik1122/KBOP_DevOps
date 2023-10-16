@@ -1,0 +1,161 @@
+﻿@model iBAS.Models.Modeofoperation_master
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/MOPMaster.js"></script>
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <form>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card overflow-hidden">
+                        <div class="card-header bg-light py-2">
+                            <h5 class="mb-0 text-center">Edit Mode of Operation</h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id)
+
+                            <div class="row mb-4 mt-4">
+                                @Html.HiddenFor(model => model.ModifiedBY)
+                            </div>
+                            <div class="row mb-4 mt-4">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Ref_Code, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    @Html.EditorFor(model => model.Ref_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Ref_Code, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-lg-4">
+                                    @Html.LabelFor(model => model.Ref_Desc, htmlAttributes: new { @class = "control-label col-md-3" })
+
+                                    @Html.EditorFor(model => model.Ref_Desc, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Ref_Desc, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-2">
+
+                                <div class="row mb-1 mt-6">
+                                    <div class="d-grid gap-2 d-md-block text-center mb-3">
+                                        <input type="button" value="Save" class="btn btn-primary btn-sm px-4 me-2" href="#authenticationmodal" data-bs-toggle="modal" onclick="ValidateData()" />
+                                        @*<input type="submit" value="Save" class="btn btn-primary btn-sm px-4 me-2"/>*@
+                                        @*<button href="#authenticationmodal" data-bs-toggle="modal" type="button" class="btn btn-primary btn-sm px-4 me-2" onclick="ValidateData()">Save</button>*@
+                                        @Html.ActionLink("Back", "OperationList", null, new { @class = "btn btn-secondary btn-sm px-4", style = "color:white" })
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="authenticationmodal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+                    <div class="modal-content border-0">
+                        <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                            <div class="position-relative z-1" data-bs-theme="light">
+                                <h4 class="mb-0 text-white" id="authentication-modal-label">Message Box</h4>
+                            </div>
+                            @*<button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal"
+                                aria-label="Close"></button>*@
+                        </div>
+                        <div class="modal-body py-2 px-1">
+                            <div id="div_create_question" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                                <h5 class="text-center">
+                                    <strong class="me-auto">Do you want to Edit this MOP?</strong>
+                                </h5>
+                            </div>
+                            <table id="tbl_verf_fail" class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-wrap">Error Msg</th>
+                                        <td class="text-wrap">
+                                            <span id="errorMsg" class="badge badge-sm bg-warning" style="font-size:15px;"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table id="tbl_verf_result" class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-wrap">Response</th>
+                                        <td class="text-wrap">
+                                            <lable id="successMsg" class="badge badge-sm bg-success" style="font-size:15px;">@ViewBag.message</lable>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                                @*<div id="btn_postdata" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="PushData()">Edit</a></div>*@
+                                <div class="col-sm-6">
+                                    <input type="submit" value="Edit" class="btn btn-primary btn-sm d-block w-100" onclick="reloadpage()" />
+                                </div>
+                                @*<input type="submit" value="Create" class="btn btn-primary btn-sm px-4 me-2" />*@
+
+                                <div class="col-sm-6">
+                                    <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                                       aria-label="Close">Cancel</a>
+                                </div>
+                            </div>
+                            <div id="div_submit_fail" class="row g-2 mt-2 mx-4">
+                                <label class="col-sm-10"></label>
+                                <div id="btn_postdata" class="col-sm-2">
+                                    <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                                </div>
+                            </div>
+                            <div id="div_response_success" class="row g-2 mt-2 mx-4">
+                                <label class="col-sm-10"></label>
+                                <div id="btn_postdata" class="col-sm-2">
+                                    <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="reloadpage()">OK</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+@{
+    var message = TempData["success"] ?? string.Empty;
+}
+<script type="text/javascript">
+    var rooturl = '@Url.Content("~/")';
+    var message = '@message';
+    if (message)
+       alert(message);
+
+    $(document).ready(function () {
+        debugger;
+      
+        $("#ProcessingBar").hide();
+
+        $.ajax({
+            type: "POST",
+            url: rooturl + "Home/ValidateSession",
+            data: {},
+            datatype: "json",
+            success: function (data) {
+                if (data == "False") {
+                    window.location = rooturl + "Home/LoginiBAS?cond=1";
+                }
+            }
+        });
+    });
+
+
+</script>

@@ -1,0 +1,457 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+
+<script src="~/Scripts/PrinterMapping.js"></script>
+
+<div class="row col-12 mb-3 mt-1">
+    <form class="d-flex align-items-center" action="#">
+        <div class="row">
+            <h3 class="mb-0 text-primary position-relative">
+                <span class="bg-200 dark__bg-1100">Printer Mapping</span>
+            </h3>
+        </div>
+        &nbsp;
+        <div class="row mx-3 g-3">
+            <div class="col-auto">
+                <a href="~/Printer/AddMapping" class="btn btn-sm btn-primary me-2 ">
+                    <svg class="svg-inline--fa fa-plus-circle fa-w-16 text-white" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path></svg><!-- <i class="fas fa-plus-circle text-white"></i> Font Awesome fontawesome.com -->&nbsp;&nbsp;Add Printer Mapping
+                </a>
+            </div>
+            <div class="col-auto">
+                <input type="file" class="form-control form-control-sm">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card overflow-hidden">
+    <div class="card-body py-0">
+        <div class="table-responsive scrollbar">
+            <table id="myDatatable" class="table table-dashboard table-sm table-hover mb-0 fs--1">
+                <thead>
+                    <tr>
+                        <th scope="col">Printer Id</th>
+                        <th scope="col">Branch Code</th>
+                        <th scope="col">Machine Serial No</th>
+                        <th scope="col">Sorter IP</th>
+                        <th scope="col">Sorter Port</th>
+                        <th scope="col">Printer IP</th>
+                        <th scope="col">Printer Port</th>
+                        <th scope="col">Printer Model</th>
+                        <th scope="col">Teller Id</th>
+                        <th scope="col">Receipt Printing</th>
+                        <th scope="col">BOFD</th>
+                        <th scope="col">IFSC</th>
+                        <th scope="col">Grid Name</th>
+                        <th scope="col">Server IP</th>
+                        @*//User04*@
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @*<div class="card-footer bg-light py-2">
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 0 !important;">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
+    </div>*@
+</div>
+
+<input type="hidden" id="currentRowId" value="" />
+
+<div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-1" data-bs-theme="light">
+                    <h4 class="mb-0 text-white" id="edit-modal-label">Edit Printer Mapping</h4>
+                </div>
+                <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2 px-1">
+                <table id="tbl_content" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">ID</th>
+                            <td class="text-wrap">
+                                <input id="printer_id" type="text" class="form-control form-control-sm" placeholder="345">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Branch Code</th>
+                            <td class="text-wrap">
+                                <input id="branch_Code" type="text" class="form-control form-control-sm" placeholder="555">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Machine Serial No</th>
+                            <td class="text-wrap text-success">
+                                <select id="drpsorter" class="form-select form-select-sm">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Sorter Id</th>
+                            <td class="text-wrap">
+                                <input id="sorter_ip" type="text" class="form-control form-control-sm"
+                                       placeholder="KKBK34567">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Sorter Port</th>
+                            <td class="text-wrap">
+                                <input id="sorter_port" type="text" class="form-control form-control-sm" placeholder="xyz">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Printer Id</th>
+                            <td class="text-wrap">
+                                <input id="printer_ip" type="text" class="form-control form-control-sm"
+                                       placeholder="KKBK34567">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Printer Port</th>
+                            <td class="text-wrap">
+                                <input id="printer_port" type="text" class="form-control form-control-sm" placeholder="xyz">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Printer Model</th>
+                            <td class="text-wrap">
+                                <select id="printer_Model" class="form-select form-select-sm">
+                                    <option selected>Please Select...</option>
+                                    <option value="TP805">TP805</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Teller ID</th>
+                            <td class="text-wrap">
+                                <input id="teller_id" type="text" class="form-control form-control-sm" placeholder="I113">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Receipt Printing</th>
+                            <td class="text-wrap">
+                                <select id="receipt_printing" class="form-select form-select-sm">
+                                    <option selected>Please Select...</option>
+                                    <option value="1">YES</option>
+                                    <option value="2">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">BOFD</th>
+                            <td class="text-wrap">
+                                <input id="bofd" type="text" class="form-control form-control-sm" placeholder="I113">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">IFSC</th>
+                            <td class="text-wrap">
+                                <input id="ifsc" type="text" class="form-control form-control-sm" placeholder="I113">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Grid Name</th>
+                            <td class="text-wrap">
+                                <input id="grid_name" type="text" class="form-control form-control-sm" placeholder="I113">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-wrap">Server IP</th>
+                            <td class="text-wrap">
+                                <input id="server_ip" type="text" class="form-control form-control-sm" placeholder="10.56.5.667">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div id="div_create_question1" class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                    <h5 class="text-center">
+                        <strong class="me-auto">Do you want to Edit this Printer ?</strong>
+                    </h5>
+                </div>
+                <table id="tbl_verf_fail1" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Error Msg</th>
+                            <td class="text-wrap">
+                                <span id="errorMsg1" class="badge badge-sm bg-warning" style="font-size:15px;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbl_verf_result1" class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-wrap">Response</th>
+                            <td class="text-wrap">
+                                <lable id="successMsg1" class="badge badge-sm bg-success" style="font-size:15px;"></lable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="div_submit_pass1" class="row g-2 mt-2 mx-4">
+                    <div id="btn_postdata1" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="UpdateData()">Edit</a></div>
+                    <div class="col-sm-6">
+                        <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                           aria-label="Close">Cancel</a>
+                    </div>
+                </div>
+
+                <div id="div_submit_fail1" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata1" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal">OK</a>
+                    </div>
+                </div>
+                <div id="div_response_success1" class="row g-2 mt-2 mx-4">
+                    <label class="col-sm-10"></label>
+                    <div id="btn_postdata1" class="col-sm-2">
+                        <a class="btn btn-primary btn-sm d-block w-100" data-bs-dismiss="modal" onclick="reloadpage()">OK</a>
+                    </div>
+                </div>
+                <div id="div_submit_pass" class="row g-2 mt-2 mx-4">
+                    <div id="btnSubmit" class="col-sm-6"><a class="btn btn-primary btn-sm d-block w-100" onclick="ValidateData()">Submit</a></div>
+                    <div id="btnCancel" class="col-sm-6">
+                        <a class="btn btn-secondary btn-sm d-block w-100" data-bs-dismiss="modal"
+                           aria-label="Close">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+
+                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="rounded-top-3 py-3 ps-4 pe-6 bg-light">
+                    <!-- <div class="bg-warning me-3 icon-item"><span class="fas fa-exclamation-circle text-white fs-3"></span></div> -->
+                    <h5 class="text-center">
+                        <span class="fas fa-exclamation-circle text-warning fs-3"></span>&nbsp;&nbsp;&nbsp;<strong class="me-auto">Are you sure to delete this record?</strong>
+                    </h5>
+                </div>
+                <div class="my-3 text-center d-grid gap-2 d-md-block">
+                    <button class="btn btn-danger" type="button" onclick=DeleteRow()>Yes </button>
+                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- End of Reject Modal -->
+
+
+
+<script type="text/javascript">
+
+
+    var id = "";
+    var branch_code = "";
+    var drpsorter = "";
+    var sorter_ip = "";
+    var sorter_port = "";
+    var printer_ip = "";
+    var printer_port = "";
+    var printer_model ="";
+    var inteller_id = "";
+    var bofd = "";
+    var ifsc = "";
+    var grid_name = "";
+    var server_ip = "";
+
+
+
+
+        var arr = {};
+
+        @*$("body").on("click", "#btnMappingMaster", function () {
+            window.location = rooturl + "home/MappingMaster";
+        });
+
+        var rooturl = '@Url.Content("~/")'*@
+
+        //var access_token = window.localStorage.getItem('AccessToken');
+        //var bearer = window.localStorage.getItem('TokenType');
+        //var gusername = window.localStorage.getItem('username');
+        var authHeaders = {};
+        //authHeaders.Authorization = bearer + " " + access_token;
+
+
+
+        var x = '@ViewBag.URL';
+        var y = 'getprintermapdetails';
+        $(document).ready(function () {
+
+            $.ajax({
+                url: x + y,
+                headers: authHeaders,
+                type: 'POST',
+                success: function (result) {
+                    PrinterMapDetails(result);
+
+                },
+                error: getError
+            });
+
+
+            //var y1 = "getsorterdetails";
+            //$.ajax({
+            //    url: x + y1,
+            //    headers: authHeaders,
+            //    type: 'POST',
+            //    success: function (result) {
+
+            //        var district = "";
+            //        $("#drpsorter").empty();
+
+            //        debugger;
+
+            //        //var selectedMachineSerialNo = currentRow.find("td:eq(2)").text();
+            //        $("#drpsorter").append(
+            //            $('<option></option>').val(selectedMachineSerialNo).html(selectedMachineSerialNo));
+            //        $.each(result, function (i, drpsorter) {
+            //            $("#drpsorter").append(
+            //                $('<option></option>').val(drpsorter.inmachineserialno).html(drpsorter.inmachineserialno));
+            //        });
+
+
+
+            //    },
+            //    error: getError
+            //});
+        })
+
+
+    $("#myDatatable").on('click', '#edit', function () {
+
+        var currentRow = $(this).closest("tr");
+        GetData(currentRow);
+
+    });
+
+    $("#myDatatable").on('click', '#view', function () {
+        debugger;
+        var currentRow = $(this).closest("tr");
+
+        GetData(currentRow);
+
+    });
+
+
+        var id = "";
+    var machineserialno = "";
+
+        $("#myDatatable").on('click', '#delete', function () {
+            var currentRow = $(this).closest("tr");
+            id = currentRow.find("td:eq(0)").text();
+            machineserialno = currentRow.find("td:eq(2)").text();
+           // $("#currentRowId").val(currentRow.find("td:eq(0)").text());
+
+
+
+        });
+
+
+
+    function DeleteRow() {
+        debugger;
+        var a = '@ViewBag.URL';
+        var b = 'DeltSorterdetails';
+
+
+        $.ajax({
+            type: 'POST',
+            url: a + b,
+            datatype: 'JSON',
+            //data: { 'Id': Number(document.getElementById("currentRowId").value) },
+            data: { 'Id': id, 'inmachineserialno': machineserialno },
+            success: function (response) {
+                if (response.success) {
+                    $.alert.open("Data Deleted Successfully");
+                }
+
+                location.reload();
+            },
+            error: function (msg) {
+                //$.alert.open(msg.responseText);
+            }
+        });
+
+        }
+
+
+        function UpdateData() {
+
+            $("#div_create_question1").hide();
+            $("#tbl_verf_fail1").hide();
+            $("#tbl_verf_result1").show();
+            $("#div_submit_pass1").hide();
+            $("#div_submit_fail1").hide();
+            $("#div_response_success1").show();
+            $("#tbl_content").hide();
+            $("#div_submit_pass").hide();
+
+            document.getElementById("successMsg1").innerHTML = "Processing Request...";
+
+        var a = '@ViewBag.URL';
+        var b = 'Updateprinterdetails';
+
+
+            if (printer_ip != "USB")
+            {
+                printer_ip = "Net." + printer_ip;
+            }
+        var v = '19000123870091234590'
+        var iiv = v.substring(2, 18);
+        var d = '|' + id + '|' + branch_code + '|' + drpsorter + '|' + sorter_ip + '|' + sorter_port + '|' +
+            printer_ip + '|' + printer_port + '|' + printer_model + '|' + inteller_id + '|' + receipt_printing + '|' + bofd + '|' + ifsc + '|' + grid_name + '|' + server_ip;
+
+        $.ajax({
+            url: a + b,
+            headers: authHeaders,  //Added for Authorization error ,
+            type: 'POST',
+            dataType: 'JSON',
+            data: { 'inbranch_code': d },
+            success: SuccessResp,
+            error: getError
+        });
+
+
+     }
+
+
+    function SuccessResp(result) {
+        $("#div_response_success1").show();
+        document.getElementById("successMsg1").innerHTML = "Record Updated Successfully!";
+    }
+
+    $(document).ready(function () {
+        $("#ProcessingBar").hide();
+    });
+</script>

@@ -1,0 +1,16 @@
+﻿
+<div id="ajaxorg" style="padding-left:10%">
+    <label class="w3-label w3-text-black" style="font-weight:600"> Select Orgnization:</label>
+    <br />
+    @Html.DropDownList("AccessPartialView", null, new { @multiple = true, @name = "AccessPartialView[]" })
+</div>
+
+
+<script src="~/Scripts/jquery.multiselect.js"></script>
+
+<script type="text/javascript">
+    $('#AccessPartialView').multiselect({
+        columns: 1,
+        placeholder: 'Select Orgnization'
+    });
+</script>

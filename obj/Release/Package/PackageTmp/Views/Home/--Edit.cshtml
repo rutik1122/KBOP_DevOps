@@ -1,0 +1,128 @@
+﻿@*@model CCMS.ViewModel.UserVM
+@{ Layout = null;}*@
+
+@using (Html.BeginForm("Save", "UserMaster", FormMethod.Post, new { id = "popupForm" }))
+{
+    @*@Html.AntiForgeryToken()
+    if (Model != null && Model.Id > 0)
+    {
+        @Html.HiddenFor(model => model.Id)
+    }*@
+    @*@Html.ValidationSummary(true)*@
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.Label("User Name", new { @class = "manadatory" })
+                @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)*@
+            </div>
+            <div class="col-sm-6">
+                @Html.Label("EmployeeId", new { @class = "manadatory" })
+                @*@Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EmployeeId)*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.Label("LoginId", new { @class = "manadatory" })
+                @*@Html.TextBoxFor(model => model.LoginId, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LoginId)*@
+            </div>
+            <div class="col-sm-6">
+                <label>EmailId</label>
+                @*@Html.TextBoxFor(model => model.EmailId, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EmailId)*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.Label("Chest Name", new { @class = "manadatory" })
+                @*@Html.DropDownListFor(m => m.ChestId, ViewBag.ChestList as IEnumerable<SelectListItem>, ViewBag.ChestId as string, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ChestId)*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.Label("User Type", new { @class = "manadatory" })
+                @*@Html.DropDownListFor(m => m.UserTypeId, ViewBag.UserTypeList as IEnumerable<SelectListItem>, ViewBag.UserTypeId as string, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.UserTypeId)*@
+            </div>
+            <div class="col-sm-6">
+                @Html.Label("Group Name", new { @class = "manadatory" })
+                @*@Html.DropDownListFor(m => m.GroupId, ViewBag.GroupList as IEnumerable<SelectListItem>, ViewBag.GroupId as string, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.GroupId)*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="Chkmultigruop" class="form-group">
+                    @Html.Label("Assing MultiChest")
+                    @*@Html.CheckBoxFor(m => m.MultiChestAccess, new { @style = "height:25px; width:35px;" })*@
+                    @*<input data-val="true" data-val-required="The MultiChestAccess field is required." id="MultiChestAccess" name="MultiChestAccess" style="height:25px; width:35px;" type="checkbox" value="true" checked="checked">*@
+                </div>
+            </div>
+        </div>
+        @*@if (Model.MultiChestAccess == true)
+            {*@
+        <div id="dpdMultiChest" class="row">
+            <div class="col-sm-12">
+                @Html.Label("Chest Name", new { @class = "manadatory" })
+                @*@Html.ListBoxFor(m => m.SelectedIDArray, new MultiSelectList(Model.ChestCollections, "Id", "Name"), new { id = "multiSelectDropDown", multiple = "multiple", style = "width:100%;" })*@
+            </div>
+        </div>
+        @*}*@
+       
+    </div>
+    <div class="row">
+        <div style="text-align:center" class="col-md-12">
+            <input id="submit" class="btn btn-primary" type="submit" value="Save" />
+            <input id="reset" class="btn btn-info" type="reset" value="Reset" />
+            <input id="close" type="button" class="btn btn-danger" value="Close" />
+        </div>
+    </div>
+    @*@Html.HiddenFor(model => model.IsDeleted)*@
+}
+
+<script type="text/javascript">
+    $("#close").click(function () {
+        $dialog.dialog('close');
+        myDatatable.ajax.reload();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+
+        if ($("#MultiChestAccess").is(':checked')) {
+            $('#dpdMultiChest').css('visibility', 'visible');
+        }
+        else {
+            $('#dpdMultiChest').css('visibility', 'hidden');
+        }
+        //---------------check box event for MultiGroupAccessMultiGroupAccess
+        $("#MultiChestAccess").click(function () {
+            if ($(this).is(':checked')) {
+                $('#dpdMultiChest').css('visibility', 'visible');
+            }
+            else {
+                $('#dpdMultiChest').css('visibility', 'hidden');
+            }
+        });
+        //--------------\.-check box event for MultiGroupAccess
+        //---------------For  Multiselect dropdown
+        $("#multiSelectDropDown").chosen({
+            disable_search_threshold: 10,
+            no_results_text: "Oops, nothing found!"//
+        });
+        //-------------\.--For  Multiselect dropdown
+
+
+
+
+
+
+    });
+</script>
+

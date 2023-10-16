@@ -1,0 +1,190 @@
+15:08: Exception: ValidateSession
+15:08: StackTrace: ----- started -----
+15:08: Exception: ValidateSession
+15:08: StackTrace: reading ds value
+15:08: Exception: ValidateSession userid
+15:08: StackTrace: uid:46
+15:08: Exception: Validate Session Log
+15:08: StackTrace: ---- result ----
+15:08: Exception: DB session
+15:08: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:08: Exception: Local session
+15:08: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:08: Exception: Validate Session Log
+15:08: StackTrace: ---- return true ----
+15:08: Exception: ValidateSession
+15:08: StackTrace: ----- started -----
+15:08: Exception: ValidateSession
+15:08: StackTrace: reading ds value
+15:08: Exception: ValidateSession userid
+15:08: StackTrace: uid:46
+15:08: Exception: Validate Session Log
+15:08: StackTrace: ---- result ----
+15:08: Exception: DB session
+15:08: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:08: Exception: Local session
+15:08: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:08: Exception: Validate Session Log
+15:08: StackTrace: ---- return true ----
+15:09: Exception: ValidateSession
+15:09: StackTrace: ----- started -----
+15:09: Exception: ValidateSession
+15:09: StackTrace: reading ds value
+15:09: Exception: ValidateSession userid
+15:09: StackTrace: uid:46
+15:09: Exception: Validate Session Log
+15:09: StackTrace: ---- result ----
+15:09: Exception: DB session
+15:09: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:09: Exception: Local session
+15:09: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:09: Exception: Validate Session Log
+15:09: StackTrace: ---- return true ----
+15:09: Exception: ValidateSession
+15:09: StackTrace: ----- started -----
+15:09: Exception: ValidateSession
+15:09: StackTrace: reading ds value
+15:09: Exception: ValidateSession userid
+15:09: StackTrace: uid:46
+15:09: Exception: Validate Session Log
+15:09: StackTrace: ---- result ----
+15:09: Exception: DB session
+15:09: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:09: Exception: Local session
+15:09: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:09: Exception: Validate Session Log
+15:09: StackTrace: ---- return true ----
+15:09: Exception: ValidateSession
+15:09: StackTrace: ----- started -----
+15:09: Exception: ValidateSession
+15:09: StackTrace: reading ds value
+15:09: Exception: ValidateSession userid
+15:09: StackTrace: uid:46
+15:09: Exception: Validate Session Log
+15:09: StackTrace: ---- result ----
+15:09: Exception: DB session
+15:09: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:09: Exception: Local session
+15:09: StackTrace: Session ID: m8csfBXGHCKIfJJcjUzy9CSo
+15:09: Exception: Validate Session Log
+15:09: StackTrace: ---- return true ----
+15:11: Exception: LoginiBAS
+15:11: StackTrace: CommonSettings data read
+15:11: Exception: LoginiBAS
+15:11: StackTrace: Role Mapping started
+15:11: Exception: LoginiBAS
+15:11: StackTrace: Data from Role Master table
+15:11: Exception: LoginiBAS
+15:11: StackTrace: Role Mapping completed
+15:12: Exception: ValidateSession
+15:12: StackTrace: ----- started -----
+15:12: Exception: ValidateSession
+15:12: StackTrace: reading ds value
+15:12: Exception: ValidateSession userid
+15:12: StackTrace: uid:46
+15:12: Exception: Validate Session Log
+15:12: StackTrace: ---- result ----
+15:12: Exception: DB session
+15:12: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:12: Exception: Local session
+15:12: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:12: Exception: Validate Session Log
+15:12: StackTrace: ---- return true ----
+15:12: Exception: ValidateSession
+15:12: StackTrace: ----- started -----
+15:12: Exception: ValidateSession
+15:12: StackTrace: reading ds value
+15:12: Exception: ValidateSession userid
+15:12: StackTrace: uid:46
+15:12: Exception: Validate Session Log
+15:12: StackTrace: ---- result ----
+15:12: Exception: DB session
+15:12: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:12: Exception: Local session
+15:12: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:12: Exception: Validate Session Log
+15:12: StackTrace: ---- return true ----
+15:12: Exception: ValidateSession
+15:12: StackTrace: ----- started -----
+15:12: Exception: ValidateSession
+15:12: StackTrace: reading ds value
+15:12: Exception: ValidateSession userid
+15:12: StackTrace: uid:46
+15:12: Exception: Validate Session Log
+15:12: StackTrace: ---- result ----
+15:12: Exception: DB session
+15:12: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:12: Exception: Local session
+15:12: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:12: Exception: Validate Session Log
+15:12: StackTrace: ---- return true ----
+15:13: Exception: ValidateSession
+15:13: StackTrace: ----- started -----
+15:13: Exception: ValidateSession
+15:13: StackTrace: reading ds value
+15:13: Exception: ValidateSession userid
+15:13: StackTrace: uid:46
+15:13: Exception: Validate Session Log
+15:13: StackTrace: ---- result ----
+15:13: Exception: DB session
+15:13: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:13: Exception: Local session
+15:13: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:13: Exception: Validate Session Log
+15:13: StackTrace: ---- return true ----
+15:18: Exception: ValidateSession
+15:18: StackTrace: ----- started -----
+15:18: Exception: ValidateSession
+15:18: StackTrace: reading ds value
+15:18: Exception: ValidateSession userid
+15:18: StackTrace: uid:46
+15:18: Exception: Validate Session Log
+15:18: StackTrace: ---- result ----
+15:18: Exception: DB session
+15:18: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:18: Exception: Local session
+15:18: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:18: Exception: Validate Session Log
+15:18: StackTrace: ---- return true ----
+15:19: Exception: ValidateSession
+15:19: StackTrace: ----- started -----
+15:19: Exception: ValidateSession
+15:19: StackTrace: reading ds value
+15:19: Exception: ValidateSession userid
+15:19: StackTrace: uid:46
+15:19: Exception: Validate Session Log
+15:19: StackTrace: ---- result ----
+15:19: Exception: DB session
+15:19: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:19: Exception: Local session
+15:19: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:19: Exception: Validate Session Log
+15:19: StackTrace: ---- return true ----
+15:19: Exception: ValidateSession
+15:19: StackTrace: ----- started -----
+15:19: Exception: ValidateSession
+15:19: StackTrace: reading ds value
+15:19: Exception: ValidateSession userid
+15:19: StackTrace: uid:46
+15:19: Exception: Validate Session Log
+15:19: StackTrace: ---- result ----
+15:19: Exception: DB session
+15:19: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:19: Exception: Local session
+15:19: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:19: Exception: Validate Session Log
+15:19: StackTrace: ---- return true ----
+15:19: Exception: ValidateSession
+15:19: StackTrace: ----- started -----
+15:19: Exception: ValidateSession
+15:19: StackTrace: reading ds value
+15:19: Exception: ValidateSession userid
+15:19: StackTrace: uid:46
+15:19: Exception: Validate Session Log
+15:19: StackTrace: ---- result ----
+15:19: Exception: DB session
+15:19: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:19: Exception: Local session
+15:19: StackTrace: Session ID: 3wuyMyXpoPmFDNbaoy5lJYRf
+15:19: Exception: Validate Session Log
+15:19: StackTrace: ---- return true ----
